@@ -78,6 +78,346 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-未来的购物App-普通人眼里的Agent化" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/" class="article-date">
+  <time class="dt-published" datetime="2026-05-23T14:00:00.000Z" itemprop="datePublished">2026-05-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><strong>写给谁</strong>：经常网购、但不一定懂技术的普通用户<br><strong>一句话</strong>：未来的 App 不只会「展示页面等你点」，还会<strong>听懂你要什么、替你跑完一串步骤</strong>——电商可能是你最先感受到变化的地方之一。</p>
+</blockquote>
+<hr>
+<h2 id="1-你可能已经烦过这些"><a href="#1-你可能已经烦过这些" class="headerlink" title="1. 你可能已经烦过这些"></a>1. 你可能已经烦过这些</h2><p>网购久了，大概都遇到过类似时刻：</p>
+<ul>
+<li>想退货，却在「我的订单 → 申请售后 → 选原因 → 上传凭证」里绕了好几圈；</li>
+<li>想买一件「适合送长辈、预算 300 左右、别太贵但要有面子」的礼物，搜了半小时，收藏夹里堆了十几款，还是拿不定主意；</li>
+<li>大促凑满减，计算器按了 N 遍，最后发现有一单忘了领券；</li>
+<li>物流显示「已签收」，你明明没收到，客服排队 20 分钟，还要重复说一遍订单号。</li>
+</ul>
+<p>这些事的共同点：<strong>App 功能很多，但你要自己当「导航员」</strong>——知道入口在哪、规则是什么、下一步点哪个按钮。</p>
+<p>行业里最近常聊一个词：<strong>Agent 化</strong>。听起来像技术黑话，其实可以翻译成一句更直白的话：</p>
+<blockquote>
+<p><strong>以后你打开 App，更像在跟一个能办事的助手说话，而不只是在翻菜单。</strong></p>
+</blockquote>
+<p>下面全部用<strong>网购</strong>举例，尽量不涉及代码和架构。</p>
+<hr>
+<h2 id="2-先用人话解释：什么是「Agent-化」？"><a href="#2-先用人话解释：什么是「Agent-化」？" class="headerlink" title="2. 先用人话解释：什么是「Agent 化」？"></a>2. 先用人话解释：什么是「Agent 化」？</h2><p>你可以把 <strong>Agent</strong> 理解成：<strong>不只回答问题的助手，而是能替你查、替你办、办到一半还会来问你「这一步要不要继续」的那种。</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>今天的常见体验</th>
+<th>Agent 化之后（理想状态）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>你怎么用</strong></td>
+<td>自己找入口、填表单、对规则</td>
+<td>说目标，例如「帮我把上周那单退了」</td>
+</tr>
+<tr>
+<td><strong>App 怎么回应</strong></td>
+<td>固定页面：列表、按钮、弹窗</td>
+<td>先理解意图，再<strong>按步骤去查订单、填申请、等你确认</strong></td>
+</tr>
+<tr>
+<td><strong>出错时</strong></td>
+<td>你自己猜是哪一步错了</td>
+<td>助手说明卡在哪，给出可选方案</td>
+</tr>
+</tbody></table>
+<p>注意：<strong>不是把 App 变成一个聊天框就完事。</strong> 该让你签字确认的地方（比如涉及退款金额、地址修改）仍然会停一下；该看商品图、看评价的时候，页面也还在——变的是<strong>谁负责串联这些步骤</strong>。</p>
+<hr>
+<h2 id="3-电商为什么可能是「第一批」让你感受到的变化？"><a href="#3-电商为什么可能是「第一批」让你感受到的变化？" class="headerlink" title="3. 电商为什么可能是「第一批」让你感受到的变化？"></a>3. 电商为什么可能是「第一批」让你感受到的变化？</h2><p>网购有几个特点，和「助手替你跑腿」特别合拍：</p>
+<ol>
+<li><strong>步骤多</strong>：选品、领券、下单、支付、物流、售后——一条链路上环节长。</li>
+<li><strong>规则杂</strong>：满减、会员价、地区限购、退换条件，普通人很难一次记全。</li>
+<li><strong>重复劳动多</strong>：查物流、改地址、催发货、问「能不能价保」，本质都是「带着订单信息去问系统」。</li>
+<li><strong>你其实早就想要「一句话办完」</strong>：「跟客服说人话」的需求，比很多 App 都强烈。</li>
+</ol>
+<p>所以当我们说「未来应用都会 Agent 化」，<strong>电商 App、外卖、出行订票</strong>这类「强流程」产品，往往比纯娱乐类 App 更早走出一步——不是因为它更酷，而是因为<strong>用户痛点本来就在「流程太长」</strong>。</p>
+<hr>
+<h2 id="4-五个日常场景：今天-vs-明天"><a href="#4-五个日常场景：今天-vs-明天" class="headerlink" title="4. 五个日常场景：今天 vs 明天"></a>4. 五个日常场景：今天 vs 明天</h2><h3 id="场景-A：送礼不知道买啥"><a href="#场景-A：送礼不知道买啥" class="headerlink" title="场景 A：送礼不知道买啥"></a>场景 A：送礼不知道买啥</h3><p><strong>今天</strong>：打开搜索框，换关键词「母亲节礼物」「实用 礼盒」，刷评价、比价格、问朋友，最后下单时还可能买错尺码或颜色。</p>
+<p><strong>Agent 化之后（设想）</strong>：</p>
+<blockquote>
+<p>「想给 60 岁妈妈买生日礼物，她腰不好、不爱花哨，预算 500 以内，要能在三天内送到杭州。」</p>
+</blockquote>
+<p>助手可能会：根据历史偏好（若你授权）排除不合适的品类 → 筛出几款候选 → <strong>用卡片展示对比</strong>（价格、评价摘要、是否支持次日达）→ 你点选一款 → 它帮你检查地址和优惠券 → <strong>下单前弹确认页</strong>，你点「确认支付」才真正扣款。</p>
+<p>你省掉的是<strong>反复搜索和比对</strong>；你保留的是<strong>最后拍板的权力</strong>。</p>
+<h3 id="场景-B：退货-换货"><a href="#场景-B：退货-换货" class="headerlink" title="场景 B：退货 &#x2F; 换货"></a>场景 B：退货 &#x2F; 换货</h3><p><strong>今天</strong>：找到订单 → 判断是否在七天无理由内 → 选退货原因 → 拍照上传 → 等审核 → 自己填快递单号。</p>
+<p><strong>Agent 化之后（设想）</strong>：</p>
+<blockquote>
+<p>「这双鞋磨脚，想退掉，上周三收到的。」</p>
+</blockquote>
+<p>助手：定位订单 → 说明是否符合退换规则 → 若需要，引导拍两张照片 → <strong>生成退货申请草稿</strong> → 你确认后提交 → 若有上门取件，直接帮你预约时段。</p>
+<p>若规则不允许退（比如已拆封的贴身衣物），它会<strong>先说清楚原因和替代方案</strong>（换尺码、部分补偿券等），而不是让你填完表才被驳回。</p>
+<h3 id="场景-C：物流异常"><a href="#场景-C：物流异常" class="headerlink" title="场景 C：物流异常"></a>场景 C：物流异常</h3><p><strong>今天</strong>：复制快递单号 → 打开物流页 → 发现卡住 → 进客服 → 重复报订单号、地址、问题描述。</p>
+<p><strong>Agent 化之后（设想）</strong>：</p>
+<blockquote>
+<p>「显示签收了但我没收到。」</p>
+</blockquote>
+<p>助手：拉取该订单物流轨迹 → 判断是「驿站代收」「投递错误」还是「时间差」→ 若需要，<strong>代你发起工单或联系承运方</strong>，并把进度用你能看懂的话同步回来。</p>
+<h3 id="场景-D：大促凑单"><a href="#场景-D：大促凑单" class="headerlink" title="场景 D：大促凑单"></a>场景 D：大促凑单</h3><p><strong>今天</strong>：购物车算满减、跨店凑单、会员叠加，经常「差 23 元」——然后为了凑单多买了一样不需要的东西。</p>
+<p><strong>Agent 化之后（设想）</strong>：</p>
+<blockquote>
+<p>「我想凑到 300 减 40，别让我买垃圾凑数。」</p>
+</blockquote>
+<p>助手：读取购物车和可用券 → 推荐<strong>真正可能用得上的小件</strong>（纸巾、常购耗材等）或提示「分开下单更划算」→ 给出<strong>一页对比</strong>：现在下单 vs 放弃满减，各花多少钱。</p>
+<p>重点不是「AI 帮你买更多」，而是<strong>把算账这件事接过去</strong>。</p>
+<h3 id="场景-E：价保-发票-改地址"><a href="#场景-E：价保-发票-改地址" class="headerlink" title="场景 E：价保 &#x2F; 发票 &#x2F; 改地址"></a>场景 E：价保 &#x2F; 发票 &#x2F; 改地址</h3><p>这类需求特点：<strong>规则清晰、操作重复、但入口深</strong>。正是 Agent 适合接手的「跑腿型」任务——你说目标，它在后台调用原本就有的能力（查价保资格、申请发票、修改未发货订单地址），只在关键节点让你确认。</p>
+<hr>
+<h2 id="5-和「现在-App-里那个-AI-客服」有什么不同？"><a href="#5-和「现在-App-里那个-AI-客服」有什么不同？" class="headerlink" title="5. 和「现在 App 里那个 AI 客服」有什么不同？"></a>5. 和「现在 App 里那个 AI 客服」有什么不同？</h2><p>很多平台已经加了「智能客服」，你大概体验过：</p>
+<ul>
+<li>问东答西，三句之后转人工；</li>
+<li>只会发帮助文档链接；</li>
+<li>一涉及改订单、退钱，立刻说「请您自行操作」。</li>
+</ul>
+<p>那种更像<strong>问答机器人</strong>。Agent 化想解决的是再往前一步：</p>
+<table>
+<thead>
+<tr>
+<th>智能客服（常见）</th>
+<th>Agent 化（方向）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主要「说话」</td>
+<td>在授权范围内<strong>真的去查、去办</strong></td>
+</tr>
+<tr>
+<td>单次问答</td>
+<td><strong>多步任务</strong>：查 → 比 → 申请 → 确认</td>
+</tr>
+<tr>
+<td>失败了让你自己找入口</td>
+<td>说明卡在哪，并给出<strong>下一步可选项</strong></td>
+</tr>
+</tbody></table>
+<p>当然，<strong>今天市面上绝大多数 App 还没到后面这一列</strong>。上面写的很多是「正在发生和即将发生」的方向，不是承诺每一款明天就能用。</p>
+<hr>
+<h2 id="6-你需要知道的：好处与顾虑"><a href="#6-你需要知道的：好处与顾虑" class="headerlink" title="6. 你需要知道的：好处与顾虑"></a>6. 你需要知道的：好处与顾虑</h2><h3 id="可能带来的好处"><a href="#可能带来的好处" class="headerlink" title="可能带来的好处"></a>可能带来的好处</h3><ul>
+<li><strong>少记规则</strong>：满减、退换条件、会员权益，由助手按场景解释。</li>
+<li><strong>少点几次</strong>：高频琐事（查物流、催发货、开发票）一句话发起。</li>
+<li><strong>决策更轻松</strong>：对比、摘要、风险提示，比你自己翻几十条评价省时间。</li>
+</ul>
+<h3 id="合理的顾虑（也值得产品认真做）"><a href="#合理的顾虑（也值得产品认真做）" class="headerlink" title="合理的顾虑（也值得产品认真做）"></a>合理的顾虑（也值得产品认真做）</h3><ol>
+<li><p><strong>会不会乱下单、乱退款？</strong><br>正规设计会在<strong>支付、退款、改地址</strong>等节点强制你确认；不应「一句话就悄悄扣款」。</p>
+</li>
+<li><p><strong>隐私怎么办？</strong><br>助手若要「猜你喜欢」，需要订单、地址、浏览记录——<strong>应明确告诉你用了哪些数据、能否关闭</strong>，而不是默认全开。</p>
+</li>
+<li><p><strong>搞错了谁负责？</strong><br>比「聊天说错了」更严重的是「办错了」。所以可追溯、可撤销、能找人工兜底，和今天电商的售后体系一样重要，甚至更重要。</p>
+</li>
+<li><p><strong>会不会反而更难用？</strong><br>若只加一个聊天气泡，却解决不了问题，就是添乱。好的 Agent 化是<strong>该说话的时候说话，该出页面的时候出页面</strong>——不是把一切塞进对话框。</p>
+</li>
+</ol>
+<hr>
+<h2 id="7-App-界面会消失吗？"><a href="#7-App-界面会消失吗？" class="headerlink" title="7. App 界面会消失吗？"></a>7. App 界面会消失吗？</h2><p>大概率：<strong>不会。</strong></p>
+<p>商品图、尺码表、评价、支付密码、物流地图——这些仍然适合用「页面」呈现。变的是：</p>
+<ul>
+<li>你<strong>不必从首页开始自己找路</strong>；</li>
+<li>助手负责<strong>在后台串联</strong>查库存、领券、填地址；</li>
+<li>界面变成<strong>「当前这一步你需要看的东西」</strong>，而不是固定菜单树。</li>
+</ul>
+<p>可以粗浅理解成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">以前：App = 一本很厚的说明书，你自己翻目录</span><br><span class="line">以后：App = 说明书 + 一个熟门熟路的店员，你只说目标，他帮你翻并递到面前</span><br></pre></td></tr></table></figure>
+
+<p>店员再熟，<strong>付钱仍在你</strong>。</p>
+<hr>
+<h2 id="8-这和「未来所有-App-都会-Agent-化」有什么关系？"><a href="#8-这和「未来所有-App-都会-Agent-化」有什么关系？" class="headerlink" title="8. 这和「未来所有 App 都会 Agent 化」有什么关系？"></a>8. 这和「未来所有 App 都会 Agent 化」有什么关系？</h2><p>电商只是例子。同样的逻辑会出现在：</p>
+<ul>
+<li><strong>外卖</strong>：「两家店一起点，总配送费怎么最省」</li>
+<li><strong>出行</strong>：「周五晚七点到虹桥，要便宜但也要准时，帮我比一下高铁和网约车」</li>
+<li><strong>银行 &#x2F; 理财 App</strong>：「这个月多还一点房贷会不会更划算」——前提是严格确认与合规</li>
+</ul>
+<p>共同趋势是：<strong>从「人适应 App 的菜单结构」，转向「App 适应人的目标」</strong>。<br>电商因为离钱近、流程长、用户基数大，往往是最先被讨论、也最先试水的领域之一。</p>
+<hr>
+<h2 id="9-你现在可以怎么想这件事？"><a href="#9-你现在可以怎么想这件事？" class="headerlink" title="9. 你现在可以怎么想这件事？"></a>9. 你现在可以怎么想这件事？</h2><p>不必追每一个新名词。作为普通用户，记住三句就够：</p>
+<ol>
+<li><strong>Agent 化</strong> ≈ App 从「等你点」变成「能替你跑流程，但重要步骤仍要你点头」。</li>
+<li><strong>电商</strong>很可能是你最早感知到变化的一类 App——因为退货、物流、凑单太费神了。</li>
+<li><strong>值得警惕的不是 AI 太强，而是 AI 乱办还不让你知道</strong>——好的产品设计，一定让你<strong>看得懂、管得住、退得回</strong>。</li>
+</ol>
+<p>若你好奇「App 背后工程师在怎么实现这些」，可以读本站面向开发者的姊妹篇：<a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>——那是同一主题的另一面。</p>
+<p>也欢迎你在评论区留一句：<strong>你最希望哪个购物 App 先帮你办掉哪一件烦心事？</strong> 退货、凑单、还是找礼物——也许你的答案，就是下一代产品该先做的地方。</p>
+<hr>
+<h2 id="10-小结"><a href="#10-小结" class="headerlink" title="10. 小结"></a>10. 小结</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>简短回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent 化是什么？</td>
+<td>App 能听懂目标，并多步帮你办事，而不是只展示页面</td>
+</tr>
+<tr>
+<td>为什么用电商举例？</td>
+<td>步骤多、规则杂、重复劳动多，痛点清晰</td>
+</tr>
+<tr>
+<td>界面会没了吗？</td>
+<td>不会，但菜单导航的压力会小很多</td>
+</tr>
+<tr>
+<td>安全吗？</td>
+<td>取决于产品是否做好确认、权限和售后——这和今天网购一样关键</td>
+</tr>
+</tbody></table>
+<p>网购从 PC 时代「搜索 + 下单」，到手机时代「随时随地买」，已经变过一次。下一变，可能是<strong>从「自己逛」到「说目标、让 App 跑腿」</strong>——上面说的 Agent 化，本质上就是这件事。</p>
+<p>感谢读完。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/" data-id="cmpig4v3u000oe4mr2aws9u8u" data-title="未来的购物 App 会变怎样？——普通人眼里的「Agent 化」" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-关于Neo-从电商与链上到Agent化Web" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/" class="article-date">
+  <time class="dt-published" datetime="2026-05-23T12:00:00.000Z" itemprop="datePublished">2026-05-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>我是 Neo，做软件开发，长期在电商与加密货币场景里写 TS&#x2F;React&#x2F;Vue&#x2F;Go，现在更关心 Agent 如何改变应用形态。</p>
+</blockquote>
+<hr>
+<h2 id="0-一次「小改」牵出一串系统"><a href="#0-一次「小改」牵出一串系统" class="headerlink" title="0. 一次「小改」牵出一串系统"></a>0. 一次「小改」牵出一串系统</h2><p>有一次我以为只是改一个列表页的小交互：多一列筛选、调整一下空状态。结果从接口字段、缓存失效策略，到不同角色的按钮权限，都要跟着动一遍。电商系统里这种「小需求」并不少见——活动、库存、订单、营销规则叠在一起，表面是 UI，底下是一张张牵着的网。</p>
+<p>后来在加密货币相关产品里，我又习惯了另一套紧绷感：行情与资产数据要 timely，展示与风控边界要清楚，用户对「数错了」的容忍度极低。两段经历叠在一起，我慢慢形成同一个判断：<strong>我关心的从来不只是某个框架怎么用，而是一整套系统怎么稳稳地演进。</strong></p>
+<p>而最近一年，Agent 和 Cursor 一类工具把「从意图到改动」的距离拉短了。我既兴奋，也警惕——兴奋的是交付方式在变，警惕的是如果还按「堆功能」的老习惯往上贴 AI，只会多一个不好管的聊天框。这也是我开这个博客、并开始写 Agent 相关文章的直接原因。</p>
+<hr>
+<h2 id="1-从「堆功能」到「能演进」"><a href="#1-从「堆功能」到「能演进」" class="headerlink" title="1. 从「堆功能」到「能演进」"></a>1. 从「堆功能」到「能演进」</h2><h3 id="之前：先把需求做完"><a href="#之前：先把需求做完" class="headerlink" title="之前：先把需求做完"></a>之前：先把需求做完</h3><p>早期我的工作方式很典型：产品给 PRD，我拆页面和接口，排期、联调、上线。电商里常见的是大促前赶活动页、库存扣减与订单状态机；币圈相关产品里则是行情展示、资产汇总、充提与风控策略的呈现。目标明确：<strong>按时交付、少出线上事故</strong>。</p>
+<h3 id="卡点：改一处，牵全身"><a href="#卡点：改一处，牵全身" class="headerlink" title="卡点：改一处，牵全身"></a>卡点：改一处，牵全身</h3><p>真正磨人的不是写某个组件，而是<strong>边界不清</strong>。业务规则散落在多个服务里，改一个字段要问三个团队；联调环境不稳定，问题难以复现。需求看起来小，风险却像滚雪球。</p>
+<h3 id="现在：先想清楚怎么改、怎么验"><a href="#现在：先想清楚怎么改、怎么验" class="headerlink" title="现在：先想清楚怎么改、怎么验"></a>现在：先想清楚怎么改、怎么验</h3><p>现在我更愿意在动手前多问几句：这段逻辑属于谁？谁能改、改完怎么验？能不能分阶段上？对 AI&#x2F;Agent，我的态度也一样：<strong>它是嵌进流程的能力，不是替代思考的捷径。</strong></p>
+<blockquote>
+<p>我宁可慢一点把「谁能改什么、改完怎么验」说清楚，也不追求一次生成看起来能跑的代码。</p>
+</blockquote>
+<p>这句话差不多就是我现在的工作底线。</p>
+<hr>
+<h2 id="2-我是谁：软件开发，主战场在-Web-与后端"><a href="#2-我是谁：软件开发，主战场在-Web-与后端" class="headerlink" title="2. 我是谁：软件开发，主战场在 Web 与后端"></a>2. 我是谁：软件开发，主战场在 Web 与后端</h2><ul>
+<li><strong>角色</strong>：软件开发。熟悉<strong>电商</strong>（活动、交易、商品与订单链路）与<strong>加密货币</strong>（行情、资产、风控与展示）相关业务和系统特点。</li>
+<li><strong>技术栈</strong>：<strong>TypeScript · React · Vue · Go</strong><ul>
+<li>TS 与 React&#x2F;Vue：产品界面、复杂交互、BFF 与前端工程化。</li>
+<li>Go：接口服务、任务与需要稳定吞吐的后端模块。</li>
+</ul>
+</li>
+<li><strong>当前关注</strong>：Web 应用的 <strong>Agent 化</strong>、工程化落地，以及「未来 App 还会长什么样」。</li>
+</ul>
+<p>这里不想写成简历：年限和头衔对读者帮助不大，<strong>你在什么业务里解决过什么问题</strong>更有参考价值。若你也在电商或币圈做 Web&#x2F;全栈，欢迎对号入座聊具体场景。</p>
+<hr>
+<h2 id="3-我做事的三条原则"><a href="#3-我做事的三条原则" class="headerlink" title="3. 我做事的三条原则"></a>3. 我做事的三条原则</h2><h3 id="先划边界，再写代码"><a href="#先划边界，再写代码" class="headerlink" title="先划边界，再写代码"></a>先划边界，再写代码</h3><p>模块、权限、数据归属先说清，再讨论实现。电商里一个「加按钮」可能涉及运营权限；币圈里一处展示错误可能直接影响用户信任。边界清楚了，Agent 辅助改代码才不会越改越乱。</p>
+<h3 id="改造要可渐进"><a href="#改造要可渐进" class="headerlink" title="改造要可渐进"></a>改造要可渐进</h3><p>大系统允许分阶段演进：先只读查询、再半自动、最后才谈全自动。Agent 化也一样——不是一夜之间把整站换成聊天界面。我在 <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">《Web 应用的 Agent 化》</a> 里写的「渐进落地」，也是这条原则的外延。</p>
+<h3 id="结果要可验证"><a href="#结果要可验证" class="headerlink" title="结果要可验证"></a>结果要可验证</h3><p>能预览、能回滚、能审计。尤其是让 Agent 动仓库时，更需要状态机、范围约束和日志——这在 <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">《AI Agent 自动化工程实践》</a> 里有更完整的展开，这里不重复，只强调：<strong>能验、能查，比「生成得快」重要。</strong></p>
+<hr>
+<h2 id="4-为什么写这个博客"><a href="#4-为什么写这个博客" class="headerlink" title="4. 为什么写这个博客"></a>4. 为什么写这个博客</h2><p>一句话：<strong>分享生活与技术。</strong></p>
+<p>再具体一点：把实践里的判断记下来，避免重复踩坑；也给同路人一份可以讨论的文本，而不是只留在聊天记录里。这个站会不定期更新——技术深文花时间打磨，随笔则记录想法与转向。</p>
+<p>博客地址：<a href="https://neo-share.github.io/">https://Neo-share.github.io</a></p>
+<hr>
+<h2 id="5-如果你只想先读一篇技术文"><a href="#5-如果你只想先读一篇技术文" class="headerlink" title="5. 如果你只想先读一篇技术文"></a>5. 如果你只想先读一篇技术文</h2><p><strong>首推</strong>：<a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a></p>
+<ul>
+<li>写给 Web &#x2F; 全栈开发者：Agent 不是「多一个聊天框」，而是应用形态的演进。</li>
+<li>适合关心：现有 App 会怎样变、该提前储备哪些能力的人。</li>
+</ul>
+<p><strong>延伸阅读</strong>：<a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a></p>
+<ul>
+<li>以 Monorepo 为例：如何让 Agent <strong>稳定、可审计</strong>地改代码。</li>
+<li>适合已经在用 Cursor &#x2F; Agent、想上工程化控制的同学。</li>
+</ul>
+<p>两篇加起来，大致就是我目前技术输出的主线：<strong>趋势判断 + 落地方法</strong>。</p>
+<hr>
+<h2 id="6-生活之外：我也在问-App-还会长什么样"><a href="#6-生活之外：我也在问-App-还会长什么样" class="headerlink" title="6. 生活之外：我也在问 App 还会长什么样"></a>6. 生活之外：我也在问 App 还会长什么样</h2><p>这一节不算「生活八卦」，而是我真正会走神去想的事。</p>
+<p>交互会不会从「点菜单」变成「说目标」？手机和桌面会不会分工——一个负责呈现，一个负责在后台把流程跑完？电商和币圈这类<strong>强业务、强合规</strong>的场景，会不会反而比消费娱乐 App 更早走出一条「Agent 嵌进流程」的路？</p>
+<p>这些观察和写技术文是同一条路。若你对「未来 App 的形态」有看法，我很乐意听不同行业的版本——也许你的场景里，答案和 Web 开发者想象的并不一样。</p>
+<hr>
+<h2 id="7-接下来我想弄清的几件事"><a href="#7-接下来我想弄清的几件事" class="headerlink" title="7. 接下来我想弄清的几件事"></a>7. 接下来我想弄清的几件事</h2><ol>
+<li>Agent 化改造里，<strong>哪些页面值得先做</strong>，哪些不该动？</li>
+<li>在电商、加密货币这类场景里，<strong>工具调用与权限</strong>怎样设计才让人放心？</li>
+<li>「未来 App」会是统一超级入口，还是 <strong>垂直场景 + 深编排</strong>？</li>
+</ol>
+<p>也想反问读者一句：</p>
+<blockquote>
+<p>你觉得三年后你日常最常用的「App」，更像今天的微信，还是更像一个能替你跑流程的助手？</p>
+</blockquote>
+<p>欢迎留言或通过邮件和我聊。</p>
+<hr>
+<h2 id="8-联系我"><a href="#8-联系我" class="headerlink" title="8. 联系我"></a>8. 联系我</h2><ul>
+<li>博客：<a href="https://neo-share.github.io/">https://Neo-share.github.io</a></li>
+<li>GitHub：<a target="_blank" rel="noopener" href="https://github.com/Neo-share">https://github.com/Neo-share</a></li>
+<li>邮箱：<a href="mailto:&#x6c;&#105;&#117;&#x68;&#110;&#x6e;&#x6e;&#x40;&#49;&#x36;&#51;&#46;&#x63;&#111;&#x6d;">&#x6c;&#105;&#117;&#x68;&#110;&#x6e;&#x6e;&#x40;&#49;&#x36;&#51;&#46;&#x63;&#111;&#x6d;</a></li>
+</ul>
+<p>欢迎交流：Web &#x2F; Agent 工程化、电商与加密货币相关系统设计，以及对「未来应用形态」的看法。</p>
+<p>感谢读完。这是本站的一篇自我介绍，后续文章会陆续更新在首页与归档里——我们慢慢来。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/" data-id="cmpig4v3v000pe4mrhset2uss" data-title="关于 Neo：从电商与链上到 Agent 化 Web" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Web应用的Agent化演进" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/" class="article-date">
@@ -450,7 +790,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/" data-id="cmphrgora0000xmmrcr58b6ly" data-title="Web 应用的 Agent 化：面向开发者的未来演进" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="https://neo-share.github.io/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/" data-id="cmpig4v3s0001e4mr6ekubwx5" data-title="Web 应用的 Agent 化：面向开发者的未来演进" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -1076,115 +1416,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpgb9b0e0000rfmrfbn2fmpi" data-title="AI Agent 自动化工程实践" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="https://neo-share.github.io/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpig4v3q0000e4mr4xhjh1cb" data-title="AI Agent 自动化工程实践" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/05/21/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2026-05-21T11:33:37.413Z" itemprop="datePublished">2026-05-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/05/21/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/21/hello-world/" data-id="cmpgb9b0g0001rfmrafa4anme" data-title="Hello World" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-welcome" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/05/21/welcome/" class="article-date">
-  <time class="dt-published" datetime="2026-05-21T06:00:00.000Z" itemprop="datePublished">2026-05-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/05/21/welcome/">欢迎来到我的博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>这是使用 <strong>Hexo</strong> 搭建、通过 <strong>GitHub Pages</strong> 发布的个人博客。</p>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本地预览（访问 http://localhost:4000）</span></span><br><span class="line">npm run server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建文章</span></span><br><span class="line">npx hexo new <span class="string">&quot;文章标题&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成静态文件</span></span><br><span class="line">npm run build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署到 GitHub（需先配置 _config.yml 中的 deploy）</span></span><br><span class="line">npm run deploy</span><br></pre></td></tr></table></figure>
-
-<h2 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h2><ol>
-<li>在 GitHub 创建仓库 <a target="_blank" rel="noopener" href="https://github.com/new">Neo-share.github.io</a>（若尚未创建）</li>
-<li>仓库 <strong>Settings → Pages</strong> 源分支选 <code>main</code></li>
-<li>执行 <code>npm run deploy</code> 发布站点</li>
-</ol>
-<p>祝你写作愉快。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/21/welcome/" data-id="cmpgb9b0h0004rfmreadz6thw" data-title="欢迎来到我的博客" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub-Pages/" rel="tag">GitHub Pages</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li></ul>
 
     </footer>
   </div>
@@ -1214,7 +1450,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub-Pages/" rel="tag">GitHub Pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -1224,7 +1460,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 20px;">AI</a> <a href="/tags/Agent/" style="font-size: 20px;">Agent</a> <a href="/tags/GitHub-Pages/" style="font-size: 10px;">GitHub Pages</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 10px;">Web开发</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 10px;">架构</a>
+      <a href="/tags/AI/" style="font-size: 20px;">AI</a> <a href="/tags/Agent/" style="font-size: 20px;">Agent</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 10px;">Web开发</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 10px;">架构</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 10px;">电商</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 15px;">随笔</a>
     </div>
   </div>
 
@@ -1246,19 +1482,19 @@
       <ul>
         
           <li>
+            <a href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
+          </li>
+        
+          <li>
             <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>
           </li>
         
           <li>
             <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/21/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/21/welcome/">欢迎来到我的博客</a>
           </li>
         
       </ul>
