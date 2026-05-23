@@ -129,7 +129,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub-Pages/" rel="tag">GitHub Pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub-Pages/" rel="tag">GitHub Pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li></ul>
     </div>
   </div>
 
@@ -139,7 +139,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 10px;">AI</a> <a href="/tags/Agent/" style="font-size: 10px;">Agent</a> <a href="/tags/GitHub-Pages/" style="font-size: 10px;">GitHub Pages</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a>
+      <a href="/tags/AI/" style="font-size: 20px;">AI</a> <a href="/tags/Agent/" style="font-size: 20px;">Agent</a> <a href="/tags/GitHub-Pages/" style="font-size: 10px;">GitHub Pages</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 10px;">Web开发</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 10px;">架构</a>
     </div>
   </div>
 
@@ -159,6 +159,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>
+          </li>
         
           <li>
             <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a>
@@ -213,6 +217,19 @@
 
 
 <script src="/js/script.js"></script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.3/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!window.mermaid) return;
+      var opts = {"startOnLoad":false,"theme":"neutral","securityLevel":"loose"};
+      mermaid.initialize(opts);
+      mermaid.run({ querySelector: '.article-entry pre.mermaid, pre.mermaid' });
+    });
+  </script>
+
 
 
 
