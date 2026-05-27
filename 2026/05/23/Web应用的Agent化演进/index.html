@@ -6,12 +6,12 @@
   
   <title>Web 应用的 Agent 化：面向开发者的未来演进 | Neo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="向 Web 应用开发者介绍「应用都会 Agent 化」这一趋势：交互范式、技术栈与渐进落地路径，以及你需要提前储备的能力。">
+  <meta name="description" content="Agent 不是多一个聊天框，而是下一代 Web 应用形态。面向前端、全栈开发者：从 L1 体验层到 L3 架构层的演进路径、Tool 化实践、人机协同与可观测性。Neo的数智空间深度观察。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Web 应用的 Agent 化：面向开发者的未来演进">
 <meta property="og:url" content="https://neo-share.github.io/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/index.html">
 <meta property="og:site_name" content="Neo的博客">
-<meta property="og:description" content="向 Web 应用开发者介绍「应用都会 Agent 化」这一趋势：交互范式、技术栈与渐进落地路径，以及你需要提前储备的能力。">
+<meta property="og:description" content="Agent 不是多一个聊天框，而是下一代 Web 应用形态。面向前端、全栈开发者：从 L1 体验层到 L3 架构层的演进路径、Tool 化实践、人机协同与可观测性。Neo的数智空间深度观察。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-23T02:00:00.000Z">
 <meta property="article:modified_time" content="2026-05-23T02:00:00.000Z">
@@ -19,8 +19,8 @@
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="Web开发">
-<meta property="article:tag" content="前端">
-<meta property="article:tag" content="架构">
+<meta property="article:tag" content="Neo的数智空间">
+<meta property="article:tag" content="深度观察">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Neo的博客" type="application/atom+xml">
@@ -108,11 +108,21 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p><strong>副标题</strong>：为什么我说「现有 APP 都会 Agent 化」<br><strong>受众</strong>：前端、全栈、Node&#x2F;BFF、小程序等 Web 方向开发者<br><strong>核心命题</strong>：Agent 不是「多一个聊天框」，而是下一代应用形态——你的页面、API、权限与可观测性都要为此重构</p>
-</blockquote>
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E5%85%88%E8%AE%B2%E7%BB%93%E8%AE%BA%E8%BF%99%E4%B8%8D%E6%98%AF%E5%8F%AF%E9%80%89%E6%BD%AE%E6%B5%81">先讲结论：这不是可选潮流</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF-agent-%E5%BA%94%E7%94%A8">什么是「Agent 应用」？</a></li>
+<li><a href="#%E5%BA%94%E7%94%A8-agent-%E5%8C%96%E5%8F%91%E7%94%9F%E5%9C%A8%E5%93%AA%E5%87%A0%E4%B8%AA%E5%B1%82%E6%AC%A1">「应用 Agent 化」发生在哪几个层次？</a></li>
+<li><a href="#%E4%BA%A4%E4%BA%92%E8%8C%83%E5%BC%8F%E4%BB%8E%E9%A1%B5%E9%9D%A2%E5%AF%BC%E8%88%AA%E5%88%B0%E7%9B%AE%E6%A0%87%E5%AE%8C%E6%88%90">交互范式：从「页面导航」到「目标完成」</a></li>
+<li><a href="#%E6%8A%80%E6%9C%AF%E6%A0%88%E5%8F%98%E5%8C%96web-%E5%BC%80%E5%8F%91%E8%80%85%E4%BC%9A%E7%A2%B0%E4%BB%80%E4%B9%88">技术栈变化：Web 开发者会碰什么？</a></li>
+<li><a href="#%E7%8E%B0%E6%9C%89%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%B8%90%E8%BF%9B-agent-%E5%8C%96">现有应用如何渐进 Agent 化？</a></li>
+<li><a href="#web-%E5%BC%80%E5%8F%91%E8%80%85%E7%8E%B0%E5%9C%A8%E8%AF%A5%E8%A1%A5%E5%93%AA%E4%BA%9B%E8%83%BD%E5%8A%9B">Web 开发者现在该补哪些能力？</a></li>
+<li><a href="#%E9%A3%8E%E9%99%A9%E4%B8%8E%E8%BE%B9%E7%95%8C%E7%90%86%E6%80%A7-agent-%E5%8C%96">风险与边界：理性 Agent 化</a></li>
+<li><a href="#%E5%92%8C%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%80%E6%96%87%E7%9A%84%E5%85%B3%E7%B3%BB">和「工程实践」一文的关系</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93%E7%BB%99-web-%E5%BC%80%E5%8F%91%E8%80%85%E7%9A%84%E4%B8%80%E5%8F%A5%E8%AF%9D">总结：给 Web 开发者的一句话</a></li>
+<li><a href="#%E5%85%B3%E6%B3%A8%E4%B8%8E%E7%9B%B8%E5%85%B3">关注与相关</a></li>
+</ul>
 <hr>
-<h2 id="1-先讲结论：这不是可选潮流"><a href="#1-先讲结论：这不是可选潮流" class="headerlink" title="1. 先讲结论：这不是可选潮流"></a>1. 先讲结论：这不是可选潮流</h2><p>如果你过去十年做的是 Web 应用，你大概率熟悉这条主线：</p>
+<h2 id="先讲结论：这不是可选潮流"><a href="#先讲结论：这不是可选潮流" class="headerlink" title="先讲结论：这不是可选潮流"></a>先讲结论：这不是可选潮流</h2><p>如果你过去十年做的是 Web 应用，你大概率熟悉这条主线：</p>
 <blockquote>
 <p>表单 + 列表 + 详情页 → REST&#x2F;GraphQL → 状态管理 → 部署上线</p>
 </blockquote>
@@ -145,7 +155,7 @@
 </tbody></table>
 <p><strong>Agent 应用开发，就是 Web 开发的下一站。</strong> 越早理解演进路径，越不会在「给老系统贴一个 Copilot 侧边栏」时走弯路。</p>
 <hr>
-<h2 id="2-什么是「Agent-应用」？"><a href="#2-什么是「Agent-应用」？" class="headerlink" title="2. 什么是「Agent 应用」？"></a>2. 什么是「Agent 应用」？</h2><h3 id="2-1-一句话定义"><a href="#2-1-一句话定义" class="headerlink" title="2.1 一句话定义"></a>2.1 一句话定义</h3><p><strong>Agent 应用</strong>：以大型语言模型（LLM）为推理核心，能够根据用户目标<strong>自主规划、调用工具、读写状态、在多步执行中保持上下文</strong>的软件系统。</p>
+<h2 id="什么是「Agent-应用」？"><a href="#什么是「Agent-应用」？" class="headerlink" title="什么是「Agent 应用」？"></a>什么是「Agent 应用」？</h2><h3 id="一句话定义"><a href="#一句话定义" class="headerlink" title="一句话定义"></a>一句话定义</h3><p><strong>Agent 应用</strong>：以大型语言模型（LLM）为推理核心，能够根据用户目标<strong>自主规划、调用工具、读写状态、在多步执行中保持上下文</strong>的软件系统。</p>
 <p>它和「带 AI 功能的传统应用」的差别，不在于有没有模型，而在于<strong>谁主导流程</strong>。</p>
 <pre class="mermaid">flowchart TB
   subgraph traditional["传统 Web 应用"]
@@ -162,14 +172,14 @@
     ORCH --> UI2["动态 UI / 流式反馈 / 确认卡片"]
   end</pre>
 
-<h3 id="2-2-四个关键特征（Web-开发者版）"><a href="#2-2-四个关键特征（Web-开发者版）" class="headerlink" title="2.2 四个关键特征（Web 开发者版）"></a>2.2 四个关键特征（Web 开发者版）</h3><ol>
+<h3 id="四个关键特征（Web-开发者版）"><a href="#四个关键特征（Web-开发者版）" class="headerlink" title="四个关键特征（Web 开发者版）"></a>四个关键特征（Web 开发者版）</h3><ol>
 <li><strong>意图驱动</strong>：用户说「帮我把上周未发货的订单批量提醒客服」，而不是点开 5 个筛选器。</li>
 <li><strong>工具调用（Tool Use）</strong>：Agent 不「猜」数据，而是通过你暴露的 HTTP、tRPC、SQL、搜索等<strong>受控接口</strong>拿真数据、做真操作。</li>
 <li><strong>多步执行</strong>：一次对话可能触发查库 → 生成草稿 → 等人确认 → 批量写入；需要<strong>任务状态机</strong>，不是单次 request&#x2F;response。</li>
 <li><strong>可治理</strong>：每次调用谁、改了什么、为何失败，必须可追溯——这和 Web 里的「操作日志 + 权限」是一脉相承的。</li>
 </ol>
 <hr>
-<h2 id="3-「应用-Agent-化」发生在哪几个层次？"><a href="#3-「应用-Agent-化」发生在哪几个层次？" class="headerlink" title="3. 「应用 Agent 化」发生在哪几个层次？"></a>3. 「应用 Agent 化」发生在哪几个层次？</h2><p>不必一夜之间重写产品。业界常见的演进是<strong>由浅入深三层</strong>：</p>
+<h2 id="「应用-Agent-化」发生在哪几个层次？"><a href="#「应用-Agent-化」发生在哪几个层次？" class="headerlink" title="「应用 Agent 化」发生在哪几个层次？"></a>「应用 Agent 化」发生在哪几个层次？</h2><p>不必一夜之间重写产品。业界常见的演进是<strong>由浅入深三层</strong>：</p>
 <pre class="mermaid">flowchart LR
   L1["L1 体验层\nCopilot / 侧边栏 / 命令面板"]
   L2["L2 能力层\nAPI 工具化 · MCP · Function Calling"]
@@ -207,11 +217,11 @@
 </tbody></table>
 <p><strong>误区</strong>：长期停在 L1——所有业务仍靠人手点页面，AI 只能「回答问题」。<br><strong>正路</strong>：L1 获客、L2 沉淀可调用能力、L3 让核心路径走 Agent 编排。</p>
 <hr>
-<h2 id="4-交互范式：从「页面导航」到「目标完成」"><a href="#4-交互范式：从「页面导航」到「目标完成」" class="headerlink" title="4. 交互范式：从「页面导航」到「目标完成」"></a>4. 交互范式：从「页面导航」到「目标完成」</h2><h3 id="4-1-传统-Web：界面即流程"><a href="#4-1-传统-Web：界面即流程" class="headerlink" title="4.1 传统 Web：界面即流程"></a>4.1 传统 Web：界面即流程</h3><p>开发者用路由和组件<strong>预定义</strong>用户路径：</p>
+<h2 id="交互范式：从「页面导航」到「目标完成」"><a href="#交互范式：从「页面导航」到「目标完成」" class="headerlink" title="交互范式：从「页面导航」到「目标完成」"></a>交互范式：从「页面导航」到「目标完成」</h2><h3 id="传统-Web：界面即流程"><a href="#传统-Web：界面即流程" class="headerlink" title="传统 Web：界面即流程"></a>传统 Web：界面即流程</h3><p>开发者用路由和组件<strong>预定义</strong>用户路径：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dashboard → /orders → /orders/:id → 点击「导出」→ 下载</span><br></pre></td></tr></table></figure>
 
 <p>优点是确定性强、可测试、性能好；缺点是<strong>学习成本高</strong>——新用户要记住菜单在哪、字段什么意思。</p>
-<h3 id="4-2-Agent-化-Web：界面即「执行结果的投影」"><a href="#4-2-Agent-化-Web：界面即「执行结果的投影」" class="headerlink" title="4.2 Agent 化 Web：界面即「执行结果的投影」"></a>4.2 Agent 化 Web：界面即「执行结果的投影」</h3><p>用户给出<strong>目标</strong>，系统生成<strong>当前最优的 UI</strong>（可能是表格、卡片、确认框、流式日志）：</p>
+<h3 id="Agent-化-Web：界面即「执行结果的投影」"><a href="#Agent-化-Web：界面即「执行结果的投影」" class="headerlink" title="Agent 化 Web：界面即「执行结果的投影」"></a>Agent 化 Web：界面即「执行结果的投影」</h3><p>用户给出<strong>目标</strong>，系统生成<strong>当前最优的 UI</strong>（可能是表格、卡片、确认框、流式日志）：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">「导出上周华东区退款单并标红异常金额」</span><br><span class="line">  → Agent 解析意图</span><br><span class="line">  → 调用 listOrders + filterRegion + exportCsv</span><br><span class="line">  → 流式展示进度</span><br><span class="line">  → 异常行高亮预览</span><br><span class="line">  → 用户确认后下载</span><br></pre></td></tr></table></figure>
 
 <p>对前端的影响：</p>
@@ -220,7 +230,7 @@
 <li><strong>流式 UI</strong>（SSE &#x2F; WebSocket）成为标配：用户要看到 Agent「正在查库 &#x2F; 正在写文件」。</li>
 <li><strong>确认点（Human-in-the-loop）</strong> 是一等公民：涉及钱、权限、删除时，必须卡住等人点确认——这和表单里的「二次确认」同源，只是触发条件由 Agent 决策。</li>
 </ul>
-<h3 id="4-3-三种-UI-模式并存（未来-3-年的常态）"><a href="#4-3-三种-UI-模式并存（未来-3-年的常态）" class="headerlink" title="4.3 三种 UI 模式并存（未来 3 年的常态）"></a>4.3 三种 UI 模式并存（未来 3 年的常态）</h3><table>
+<h3 id="三种-UI-模式并存（未来-3-年的常态）"><a href="#三种-UI-模式并存（未来-3-年的常态）" class="headerlink" title="三种 UI 模式并存（未来 3 年的常态）"></a>三种 UI 模式并存（未来 3 年的常态）</h3><table>
 <thead>
 <tr>
 <th>模式</th>
@@ -246,7 +256,7 @@
 </tbody></table>
 <p>好的 Agent 化产品不是「去掉页面」，而是<strong>让页面与对话共享同一套业务能力</strong>。</p>
 <hr>
-<h2 id="5-技术栈变化：Web-开发者会碰什么？"><a href="#5-技术栈变化：Web-开发者会碰什么？" class="headerlink" title="5. 技术栈变化：Web 开发者会碰什么？"></a>5. 技术栈变化：Web 开发者会碰什么？</h2><h3 id="5-1-前端"><a href="#5-1-前端" class="headerlink" title="5.1 前端"></a>5.1 前端</h3><table>
+<h2 id="技术栈变化：Web-开发者会碰什么？"><a href="#技术栈变化：Web-开发者会碰什么？" class="headerlink" title="技术栈变化：Web 开发者会碰什么？"></a>技术栈变化：Web 开发者会碰什么？</h2><h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><table>
 <thead>
 <tr>
 <th>领域</th>
@@ -276,7 +286,7 @@
 </tr>
 </tbody></table>
 <p>技术选型上，React &#x2F; Vue &#x2F; Next &#x2F; Nuxt 都仍适用；变化的是<strong>边界</strong>：前端不再只调 BFF，还要展示「Agent 正在调用哪些工具、结果是否可信」。</p>
-<h3 id="5-2-后端与-BFF"><a href="#5-2-后端与-BFF" class="headerlink" title="5.2 后端与 BFF"></a>5.2 后端与 BFF</h3><p>你需要为 Agent 提供<strong>机器可读、人类可审计</strong>的能力接口：</p>
+<h3 id="后端与-BFF"><a href="#后端与-BFF" class="headerlink" title="后端与 BFF"></a>后端与 BFF</h3><p>你需要为 Agent 提供<strong>机器可读、人类可审计</strong>的能力接口：</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示意：把「业务动作」声明为 Tool，而不是让 LLM 拼 SQL</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> tools = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;list_orders&#x27;</span>,</span><br><span class="line">    <span class="attr">description</span>: <span class="string">&#x27;按时间、区域、状态筛选订单，只读&#x27;</span>,</span><br><span class="line">    <span class="attr">parameters</span>: orderFilterSchema,</span><br><span class="line">    <span class="attr">handler</span>: listOrders,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;batch_notify_support&#x27;</span>,</span><br><span class="line">    <span class="attr">description</span>: <span class="string">&#x27;对订单 ID 列表发送客服提醒，需 approval&#x27;</span>,</span><br><span class="line">    <span class="attr">parameters</span>: notifySchema,</span><br><span class="line">    <span class="attr">handler</span>: batchNotify,</span><br><span class="line">    <span class="attr">requiresApproval</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 
 <p>实践要点：</p>
@@ -285,7 +295,7 @@
 <li><strong>幂等与限流</strong>：Agent 可能重复调用同一工具。</li>
 <li><strong>权限下沉到工具级</strong>：「能聊天」≠「能删库」。</li>
 </ul>
-<h3 id="5-3-编排与运行时"><a href="#5-3-编排与运行时" class="headerlink" title="5.3 编排与运行时"></a>5.3 编排与运行时</h3><table>
+<h3 id="编排与运行时"><a href="#编排与运行时" class="headerlink" title="编排与运行时"></a>编排与运行时</h3><table>
 <thead>
 <tr>
 <th>组件</th>
@@ -310,13 +320,13 @@
 </tr>
 </tbody></table>
 <p>开源与商业方案都在快速成熟（LangGraph、Temporal、各类 Agent SDK、Cursor 等）。Web 团队不必自研模型，但必须<strong>自研领域工具与治理策略</strong>。</p>
-<h3 id="5-4-与-MCP、OpenAPI-的关系"><a href="#5-4-与-MCP、OpenAPI-的关系" class="headerlink" title="5.4 与 MCP、OpenAPI 的关系"></a>5.4 与 MCP、OpenAPI 的关系</h3><ul>
+<h3 id="与-MCP、OpenAPI-的关系"><a href="#与-MCP、OpenAPI-的关系" class="headerlink" title="与 MCP、OpenAPI 的关系"></a>与 MCP、OpenAPI 的关系</h3><ul>
 <li><strong>OpenAPI &#x2F; tRPC</strong>：描述「你的业务 API 长什么样」。</li>
 <li><strong>MCP（Model Context Protocol）</strong>：描述「外部能力如何以标准方式接到 Agent」。</li>
 </ul>
 <p>Web 团队的最小行动：<strong>先把内部高频 API 整理成 Tool 清单</strong>（名称、描述、参数、副作用、权限），再考虑是否挂 MCP Server。否则 Agent 只能在文档里「幻觉」业务。</p>
 <hr>
-<h2 id="6-现有应用如何渐进-Agent-化？"><a href="#6-现有应用如何渐进-Agent-化？" class="headerlink" title="6. 现有应用如何渐进 Agent 化？"></a>6. 现有应用如何渐进 Agent 化？</h2><p>下面是一条<strong>可落地的迁移路径</strong>（适合已有用户量的 Web 产品）：</p>
+<h2 id="现有应用如何渐进-Agent-化？"><a href="#现有应用如何渐进-Agent-化？" class="headerlink" title="现有应用如何渐进 Agent 化？"></a>现有应用如何渐进 Agent 化？</h2><p>下面是一条<strong>可落地的迁移路径</strong>（适合已有用户量的 Web 产品）：</p>
 <pre class="mermaid">flowchart TD
   A["盘点高频用户目标\n（不是页面，是任务）"] --> B["选 3–5 个只读场景\n做 L1+L2 PoC"]
   B --> C["统一 Tool 层 + 鉴权 + 审计日志"]
@@ -324,21 +334,21 @@
   D --> E["核心写操作加审批流\nHuman-in-the-loop"]
   E --> F["评估成本与 SLA\n模型路由 / 缓存 / 小模型兜底"]</pre>
 
-<h3 id="6-1-第一步：用「用户任务」倒推，不是用「页面」正推"><a href="#6-1-第一步：用「用户任务」倒推，不是用「页面」正推" class="headerlink" title="6.1 第一步：用「用户任务」倒推，不是用「页面」正推"></a>6.1 第一步：用「用户任务」倒推，不是用「页面」正推</h3><p>写下用户真正想完成的句子，例如：</p>
+<h3 id="第一步：用「用户任务」倒推，不是用「页面」正推"><a href="#第一步：用「用户任务」倒推，不是用「页面」正推" class="headerlink" title="第一步：用「用户任务」倒推，不是用「页面」正推"></a>第一步：用「用户任务」倒推，不是用「页面」正推</h3><p>写下用户真正想完成的句子，例如：</p>
 <ul>
 <li>「把这周转化率下降的 SKU 列出来并解释可能原因」</li>
 <li>「根据模板生成活动页并预览」</li>
 <li>「把测试环境数据库同步到 staging（危险）」</li>
 </ul>
 <p>每个任务映射到：<strong>需要哪些读接口、哪些写接口、哪些必须人工确认</strong>。</p>
-<h3 id="6-2-第二步：Tool-化，而不是-Prompt-化"><a href="#6-2-第二步：Tool-化，而不是-Prompt-化" class="headerlink" title="6.2 第二步：Tool 化，而不是 Prompt 化"></a>6.2 第二步：Tool 化，而不是 Prompt 化</h3><p>不要把业务逻辑写进 prompt里「你帮我算一下折扣……」。<br><strong>折扣规则应在代码里</strong>；Agent 只负责选择调用 <code>calculate_discount</code> 并展示结果。</p>
+<h3 id="第二步：Tool-化，而不是-Prompt-化"><a href="#第二步：Tool-化，而不是-Prompt-化" class="headerlink" title="第二步：Tool 化，而不是 Prompt 化"></a>第二步：Tool 化，而不是 Prompt 化</h3><p>不要把业务逻辑写进 prompt 里「你帮我算一下折扣……」。<br><strong>折扣规则应在代码里</strong>；Agent 只负责选择调用 <code>calculate_discount</code> 并展示结果。</p>
 <p>这样：</p>
 <ul>
 <li>单元测试仍然覆盖业务代码；</li>
 <li>Agent 行为可通过「工具是否被正确调用」来评估；</li>
 <li>换模型时业务风险可控。</li>
 </ul>
-<h3 id="6-3-第三步：人机协同与审计"><a href="#6-3-第三步：人机协同与审计" class="headerlink" title="6.3 第三步：人机协同与审计"></a>6.3 第三步：人机协同与审计</h3><p>Web 应用已有登录态、RBAC、操作日志——Agent 化后应升级为：</p>
+<h3 id="第三步：人机协同与审计"><a href="#第三步：人机协同与审计" class="headerlink" title="第三步：人机协同与审计"></a>第三步：人机协同与审计</h3><p>Web 应用已有登录态、RBAC、操作日志——Agent 化后应升级为：</p>
 <table>
 <thead>
 <tr>
@@ -363,32 +373,32 @@
 <td>批量写操作支持 dry-run 与撤销</td>
 </tr>
 </tbody></table>
-<h3 id="6-4-第四步：体验与成本工程"><a href="#6-4-第四步：体验与成本工程" class="headerlink" title="6.4 第四步：体验与成本工程"></a>6.4 第四步：体验与成本工程</h3><ul>
+<h3 id="第四步：体验与成本工程"><a href="#第四步：体验与成本工程" class="headerlink" title="第四步：体验与成本工程"></a>第四步：体验与成本工程</h3><ul>
 <li><strong>流式反馈</strong>：减少「黑盒等待」带来的不信任。</li>
 <li><strong>模型路由</strong>：简单分类用小模型，复杂规划用大模型。</li>
 <li><strong>缓存</strong>：相同只读查询命中 Redis，避免重复 Token。</li>
 <li><strong>失败降级</strong>：工具超时 → 明确告知用户并给出「改用手动页面」的链接。</li>
 </ul>
 <hr>
-<h2 id="7-Web-开发者现在该补哪些能力？"><a href="#7-Web-开发者现在该补哪些能力？" class="headerlink" title="7. Web 开发者现在该补哪些能力？"></a>7. Web 开发者现在该补哪些能力？</h2><h3 id="7-1-短期（1–2-个月可上手）"><a href="#7-1-短期（1–2-个月可上手）" class="headerlink" title="7.1 短期（1–2 个月可上手）"></a>7.1 短期（1–2 个月可上手）</h3><ol>
+<h2 id="Web-开发者现在该补哪些能力？"><a href="#Web-开发者现在该补哪些能力？" class="headerlink" title="Web 开发者现在该补哪些能力？"></a>Web 开发者现在该补哪些能力？</h2><h3 id="短期（1–2-个月可上手）"><a href="#短期（1–2-个月可上手）" class="headerlink" title="短期（1–2 个月可上手）"></a>短期（1–2 个月可上手）</h3><ol>
 <li><strong>Tool &#x2F; Function Calling 设计</strong>：会写清晰 description、严格 parameters、合理错误码。</li>
 <li><strong>流式接口与前端渲染</strong>：SSE、分块 JSON、中断请求。</li>
 <li><strong>Prompt 与产品边界</strong>：哪些交给模型、哪些必须代码兜底。</li>
 <li><strong>基础评估</strong>：同一用户目标，多轮测试「是否调对工具、是否越权」。</li>
 </ol>
-<h3 id="7-2-中期（3–6-个月形成团队能力）"><a href="#7-2-中期（3–6-个月形成团队能力）" class="headerlink" title="7.2 中期（3–6 个月形成团队能力）"></a>7.2 中期（3–6 个月形成团队能力）</h3><ol>
+<h3 id="中期（3–6-个月形成团队能力）"><a href="#中期（3–6-个月形成团队能力）" class="headerlink" title="中期（3–6 个月形成团队能力）"></a>中期（3–6 个月形成团队能力）</h3><ol>
 <li><strong>任务编排与状态机</strong>：多步任务、失败重试、checkpoint。</li>
 <li><strong>安全</strong>：提示注入、敏感数据脱敏、工具沙箱。</li>
 <li><strong>可观测性</strong>：trace 每次对话的成本、延迟、工具失败率。</li>
 <li><strong>评测体系</strong>：黄金数据集 + 自动化回归（发布前跑一轮 Agent 场景）。</li>
 </ol>
-<h3 id="7-3-长期（差异化竞争力）"><a href="#7-3-长期（差异化竞争力）" class="headerlink" title="7.3 长期（差异化竞争力）"></a>7.3 长期（差异化竞争力）</h3><ol>
+<h3 id="长期（差异化竞争力）"><a href="#长期（差异化竞争力）" class="headerlink" title="长期（差异化竞争力）"></a>长期（差异化竞争力）</h3><ol>
 <li><strong>领域 Agent 架构</strong>：电商、CRM、DevOps 各自的最优工具粒度。</li>
 <li><strong>与 CI&#x2F;CD、工单、监控打通</strong>：Agent 不只是 UI，而是<strong>运维与研发闭环</strong>的一部分。</li>
 <li><strong>多 Agent 协作</strong>：规划 Agent、执行 Agent、审查 Agent 分工（对 Monorepo 团队尤其相关）。</li>
 </ol>
 <hr>
-<h2 id="8-风险与边界：理性-Agent-化"><a href="#8-风险与边界：理性-Agent-化" class="headerlink" title="8. 风险与边界：理性 Agent 化"></a>8. 风险与边界：理性 Agent 化</h2><table>
+<h2 id="风险与边界：理性-Agent-化"><a href="#风险与边界：理性-Agent-化" class="headerlink" title="风险与边界：理性 Agent 化"></a>风险与边界：理性 Agent 化</h2><table>
 <thead>
 <tr>
 <th>风险</th>
@@ -424,7 +434,7 @@
 </tbody></table>
 <p><strong>不是所有功能都适合 Agent 化。</strong> 强监管表单录入、毫秒级交易、严格确定性计算，仍应以传统代码为主，Agent 做辅助。</p>
 <hr>
-<h2 id="9-和「工程实践」一文的关系"><a href="#9-和「工程实践」一文的关系" class="headerlink" title="9. 和「工程实践」一文的关系"></a>9. 和「工程实践」一文的关系</h2><p>本文偏<strong>方向与产品&#x2F;架构思维</strong>，面向「我要不要做、怎么做规划」。</p>
+<h2 id="和「工程实践」一文的关系"><a href="#和「工程实践」一文的关系" class="headerlink" title="和「工程实践」一文的关系"></a>和「工程实践」一文的关系</h2><p>本文偏<strong>方向与产品&#x2F;架构思维</strong>，面向「我要不要做、怎么做规划」。</p>
 <p>若你已在 Monorepo 或复杂全栈项目里让 <strong>AI Agent 参与改代码、跑 CI、控范围</strong>，可继续阅读同系列的工程化实践文：</p>
 <ul>
 <li><a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a> —— 任务状态机、scope 校验、质量门禁，解决「Agent 写代码如何可信」。</li>
@@ -438,7 +448,7 @@
 
 <p><strong>产品 Agent 化</strong> + <strong>研发 Agent 化</strong>，会同时发生在一家互联网公司里。Web 开发者往往两边都会碰到。</p>
 <hr>
-<h2 id="10-总结：给-Web-开发者的一句话"><a href="#10-总结：给-Web-开发者的一句话" class="headerlink" title="10. 总结：给 Web 开发者的一句话"></a>10. 总结：给 Web 开发者的一句话</h2><blockquote>
+<h2 id="总结：给-Web-开发者的一句话"><a href="#总结：给-Web-开发者的一句话" class="headerlink" title="总结：给 Web 开发者的一句话"></a>总结：给 Web 开发者的一句话</h2><blockquote>
 <p><strong>未来不属于「会做页面」或「会做 API」的单点技能，而属于能把业务能力封装成 Agent 可调用的、可治理的、可观测的工具，并在体验层做好人机协同的人。</strong></p>
 </blockquote>
 <p>应用都会 Agent 化，但<strong>不是把应用变成聊天软件</strong>，而是：</p>
@@ -450,6 +460,14 @@
 <p>如果你今天维护的是一个正常的 Web 应用，<strong>现在就可以从 L1 的体验试点和 L2 的 Tool 清单开始</strong>——等竞争对手把核心流程做成「一句话办完」，再补功课的成本会高一个数量级。</p>
 <hr>
 <p><em>写作日期：2026-05；技术栈与生态变化快，实现细节请以你当前选用的 Agent SDK &#x2F; 模型提供商文档为准。</em></p>
+<hr>
+<h2 id="关注与相关"><a href="#关注与相关" class="headerlink" title="关注与相关"></a>关注与相关</h2><p><strong>Neo的数智空间</strong><br>每周二：工具实测 | 每周五：AI 周报 | 不定期：深度观察</p>
+<ul>
+<li><strong>微信公众号</strong>：搜索「Neo的数智空间」获取图文版  </li>
+<li><strong>B 站视频版</strong>：【BV或视频链接】（口播 + 示意画面）  </li>
+<li><strong>生活向姊妹篇</strong>：<a href="%E3%80%90%E5%8D%9A%E5%AE%A2%E9%93%BE%E6%8E%A5%E3%80%91">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a></li>
+</ul>
+<hr>
 
       
     </div>
@@ -458,7 +476,7 @@
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li></ul>
 
     </footer>
   </div>
@@ -466,19 +484,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">前一篇</strong>
       <div class="article-nav-title">
         
-          关于 Neo：从电商与链上到 Agent 化 Web
+          5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）
         
       </div>
     </a>
   
   
-    <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">后一篇</strong>
-      <div class="article-nav-title">AI Agent 自动化工程实践</div>
+      <div class="article-nav-title">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</div>
     </a>
   
 </nav>
@@ -505,7 +523,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -515,7 +533,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 20px;">AI</a> <a href="/tags/Agent/" style="font-size: 20px;">Agent</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 10px;">Web开发</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 10px;">架构</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 10px;">生活</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 10px;">电商</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 15px;">随笔</a>
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 10px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
     </div>
   </div>
 
@@ -537,7 +555,15 @@
       <ul>
         
           <li>
-            <a href="/2026/05/24/Neo%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84-%E7%BB%99%E6%9C%8B%E5%8F%8B%E7%9A%84%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/">Neo 是做什么的？——一篇给朋友看的自我介绍</a>
+            <a href="/2026/05/30/%E4%B8%AD%E5%9B%BD%E4%BA%BA%E7%88%B1%E5%AD%98%E9%92%B1%E3%80%81%E7%BE%8E%E5%9B%BD%E4%BA%BA%E7%88%B1%E8%8A%B1%E9%92%B1%E2%80%94%E2%80%94AI%E6%97%B6%E4%BB%A3%E8%AF%A5%E5%A4%9A%E5%88%9B%E9%80%A0%E8%BF%98%E6%98%AF%E5%A4%9A%E6%B6%88%E8%B4%B9/">中国人爱存钱、美国人爱花钱？——AI 时代该多创造还是多消费</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/">5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>
           </li>
         
           <li>
@@ -546,14 +572,6 @@
         
           <li>
             <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a>
           </li>
         
       </ul>
