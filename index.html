@@ -326,6 +326,649 @@
 
 
   
+    <article id="post-AI-Agent自动化工程实践" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="dt-published" datetime="2026-05-29T02:00:00.000Z" itemprop="datePublished">2026-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1-%E8%83%8C%E6%99%AF%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BB%80%E4%B9%88%E7%B3%BB%E7%BB%9F">1. 背景：这是一个什么系统？</a></li>
+<li><a href="#2-%E9%97%AE%E9%A2%98ai-%E7%BC%96%E7%A0%81%E9%9A%BE%E5%9C%A8%E5%93%AA%E9%87%8C">2. 问题：AI 编码，难在哪里？</a></li>
+<li><a href="#3-%E6%80%9D%E8%B7%AF%E4%B8%89%E5%B1%82%E6%8E%A7%E5%88%B6%E6%9E%B6%E6%9E%84">3. 思路：三层控制架构</a></li>
+<li><a href="#4-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%85%A8%E6%A0%88%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8">4. 基础设施：全栈类型安全</a></li>
+<li><a href="#5-%E7%AC%AC%E4%B8%80%E5%B1%82%E4%BB%BB%E5%8A%A1%E5%AE%9A%E4%B9%89%E6%9C%BA%E8%AF%BB-yaml">5. 第一层：任务定义（机读 YAML）</a></li>
+<li><a href="#6-%E7%AC%AC%E4%BA%8C%E5%B1%82%E8%8C%83%E5%9B%B4%E7%AD%96%E7%95%A5scope-policy">6. 第二层：范围策略（Scope Policy）</a></li>
+<li><a href="#7-%E7%AC%AC%E4%B8%89%E5%B1%82%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81quality-gate">7. 第三层：质量门禁（Quality Gate）</a></li>
+<li><a href="#8-%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6s0s5-%E7%8A%B6%E6%80%81%E6%9C%BA">8. 执行机制：S0–S5 状态机</a></li>
+<li><a href="#9-%E6%89%A9%E5%B1%95multi-agent-%E5%B9%B6%E8%A1%8C%E5%8D%8F%E4%BD%9Cgit-worktree">9. 扩展：Multi-Agent 并行协作（Git Worktree）</a></li>
+<li><a href="#10-%E8%87%AA%E5%8A%A8%E5%8C%96ci-%E9%9B%86%E6%88%90">10. 自动化：CI 集成</a></li>
+<li><a href="#11-%E5%AE%9E%E6%88%98%E4%B8%80%E4%B8%AA%E9%9C%80%E6%B1%82%E7%9A%84%E5%AE%8C%E6%95%B4%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">11. 实战：一个需求的完整执行流程</a></li>
+<li><a href="#12-%E5%9B%9E%E9%A1%BE%E8%BF%99%E5%A5%97%E6%9E%B6%E6%9E%84%E5%A6%82%E4%BD%95%E9%92%88%E5%AF%B9%E6%80%A7%E5%9C%B0%E8%A7%A3%E5%86%B3-ai-%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BC%B1%E7%82%B9">12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？</a></li>
+<li><a href="#13-%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E6%80%BB%E7%BB%93">13. 关键设计原则总结</a></li>
+<li><a href="#14-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5">14. 常用命令速查</a></li>
+<li><a href="#15-%E5%BB%B6%E4%BC%B8%E6%80%9D%E8%80%83">15. 延伸思考</a></li>
+</ul>
+<h2 id="1-背景：这是一个什么系统？"><a href="#1-背景：这是一个什么系统？" class="headerlink" title="1. 背景：这是一个什么系统？"></a>1. 背景：这是一个什么系统？</h2><p><strong>本仓库</strong>（<code>market</code>）是一个全栈 <strong>商品平台</strong>，当前核心链路是：</p>
+<blockquote>
+<p>用户注册登录 → 浏览商品 → 下单 → 查看订单；管理端维护 RBAC 与系统配置</p>
+</blockquote>
+<pre class="mermaid">flowchart LR
+  U["用户浏览器"] --> WEB["Web / Admin"]
+  WEB --> API["API tRPC"]
+  API --> DB["PostgreSQL"]</pre>
+
+<p><strong>Monorepo 分层结构</strong>（pnpm workspaces + Turborepo）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">market/</span><br><span class="line">├── apps/</span><br><span class="line">│   ├── web/      用户端 Next.js</span><br><span class="line">│   ├── admin/    管理端 Next.js</span><br><span class="line">│   ├── api/      Fastify + tRPC</span><br><span class="line">│   └── worker/   占位进程（可扩展异步任务）</span><br><span class="line">├── packages/</span><br><span class="line">│   ├── shared/   跨端 Zod Schema（单一事实源）</span><br><span class="line">│   └── db/       Prisma 单例</span><br><span class="line">├── agents/       Agent 执行规范与机读任务入口</span><br><span class="line">└── ops/          自动化脚本</span><br></pre></td></tr></table></figure>
+
+<p>这个项目从第一行代码起就把 <strong>AI Agent 当成主要开发者</strong>——本文讲的正是为此专门设计的一套工程化机制。</p>
+<hr>
+<h2 id="2-问题：AI-编码，难在哪里？"><a href="#2-问题：AI-编码，难在哪里？" class="headerlink" title="2. 问题：AI 编码，难在哪里？"></a>2. 问题：AI 编码，难在哪里？</h2><h3 id="2-1-表象痛点"><a href="#2-1-表象痛点" class="headerlink" title="2.1 表象痛点"></a>2.1 表象痛点</h3><p>当我们把 LLM Agent（Cursor、Claude、Copilot）接入日常开发，很快就会遇到这五类问题：</p>
+<table>
+<thead>
+<tr>
+<th>痛点</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>改动越界</strong></td>
+<td>Agent 修改了不该碰的模块，破坏其他人的工作</td>
+</tr>
+<tr>
+<td><strong>“完成”不可信</strong></td>
+<td>AI 说完成了，但代码跑不起来、类型报错</td>
+</tr>
+<tr>
+<td><strong>无法回滚</strong></td>
+<td>出错后不知道从哪里开始撤销</td>
+</tr>
+<tr>
+<td><strong>跨模块污染</strong></td>
+<td>单个 Agent 同时改前端、后端、共享包，边界模糊</td>
+</tr>
+<tr>
+<td><strong>CI&#x2F;本地结论不一致</strong></td>
+<td>本地说通过，CI 报红</td>
+</tr>
+</tbody></table>
+<p>这些症状背后，有更深层的原因。</p>
+<h3 id="2-2-根本原因：AI-的认知弱点"><a href="#2-2-根本原因：AI-的认知弱点" class="headerlink" title="2.2 根本原因：AI 的认知弱点"></a>2.2 根本原因：AI 的认知弱点</h3><p>LLM 和人类开发者的认知模式截然不同：</p>
+<pre class="mermaid">flowchart TB
+  subgraph ai_pain["AI 天然存在的认知局限"]
+    P1["🔍 上下文窗口有限\n无法一次性读完整个 Monorepo"]
+    P2["💥 无法感知副作用\n改了字段 A，不知道模块 B 会跟着坏"]
+    P3["🎭 无法判断"完成"\n主观认为正确 ≠ 实际可运行"]
+    P4["⚡ 并发改动冲突\n多个 Agent 同时写同一文件"]
+    P5["🧠 无跨会话记忆\n出错后想回退，但不记得改了什么"]
+  end</pre>
+
+<p>认识到这五条弱点，就能理解后面每一个架构决策的出发点。</p>
+<hr>
+<h2 id="3-思路：三层控制架构"><a href="#3-思路：三层控制架构" class="headerlink" title="3. 思路：三层控制架构"></a>3. 思路：三层控制架构</h2><p>针对上述问题，我们在业务代码之外加了一层”执行控制层”，由三个子层组成：</p>
+<pre class="mermaid">flowchart TB
+  subgraph layer1["① 任务定义层 — 解决「不知道改哪里、怎么判完成」"]
+    T1["agents/agent-orchestration.tasks.yaml\n机读入口"]
+    T2["agents/tasks/*.tasks.yaml\n子域任务（inputs / outputs / verify / rollback）"]
+    T1 --> T2
+  end
+
+  subgraph layer2["② 范围策略层 — 解决「越界改动、跨模块污染」"]
+    S1["ops/agent-scope-check.mjs\n改动路径校验"]
+    S2["ops/agent-ci-scope.mjs\nCI 域自动判定"]
+    S1 -.-> S2
+  end
+
+  subgraph layer3["③ 质量门禁层 — 解决「"完成"不可信、本地 CI 不一致」"]
+    G1["pnpm agent:gate\ntypecheck + lint + test:run"]
+    G2["pnpm gate:pr  含 E2E @critical"]
+    G3["pnpm gate:release  发布前全量"]
+    G1 --> G2 --> G3
+  end
+
+  layer1 --> layer2 --> layer3
+
+  style layer1 fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
+  style layer2 fill:#15803d,color:#ffffff,stroke:#15803d
+  style layer3 fill:#b45309,color:#ffffff,stroke:#b45309</pre>
+
+<p>接下来逐层拆解每一层是怎么做的。</p>
+<hr>
+<h2 id="4-基础设施：全栈类型安全"><a href="#4-基础设施：全栈类型安全" class="headerlink" title="4. 基础设施：全栈类型安全"></a>4. 基础设施：全栈类型安全</h2><p>在介绍三层控制之前，先说一个贯穿整个架构的基础设计——<strong>Schema 单一事实源</strong>，它是所有层都依赖的地基。</p>
+<pre class="mermaid">flowchart TB
+  SHARED["packages/shared/schemas/product.ts\nZod Schema（唯一定义）"]
+
+  SHARED --> API_INPUT["apps/api\ntRPC input 类型推导"]
+  SHARED --> WEB_FORM["apps/web\n表单校验 + 类型引用"]
+  SHARED --> WORKER_PAYLOAD["apps/worker\nBullMQ Job payload 类型"]
+  SHARED --> PRISMA_HELPER["packages/db\nPrisma JSON 字段解析辅助"]
+
+  style SHARED fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8,stroke-width:2px</pre>
+
+<p><strong>为什么这对 AI 很重要</strong>：AI 改字段时最容易出现”前端改了、后端忘了同步”的问题。有了单一事实源，AI 只需改 <code>packages/shared</code>，TypeScript 严格模式会把所有下游不兼容的用法<strong>立即报成类型错误</strong>，在 <code>pnpm typecheck</code> 阶段就暴露，不需要靠 AI “记住”要改哪些地方。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Agent 改字段的固定顺序：</span><br><span class="line">  packages/shared → apps/api → apps/web</span><br><span class="line"></span><br><span class="line">scope 校验会拦截顺序错误（先改 web 再补 shared）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-第一层：任务定义（机读-YAML）"><a href="#5-第一层：任务定义（机读-YAML）" class="headerlink" title="5. 第一层：任务定义（机读 YAML）"></a>5. 第一层：任务定义（机读 YAML）</h2><h3 id="5-1-问题：文字文档对-AI-不够”精确”"><a href="#5-1-问题：文字文档对-AI-不够”精确”" class="headerlink" title="5.1 问题：文字文档对 AI 不够”精确”"></a>5.1 问题：文字文档对 AI 不够”精确”</h3><p>传统做法是把任务写在 Markdown 里，Agent 读文字执行。<br>问题在于：<strong>文字模糊，AI 对”完成”的判断是主观的</strong>，无法强制验证。</p>
+<p>同时 AI 的上下文窗口有限，读完整仓库文档代价很高。</p>
+<h3 id="5-2-解法：每个任务都有可执行的-verify-和-rollback"><a href="#5-2-解法：每个任务都有可执行的-verify-和-rollback" class="headerlink" title="5.2 解法：每个任务都有可执行的 verify 和 rollback"></a>5.2 解法：每个任务都有可执行的 verify 和 rollback</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># agents/agent-orchestration.tasks.yaml（入口）</span></span><br><span class="line"><span class="attr">task_catalog:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/web.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/api.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/worker.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/shared.tasks.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">execution_policy:</span></span><br><span class="line">  <span class="attr">scope_workflow:</span> <span class="string">&quot;pnpm agent:scope:auto → pnpm agent:scope:&lt;scope&gt;&quot;</span></span><br><span class="line">  <span class="attr">quality_gate:</span> <span class="string">&quot;pnpm agent:gate&quot;</span></span><br><span class="line">  <span class="attr">s4_mechanical_loop:</span> <span class="string">&quot;pnpm agent:s4:mechanical-loop&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">tasks:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">task-003-gate-command</span></span><br><span class="line">    <span class="attr">title:</span> <span class="string">增加最小门禁命令</span></span><br><span class="line">    <span class="attr">owner_scope:</span> <span class="string">all</span>          <span class="comment"># ← 允许修改范围</span></span><br><span class="line">    <span class="attr">inputs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">    <span class="attr">outputs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">    <span class="attr">verify:</span>                   <span class="comment"># ← 执行完的验证命令（可执行！）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;pnpm agent:scope:all&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;pnpm agent:gate&quot;</span></span><br><span class="line">    <span class="attr">rollback:</span>                 <span class="comment"># ← 失败时的回滚命令</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;git checkout -- package.json&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>关键设计点</strong>：</p>
+<pre class="mermaid">flowchart LR
+  T["task YAML"]
+
+  T --> I["inputs\n依赖哪些文件"]
+  T --> O["outputs\n产出哪些文件"]
+  T --> S["owner_scope\n允许修改哪些目录"]
+  T --> Vverify
+如何验证完成（命令）
+  T --> R[/"rollback\n失败如何撤销（命令）"/]
+
+  style T fill:#1e40af,color:#ffffff,stroke:#1e40af
+  style I fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
+  style O fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
+  style S fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
+  style V fill:#14532d,color:#ffffff,stroke:#15803d,stroke-width:2px
+  style R fill:#7f1d1d,color:#ffffff,stroke:#b91c1c,stroke-width:2px</pre>
+
+<p>YAML 把”该改哪里、改完验什么、失败怎么回退”全部结构化，AI 直接读字段执行，<strong>不需要推理，也不需要记忆</strong>。</p>
+<hr>
+<h2 id="6-第二层：范围策略（Scope-Policy）"><a href="#6-第二层：范围策略（Scope-Policy）" class="headerlink" title="6. 第二层：范围策略（Scope Policy）"></a>6. 第二层：范围策略（Scope Policy）</h2><h3 id="6-1-问题：Agent-容易”手滑”改错地方"><a href="#6-1-问题：Agent-容易”手滑”改错地方" class="headerlink" title="6.1 问题：Agent 容易”手滑”改错地方"></a>6.1 问题：Agent 容易”手滑”改错地方</h3><p>大型 Monorepo 中，一次功能改动通常只应触碰某个子域。但 AI 没有物理边界感，容易在执行过程中顺手改了不该改的文件。</p>
+<h3 id="6-2-解法：Scope-映射-路径校验脚本"><a href="#6-2-解法：Scope-映射-路径校验脚本" class="headerlink" title="6.2 解法：Scope 映射 + 路径校验脚本"></a>6.2 解法：Scope 映射 + 路径校验脚本</h3><p>每次 Agent 改完代码，都要经过路径级别的合规性检查：</p>
+<pre class="mermaid">flowchart TB
+  subgraph scope_map["Scope → 允许修改的目录"]
+    WEB["scope: web → apps/web/**"]
+    API["scope: api → apps/api/**"]
+    WORKER["scope: worker → apps/worker/**"]
+    BACKEND["scope: backend → apps/api/** + apps/worker/**"]
+    CONTRACT["scope: contract → packages/**"]
+    ALL["scope: all → 全仓库"]
+  end
+
+  subgraph always_ok["始终允许修改（任何 scope）"]
+    META["agents/ · docs/ · ops/\n.github/workflows/\nAGENTS.md · package.json"]
+  end</pre>
+
+<p><strong>脚本核心逻辑</strong>（<code>ops/agent-scope-check.mjs</code>）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 获取本次所有改动文件（git diff + 暂存区 + 未追踪文件）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getChangedFiles</span>(<span class="params">base, head</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> refFiles    = <span class="title function_">execSync</span>(<span class="string">`git diff --name-only &quot;<span class="subst">$&#123;base&#125;</span>...<span class="subst">$&#123;head&#125;</span>&quot;`</span>)</span><br><span class="line">  <span class="keyword">const</span> stagedFiles = <span class="title function_">execSync</span>(<span class="string">&#x27;git diff --name-only --cached&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> untracked   = <span class="title function_">execSync</span>(<span class="string">&#x27;git ls-files --others --exclude-standard&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> [...<span class="keyword">new</span> <span class="title class_">Set</span>([...refFiles, ...stagedFiles, ...untracked])]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 逐文件检查是否在允许路径内</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isAllowedFile</span>(<span class="params">file, prefixes</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable constant_">ALWAYS_ALLOWED_FILES</span>.<span class="title function_">has</span>(file)) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="variable constant_">ALWAYS_ALLOWED_PREFIX</span>.<span class="title function_">some</span>(<span class="function"><span class="params">p</span> =&gt;</span> file.<span class="title function_">startsWith</span>(p))) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">return</span> prefixes.<span class="title function_">some</span>(<span class="function"><span class="params">p</span> =&gt;</span> file.<span class="title function_">startsWith</span>(p))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 有违规文件 → exit(1)，CI / 本地均亮红灯</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-两步执行（改代码后必做）"><a href="#6-3-两步执行（改代码后必做）" class="headerlink" title="6.3 两步执行（改代码后必做）"></a>6.3 两步执行（改代码后必做）</h3><pre class="mermaid">sequenceDiagram
+  participant Dev as Agent / 开发者
+  participant Auto as pnpm agent:scope:auto
+  participant Check as pnpm agent:scope:<scope>
+  participant CI as GitHub Actions
+
+  Dev->>Auto: 改完代码后执行
+  Auto-->>Dev: {"scope":"web","reason":"单域改动"}
+  Dev->>Check: pnpm agent:scope:web
+  Check-->>Dev: ✅ 范围检查通过 (exit 0)
+
+  Note over Dev,CI: 推 PR 后 CI 执行完全相同的步骤
+  CI->>Auto: node ops/agent-ci-scope.mjs
+  CI->>Check: pnpm agent:scope:web
+  Check-->>CI: ✅ 与本地结论一致</pre>
+
+<blockquote>
+<p><code>scope:auto</code> 只<strong>输出判定结论</strong>（JSON），不做拦截；<br><code>scope:&lt;scope&gt;</code> 才是真正执行边界校验、可能 exit(1) 的步骤。<br>两步缺一不可，本地与 CI 行为完全对齐。</p>
+</blockquote>
+<hr>
+<h2 id="7-第三层：质量门禁（Quality-Gate）"><a href="#7-第三层：质量门禁（Quality-Gate）" class="headerlink" title="7. 第三层：质量门禁（Quality Gate）"></a>7. 第三层：质量门禁（Quality Gate）</h2><h3 id="7-1-问题：AI-说”完成”不算完成"><a href="#7-1-问题：AI-说”完成”不算完成" class="headerlink" title="7.1 问题：AI 说”完成”不算完成"></a>7.1 问题：AI 说”完成”不算完成</h3><p>AI 最常见的幻觉：改完代码后说”已实现，应该没问题”。<br>人无法高效 review 每一行 AI 写的代码，也不应该靠人来替 AI 把关基础质量。</p>
+<h3 id="7-2-解法：把”完成”重新定义为客观的-exit-code"><a href="#7-2-解法：把”完成”重新定义为客观的-exit-code" class="headerlink" title="7.2 解法：把”完成”重新定义为客观的 exit code"></a>7.2 解法：把”完成”重新定义为客观的 exit code</h3><pre class="mermaid">flowchart LR
+  subgraph subjective["❌ 主观判断（不可信）"]
+    S1["AI 觉得逻辑对了"]
+    S2["AI 看代码没报错"]
+    S3["AI 解释了为什么正确"]
+  end
+
+  subgraph objective["✅ 客观标准（可验证）"]
+    O1["pnpm typecheck\n0 个类型错误"]
+    O2["pnpm lint\n0 个 lint 违规"]
+    O3["pnpm test:run\n所有测试通过"]
+    O4["pnpm gate:pr\nE2E @critical 通过"]
+    O1 & O2 & O3 & O4 --> DONE["exit code = 0\n才允许宣称完成"]
+  end</pre>
+
+<h3 id="7-3-门禁层级"><a href="#7-3-门禁层级" class="headerlink" title="7.3 门禁层级"></a>7.3 门禁层级</h3><pre class="mermaid">flowchart LR
+  subgraph local["本地开发"]
+    G1["pnpm agent:gate\ntypecheck + lint + test:run"]
+    G_LOOP["pnpm agent:s4:mechanical-loop\nBiome 自动修 + gate 循环 3 轮"]
+  end
+
+  subgraph pr["PR 合并前"]
+    G2["pnpm gate:pr\nG1 + @critical E2E"]
+  end
+
+  subgraph release["发布前"]
+    G3["pnpm gate:release\nG2 + @full E2E"]
+  end
+
+  subgraph nightly["夜间巡检"]
+    G4["pnpm gate:nightly\n全量回归"]
+  end
+
+  G1 --> G2 --> G3 --> G4
+  G_LOOP -.-> G1</pre>
+
+<h3 id="7-4-S4-机械修验闭环"><a href="#7-4-S4-机械修验闭环" class="headerlink" title="7.4 S4 机械修验闭环"></a>7.4 S4 机械修验闭环</h3><p>Agent 不只是被动接受门禁结果，还有一套”自动修复 + 反复验证”的闭环：</p>
+<pre class="mermaid">flowchart TD
+  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:<scope>"]
+  I0 --> LOOP["开始机械修验循环"]
+  LOOP --> BIOME["pnpm check\nBiome 自动修复格式/lint"]
+  BIOME --> GATE["pnpm agent:gate\ntypecheck + lint + test:run"]
+  GATE --> PASS{"exit 0？"}
+  PASS -->|✅ 通过| DONE["S4 通过 → 进入 S5 交付"]
+  PASS -->|❌ 失败| ROUND{"已到第 3 轮？"}
+  ROUND -->|否| COGNITIVE["Agent 读报错\n认知修复改代码"]
+  COGNITIVE --> LOOP
+  ROUND -->|是| STOP["停止循环\n输出根因与阻塞点\n等待人工决策"]</pre>
+
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>承担者</th>
+<th>能力</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>机械层</strong></td>
+<td><code>pnpm check</code> (Biome)</td>
+<td>自动修复格式&#x2F;lint</td>
+<td>自动补分号、整理 import</td>
+</tr>
+<tr>
+<td><strong>认知层</strong></td>
+<td>AI Agent</td>
+<td>理解报错、修逻辑</td>
+<td>修类型不匹配、修失败断言</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>硬约束</strong>：机械修复<strong>只在开发环境</strong>执行，<strong>禁止在 CI 中写回源码</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="8-执行机制：S0–S5-状态机"><a href="#8-执行机制：S0–S5-状态机" class="headerlink" title="8. 执行机制：S0–S5 状态机"></a>8. 执行机制：S0–S5 状态机</h2><p>有了三层控制架构，还需要一套状态机来约束 Agent 的<strong>执行顺序</strong>——防止 AI 跳过分析直接写代码，或改了代码不验证就宣称完成。</p>
+<pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --> S0 : 收到需求
+  S0 --> S1 : 上下文确认完成
+  S1 --> S2 : Spec 确认
+  S2 --> S3 : 任务计划确认
+  S3 --> S4 : 实施完成
+  S4 --> S5 : 门禁全绿
+  S5 --> [*] : 交付
+
+  S4 --> S3 : 门禁失败 → 修复
+  S3 --> S2 : 设计推翻
+  S2 --> S1 : 依赖冲突</pre>
+
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>名称</th>
+<th>核心动作</th>
+<th>完成判定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>S0</strong></td>
+<td>上下文确认</td>
+<td>读 AGENTS.md、确认分支、确认 worktree</td>
+<td>上下文包产出</td>
+</tr>
+<tr>
+<td><strong>S1</strong></td>
+<td>需求结构化</td>
+<td>产出技术 Spec、列验收标准</td>
+<td>用户确认 Spec</td>
+</tr>
+<tr>
+<td><strong>S2</strong></td>
+<td>任务计划</td>
+<td>读任务 YAML、拆子任务、定 verify 命令</td>
+<td>用户确认计划</td>
+</tr>
+<tr>
+<td><strong>S3</strong></td>
+<td>实施</td>
+<td>改代码、完成 I.0 范围校验</td>
+<td>代码落盘</td>
+</tr>
+<tr>
+<td><strong>S4</strong></td>
+<td>验证门禁</td>
+<td><code>pnpm agent:s4:mechanical-loop</code> → 修 → 循环</td>
+<td><code>pnpm agent:gate</code> 至少一次 0 退出码</td>
+</tr>
+<tr>
+<td><strong>S5</strong></td>
+<td>交付报告</td>
+<td>输出摘要、证据、风险提示</td>
+<td>用户明确通过</td>
+</tr>
+</tbody></table>
+<p><strong>核心硬规则</strong>：</p>
+<pre class="mermaid">flowchart LR
+  subgraph forbidden["❌ 任何情况下禁止"]
+    F1["未通过 S4 说'完成'"]
+    F2["测试失败说'基本通过'"]
+    F3["未确认 Spec 直接写代码"]
+    F4["CI 中自动提交修复代码"]
+  end</pre>
+
+<hr>
+<h2 id="9-扩展：Multi-Agent-并行协作（Git-Worktree）"><a href="#9-扩展：Multi-Agent-并行协作（Git-Worktree）" class="headerlink" title="9. 扩展：Multi-Agent 并行协作（Git Worktree）"></a>9. 扩展：Multi-Agent 并行协作（Git Worktree）</h2><h3 id="9-1-为什么需要多-Agent？"><a href="#9-1-为什么需要多-Agent？" class="headerlink" title="9.1 为什么需要多 Agent？"></a>9.1 为什么需要多 Agent？</h3><p>大需求往往跨 <code>api</code> + <code>web</code> + <code>packages/shared</code> 三个域。若单 Agent 串行：</p>
+<ul>
+<li>等待时间长</li>
+<li>越界风险大</li>
+<li>上下文窗口被不相关代码消耗</li>
+</ul>
+<p><strong>解法</strong>：用 <code>git worktree</code> 开多个目录，每个 Agent 只看自己的范围，并行推进。</p>
+<h3 id="9-2-三窗口分工模型"><a href="#9-2-三窗口分工模型" class="headerlink" title="9.2 三窗口分工模型"></a>9.2 三窗口分工模型</h3><pre class="mermaid">flowchart TB
+  subgraph main["主窗口（主仓库路径）\n契约 Agent"]
+    SHARED["packages/**\n定义 Zod Schema / 类型 / 常量"]
+  end
+
+  subgraph api_worktree["~/ser-feature-api\n后端 Agent"]
+    API["apps/api/**\n实现 tRPC Procedure + Service"]
+    WORKER["apps/worker/**\n实现异步任务消费"]
+  end
+
+  subgraph web_worktree["~/ser-feature-web\n前端 Agent"]
+    WEB["apps/web/**\n实现页面 + tRPC Client 调用"]
+  end
+
+  SHARED -->|共享类型| API
+  SHARED -->|共享类型| WEB
+
+  style main fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
+  style api_worktree fill:#15803d,color:#ffffff,stroke:#15803d
+  style web_worktree fill:#92400e,color:#ffffff,stroke:#92400e</pre>
+
+<p><strong>Cursor rules 自动锁定范围</strong>（<code>.cursor/rules/worktree.mdc</code>）：</p>
+<pre class="mermaid">flowchart LR
+  subgraph rule_table["路径识别 → 自动锁定"]
+    direction TB
+    R1["路径含 -api → 后端 Agent → 只改 apps/api/** + apps/worker/**"]
+    R2["路径含 -web → 前端 Agent → 只改 apps/web/**"]
+    R3["主仓库路径 → 契约 Agent → 只改 packages/**"]
+  end</pre>
+
+<p>当 Agent 收到越界指令时，<strong>必须拒绝并提示</strong>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当前 worktree 范围限制，此文件应由 [主窗口] 负责</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-3-并行协作时序"><a href="#9-3-并行协作时序" class="headerlink" title="9.3 并行协作时序"></a>9.3 并行协作时序</h3><pre class="mermaid">sequenceDiagram
+  participant P as Overseer（用户）
+  participant M as 主窗口（契约）
+  participant A as api 窗口（后端）
+  participant W as web 窗口（前端）
+
+  P->>M: 定义新功能的 Zod Schema
+  M-->>P: shared 修改完成，输出交接块
+
+  par 并行开发
+    P->>A: 解锁后端窗口，实现 tRPC + Worker
+    P->>W: 解锁前端窗口，实现 UI + 数据获取
+  end
+
+  A-->>P: api 实现完成，pnpm gate ✅
+  W-->>P: web 实现完成，pnpm gate ✅
+
+  P->>P: 合并所有 worktree 到 main branch
+  P->>P: pnpm gate:pr（完整 PR 门禁）</pre>
+
+<hr>
+<h2 id="10-自动化：CI-集成"><a href="#10-自动化：CI-集成" class="headerlink" title="10. 自动化：CI 集成"></a>10. 自动化：CI 集成</h2><p>本地机制需要同步到 CI，才能防止”本地跑通、PR 合并后才发现问题”。</p>
+<h3 id="10-1-agent-ready-gate-yml-工作流"><a href="#10-1-agent-ready-gate-yml-工作流" class="headerlink" title="10.1 agent-ready-gate.yml 工作流"></a>10.1 <code>agent-ready-gate.yml</code> 工作流</h3><p>每个 PR 都会触发以下检查序列：</p>
+<pre class="mermaid">flowchart TD
+  PR["PR 打开 / 推送"] --> CHECKOUT["Checkout 代码\nfetch-depth: 0"]
+  CHECKOUT --> INSTALL["pnpm install --frozen-lockfile"]
+  INSTALL --> ENV["准备 CI 环境\n.env.example + postgres"]
+  ENV --> DETECT["Detect scope\nnode ops/agent-ci-scope.mjs\n输出 scope + reason"]
+  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:<scope>"]
+  SCOPE_CHECK --> GATE["pnpm gate:pr\ntypecheck + lint + unit + @critical E2E"]
+  GATE --> DONE["✅ 合并准入"]
+
+  SCOPE_CHECK -->|违规文件| FAIL_SCOPE["❌ 越界失败\n列出违规文件"]
+  GATE -->|失败| FAIL_GATE["❌ 门禁失败\n上传 playwright-report"]</pre>
+
+<h3 id="10-2-scope-自动判定逻辑"><a href="#10-2-scope-自动判定逻辑" class="headerlink" title="10.2 scope 自动判定逻辑"></a>10.2 scope 自动判定逻辑</h3><pre class="mermaid">flowchart TD
+  FILES["获取 PR 改动文件列表\ngit diff base...head"] --> FILTER["过滤 always-allowed 文件\nagents/ docs/ ops/ AGENTS.md ..."]
+  FILTER --> CLASSIFY["按目录前缀分类\nweb / api / worker / contract"]
+  CLASSIFY --> JUDGE{"改动域数量"}
+  JUDGE -->|0 个业务域| RESULT_META["scope: all\n仅元信息改动"]
+  JUDGE -->|1 个域| RESULT_SINGLE["scope: 该域\n单域改动"]
+  JUDGE -->|多个域| RESULT_CROSS["scope: all\n跨域改动"]
+  JUDGE -->|含未知路径| RESULT_UNKNOWN["scope: all\n未归属目录，兜底"]</pre>
+
+<hr>
+<h2 id="11-实战：一个需求的完整执行流程"><a href="#11-实战：一个需求的完整执行流程" class="headerlink" title="11. 实战：一个需求的完整执行流程"></a>11. 实战：一个需求的完整执行流程</h2><p>以电商场景 <strong>「用户端订单列表支持按订单状态筛选」</strong> 为例，串联所有机制（对应域：<code>order</code>，状态枚举 <code>PENDING / PAID / COMPLETED / CANCELLED</code>）：</p>
+<pre class="mermaid">flowchart TD
+  subgraph S0["S0 上下文确认"]
+    C1["确认仓库路径与分支"]
+    C2["读 AGENTS.md + ARCHITECTURE.md\n确认改动涉及 shared + api + web 三层"]
+  end
+
+  subgraph S1["S1 需求结构化"]
+    SP["Spec 要点：\n① shared/schemas/order 确认 OrderListInput.status 为筛选入参\n② api order.list 按 status 过滤并分页\n③ web 订单页增加状态 Tab，调 tRPC 拉列表\n④ 验收：切换「待支付/已完成」仅展示对应状态订单"]
+  end
+
+  subgraph S2["S2 任务计划"]
+    TP["读 agent-orchestration.tasks.yaml\n拆 3 个子任务：\nshared(contract) → api → web\n模式：主仓串行 + 两 worktree 并行"]
+  end
+
+  subgraph S3["S3 实施"]
+    I1["主窗口：改 packages/shared/src/schemas/order.ts\n（入参/出参与 OrderStatusSchema 对齐）"]
+    I2["api 窗口：改 apps/api/modules/order\n（list 查询加 status 条件）"]
+    I3["web 窗口：改 apps/web 订单列表页\n（状态 Tab + useQuery 传 status）"]
+    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:<scope>"]
+    I1 --> I2 & I3
+    I2 & I3 --> SC
+  end
+
+  subgraph S4["S4 验证"]
+    ML["pnpm agent:s4:mechanical-loop\nBiome 修 + gate 循环"]
+    ML --> RESULT{"exit 0？"}
+    RESULT -->|✅| PASS["三个域全部 gate 通过"]
+    RESULT -->|❌| FIX["读报错 → 改代码 → 继续"]
+    FIX --> ML
+  end
+
+  subgraph S5["S5 交付"]
+    RPT["输出改动摘要、验证证据、影响文件\n发 PR → 触发 agent-ready-gate.yml"]
+  end
+
+  S0 --> S1 --> S2 --> S3 --> S4 --> S5</pre>
+
+<hr>
+<h2 id="12-回顾：这套架构如何针对性地解决-AI-的五大弱点？"><a href="#12-回顾：这套架构如何针对性地解决-AI-的五大弱点？" class="headerlink" title="12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？"></a>12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？</h2><p>把第 2 章的问题和前面的解法对照验证：</p>
+<table>
+<thead>
+<tr>
+<th>AI 认知弱点</th>
+<th>架构解法</th>
+<th>核心机制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>上下文窗口有限</strong></td>
+<td>机读 YAML 把关键信息压缩成结构化索引</td>
+<td><code>inputs / outputs / owner_scope</code> 字段直接可读</td>
+</tr>
+<tr>
+<td><strong>无法感知副作用</strong></td>
+<td>Schema 单一事实源 + TypeScript Strict</td>
+<td>改一处，编译器全链路报错兜底</td>
+</tr>
+<tr>
+<td><strong>无法判断”完成”</strong></td>
+<td>质量门禁把主观变客观</td>
+<td>exit code 不可伪造</td>
+</tr>
+<tr>
+<td><strong>并发改动冲突</strong></td>
+<td>Worktree 物理隔离 + Scope 拦截双重防线</td>
+<td>物理文件系统隔离 + 路径校验</td>
+</tr>
+<tr>
+<td><strong>无跨会话记忆</strong></td>
+<td>每任务预声明 <code>rollback</code> 命令</td>
+<td>一行 <code>git checkout</code> 无需回忆</td>
+</tr>
+</tbody></table>
+<h3 id="12-1-一个反直觉的结论"><a href="#12-1-一个反直觉的结论" class="headerlink" title="12.1 一个反直觉的结论"></a>12.1 一个反直觉的结论</h3><blockquote>
+<p><strong>对 AI 友好的架构，对人类也友好。</strong></p>
+</blockquote>
+<p>上面每一条设计，对人类开发者同样有价值：</p>
+<ul>
+<li>Schema 单源让人类改字段不会遗漏</li>
+<li>门禁让 Code Review 有客观基准</li>
+<li>Rollback 让人类也能快速回退</li>
+<li>Worktree 让多人并行工作减少冲突</li>
+</ul>
+<p>AI 只是让这些<strong>本来就应该做好的工程实践</strong>变得更加不可或缺——因为 AI 没有容错余地，工程约束的缺失会被立刻放大。</p>
+<hr>
+<h2 id="13-关键设计原则总结"><a href="#13-关键设计原则总结" class="headerlink" title="13. 关键设计原则总结"></a>13. 关键设计原则总结</h2><pre class="mermaid">flowchart TB
+  ROOT["Agent 工程化原则"]
+
+  ROOT --> P1["✅ 可执行"]
+  ROOT --> P2["⏪ 可回滚"]
+  ROOT --> P3["📋 可审计"]
+  ROOT --> P4["🔒 有边界"]
+  ROOT --> P5["🚦 CI 只验证不修复"]
+
+  P1 --> P1A["任务有 verify 命令"]
+  P1 --> P1B["verify = 客观退出码，非主观描述"]
+
+  P2 --> P2A["每任务声明 rollback 命令"]
+  P2 --> P2B["失败直接 git checkout 恢复"]
+
+  P3 --> P3A["S5 交付报告含命令与输出证据"]
+  P3 --> P3B["CI logs 保留 playwright-report"]
+
+  P4 --> P4A["worktree 物理目录隔离"]
+  P4 --> P4B["scope-check 路径逻辑隔离"]
+  P4 --> P4C["两者叠加，双重防越界"]
+
+  P5 --> P5A["Agent 在开发环境改代码"]
+  P5 --> P5B["CI 跑门禁并上报结果"]
+  P5 --> P5C["禁止 CI 自动提交修复"]
+
+  style ROOT fill:#1e40af,color:#fff,stroke:#1e40af
+  style P1 fill:#15803d,color:#ffffff,stroke:#15803d
+  style P2 fill:#991b1b,color:#ffffff,stroke:#991b1b
+  style P3 fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
+  style P4 fill:#92400e,color:#ffffff,stroke:#92400e
+  style P5 fill:#6b21a8,color:#ffffff,stroke:#6b21a8</pre>
+
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>在本项目中的体现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>“完成”可验证</strong></td>
+<td><code>verify</code> 命令列表，0 退出码才算完成</td>
+</tr>
+<tr>
+<td><strong>改动有边界</strong></td>
+<td><code>agent-scope-check.mjs</code> 拦截越界文件</td>
+</tr>
+<tr>
+<td><strong>失败可回滚</strong></td>
+<td><code>rollback</code> 命令，一行恢复</td>
+</tr>
+<tr>
+<td><strong>多 Agent 有隔离</strong></td>
+<td>worktree 物理目录 + Cursor rules 锁定范围</td>
+</tr>
+<tr>
+<td><strong>CI 是只读门禁</strong></td>
+<td>CI 只验证，不修改代码</td>
+</tr>
+<tr>
+<td><strong>门禁层次分明</strong></td>
+<td><code>agent:gate</code> &lt; <code>gate:pr</code> &lt; <code>gate:release</code> &lt; <code>gate:nightly</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="14-常用命令速查"><a href="#14-常用命令速查" class="headerlink" title="14. 常用命令速查"></a>14. 常用命令速查</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ===== S3 代码落盘后，必须两步 scope 校验 =====</span></span><br><span class="line">pnpm agent:scope:auto          <span class="comment"># 输出 JSON: &#123; scope, reason &#125;</span></span><br><span class="line">pnpm agent:scope:&lt;scope&gt;       <span class="comment"># 替换 &lt;scope&gt; 为上一步 JSON 中的值</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== S4 验证门禁 =====</span></span><br><span class="line">pnpm agent:s4:mechanical-loop  <span class="comment"># 机械修验：Biome + gate 循环 3 轮（开发环境）</span></span><br><span class="line">pnpm agent:gate                <span class="comment"># 最小门禁：typecheck + lint + test:run</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== PR / 发布 =====</span></span><br><span class="line">pnpm gate:<span class="built_in">pr</span>                   <span class="comment"># PR 级：含 @critical E2E</span></span><br><span class="line">pnpm gate:release              <span class="comment"># 发布前：含 @full E2E</span></span><br><span class="line">pnpm gate:nightly              <span class="comment"># 夜间全量回归</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== E2E 前置（裸跑 playwright 前必须） =====</span></span><br><span class="line">pnpm <span class="built_in">test</span>:e2e:preflight --ensure-browsers</span><br><span class="line">pnpm <span class="built_in">test</span>:e2e                  <span class="comment"># 已封装自检，推荐用这个</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="15-延伸思考"><a href="#15-延伸思考" class="headerlink" title="15. 延伸思考"></a>15. 延伸思考</h2><pre class="mermaid">flowchart LR
+  subgraph now["现状（已具备）"]
+    N1["S0–S5 状态机"]
+    N2["scope-check 越界拦截"]
+    N3["mechanical-loop 自修复"]
+    N4["worktree 多 Agent 协作"]
+    N5["CI agent-ready-gate"]
+  end
+
+  subgraph future["可扩展方向"]
+    F1["多仓库跨 repo 协作\n（通过 shared package registry）"]
+    F2["Agent 执行日志可视化\n（打通 S5 证据 + Sentry）"]
+    F3["自动化测试覆盖率追踪\n（gate 失败时 AI 写测试补洞）"]
+    F4["任务 YAML 生成器\n（从 PRD 自动产出 tasks.yaml）"]
+  end
+
+  now --> future</pre>
+
+<hr>
+<blockquote>
+<p><strong>一句话总结</strong>：本项目的 Agent 工程化不是「让 AI 写更多代码」，<br>而是「让 AI 写的代码<strong>可信、可控、可回滚</strong>」——<br>通过任务定义、范围校验、质量门禁三层机制，<br>把 LLM Agent 变成工程意义上<strong>可治理的团队成员</strong>。</p>
+</blockquote>
+<hr>
+<p><em>文档版本：与仓库 <code>agents/workflow.md</code>、<code>ARCHITECTURE.md</code>（2026-05）对齐；如实现变更请以代码为准。</em></p>
+<hr>
+<h2 id="关注与相关"><a href="#关注与相关" class="headerlink" title="关注与相关"></a>关注与相关</h2><p><strong>Neo的数智空间</strong><br>技术分享 | AI 周报 | 工具实测 | 生活方式观察</p>
+<ul>
+<li><strong>微信公众号</strong>：搜索「Neo的数智空间」获取图文版</li>
+<li><strong>B 站视频版</strong>：【B站视频链接 &#x2F; BV号】（口播 + 架构讲解）</li>
+<li><strong>相关阅读</strong>（待更新）：工具实测系列 | AI 工程化实践</li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpig4v3q0000e4mr4xhjh1cb" data-title="ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-5个免费AI工具，我每天都在用2026普通人提效指南" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/" class="article-date">
@@ -1455,655 +2098,6 @@
 
 
   
-    <article id="post-AI-Agent自动化工程实践" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="article-date">
-  <time class="dt-published" datetime="2026-05-22T02:00:00.000Z" itemprop="datePublished">2026-05-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><a href="#1-%E8%83%8C%E6%99%AF%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BB%80%E4%B9%88%E7%B3%BB%E7%BB%9F">1. 背景：这是一个什么系统？</a></li>
-<li><a href="#2-%E9%97%AE%E9%A2%98ai-%E7%BC%96%E7%A0%81%E9%9A%BE%E5%9C%A8%E5%93%AA%E9%87%8C">2. 问题：AI 编码，难在哪里？</a></li>
-<li><a href="#3-%E6%80%9D%E8%B7%AF%E4%B8%89%E5%B1%82%E6%8E%A7%E5%88%B6%E6%9E%B6%E6%9E%84">3. 思路：三层控制架构</a></li>
-<li><a href="#4-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%85%A8%E6%A0%88%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8">4. 基础设施：全栈类型安全</a></li>
-<li><a href="#5-%E7%AC%AC%E4%B8%80%E5%B1%82%E4%BB%BB%E5%8A%A1%E5%AE%9A%E4%B9%89%E6%9C%BA%E8%AF%BB-yaml">5. 第一层：任务定义（机读 YAML）</a></li>
-<li><a href="#6-%E7%AC%AC%E4%BA%8C%E5%B1%82%E8%8C%83%E5%9B%B4%E7%AD%96%E7%95%A5scope-policy">6. 第二层：范围策略（Scope Policy）</a></li>
-<li><a href="#7-%E7%AC%AC%E4%B8%89%E5%B1%82%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81quality-gate">7. 第三层：质量门禁（Quality Gate）</a></li>
-<li><a href="#8-%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6s0s5-%E7%8A%B6%E6%80%81%E6%9C%BA">8. 执行机制：S0–S5 状态机</a></li>
-<li><a href="#9-%E6%89%A9%E5%B1%95multi-agent-%E5%B9%B6%E8%A1%8C%E5%8D%8F%E4%BD%9Cgit-worktree">9. 扩展：Multi-Agent 并行协作</a></li>
-<li><a href="#10-%E8%87%AA%E5%8A%A8%E5%8C%96ci-%E9%9B%86%E6%88%90">10. 自动化：CI 集成</a></li>
-<li><a href="#11-%E5%AE%9E%E6%88%98%E4%B8%80%E4%B8%AA%E9%9C%80%E6%B1%82%E7%9A%84%E5%AE%8C%E6%95%B4%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">11. 实战：一个需求的完整执行流程</a></li>
-<li><a href="#12-%E5%9B%9E%E9%A1%BE%E8%BF%99%E5%A5%97%E6%9E%B6%E6%9E%84%E5%A6%82%E4%BD%95%E9%92%88%E5%AF%B9%E6%80%A7%E5%9C%B0%E8%A7%A3%E5%86%B3-ai-%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BC%B1%E7%82%B9">12. 回顾：架构如何针对性解决 AI 五大弱点</a></li>
-<li><a href="#13-%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E6%80%BB%E7%BB%93">13. 关键设计原则总结</a></li>
-<li><a href="#14-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5">14. 常用命令速查</a></li>
-<li><a href="#15-%E5%BB%B6%E4%BC%B8%E6%80%9D%E8%80%83">15. 延伸思考</a></li>
-<li><a href="#%E5%85%B3%E6%B3%A8%E4%B8%8E%E7%9B%B8%E5%85%B3">关注与相关</a></li>
-</ul>
-<hr>
-<h2 id="1-背景：这是一个什么系统？"><a href="#1-背景：这是一个什么系统？" class="headerlink" title="1. 背景：这是一个什么系统？"></a>1. 背景：这是一个什么系统？</h2><p><strong>英语口语识别平台</strong>（<code>spoken-english-recognition</code>）是一个面向口语练习场景的全栈应用，核心链路是：</p>
-<blockquote>
-<p>用户上传录音 → 异步 ASR 转写 → 词级时间轴 → 可标注的学习界面</p>
-</blockquote>
-<pre class="mermaid">flowchart LR
-  U["用户上传录音"] --> API["API 创建任务\n入队 BullMQ"]
-  API --> WORKER["Worker 调用 ASR\nWhisper / 阿里云 / Mock"]
-  WORKER --> DB["回写 PostgreSQL\n词轴 + 评分 + 状态"]
-  DB --> WEB["前端轮询回显\n可点击词 · 标记 · IPA"]</pre>
-
-<p><strong>Monorepo 分层结构</strong>（pnpm workspaces + Turborepo）：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spoken-english-recognition/</span><br><span class="line">├── apps/</span><br><span class="line">│   ├── web/      Next.js 15 + React 19 前端</span><br><span class="line">│   ├── api/      Fastify + tRPC v11 后端</span><br><span class="line">│   └── worker/   BullMQ 异步转写消费者</span><br><span class="line">├── packages/</span><br><span class="line">│   ├── shared/   跨端 Zod Schema（单一事实源）</span><br><span class="line">│   ├── db/       Prisma 6 单例</span><br><span class="line">│   └── asr/      ASR Provider 抽象（whisper / mock / aliyun）</span><br><span class="line">├── agents/       ← Agent 执行规范与机读任务入口</span><br><span class="line">├── ops/          ← 自动化脚本</span><br><span class="line">└── .github/workflows/</span><br></pre></td></tr></table></figure>
-
-<p>这个项目从第一行代码起就把 <strong>AI Agent 当成主要开发者</strong>——本文讲的正是为此专门设计的一套工程化机制。</p>
-<hr>
-<h2 id="2-问题：AI-编码，难在哪里？"><a href="#2-问题：AI-编码，难在哪里？" class="headerlink" title="2. 问题：AI 编码，难在哪里？"></a>2. 问题：AI 编码，难在哪里？</h2><h3 id="2-1-表象痛点"><a href="#2-1-表象痛点" class="headerlink" title="2.1 表象痛点"></a>2.1 表象痛点</h3><p>当我们把 LLM Agent（Cursor、Claude、Copilot）接入日常开发，很快就会遇到这五类问题：</p>
-<table>
-<thead>
-<tr>
-<th>痛点</th>
-<th>表现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>改动越界</strong></td>
-<td>Agent 修改了不该碰的模块，破坏其他人的工作</td>
-</tr>
-<tr>
-<td><strong>“完成”不可信</strong></td>
-<td>AI 说完成了，但代码跑不起来、类型报错</td>
-</tr>
-<tr>
-<td><strong>无法回滚</strong></td>
-<td>出错后不知道从哪里开始撤销</td>
-</tr>
-<tr>
-<td><strong>跨模块污染</strong></td>
-<td>单个 Agent 同时改前端、后端、共享包，边界模糊</td>
-</tr>
-<tr>
-<td><strong>CI&#x2F;本地结论不一致</strong></td>
-<td>本地说通过，CI 报红</td>
-</tr>
-</tbody></table>
-<p>这些症状背后，有更深层的原因。</p>
-<h3 id="2-2-根本原因：AI-的认知弱点"><a href="#2-2-根本原因：AI-的认知弱点" class="headerlink" title="2.2 根本原因：AI 的认知弱点"></a>2.2 根本原因：AI 的认知弱点</h3><p>LLM 和人类开发者的认知模式截然不同：</p>
-<pre class="mermaid">flowchart TB
-  subgraph ai_pain["AI 天然存在的认知局限"]
-    P1["🔍 上下文窗口有限\n无法一次性读完整个 Monorepo"]
-    P2["💥 无法感知副作用\n改了字段 A，不知道模块 B 会跟着坏"]
-    P3["🎭 无法判断「完成」\n主观认为正确 ≠ 实际可运行"]
-    P4["⚡ 并发改动冲突\n多个 Agent 同时写同一文件"]
-    P5["🧠 无跨会话记忆\n出错后想回退，但不记得改了什么"]
-  end</pre>
-
-<p>认识到这五条弱点，就能理解后面每一个架构决策的出发点。</p>
-<hr>
-<h2 id="3-思路：三层控制架构"><a href="#3-思路：三层控制架构" class="headerlink" title="3. 思路：三层控制架构"></a>3. 思路：三层控制架构</h2><p>针对上述问题，我们在业务代码之外加了一层”执行控制层”，由三个子层组成：</p>
-<pre class="mermaid">flowchart TB
-  subgraph layer1["① 任务定义层 — 解决「不知道改哪里、怎么判完成」"]
-    T1["agents/agent-orchestration.tasks.yaml\n机读入口"]
-    T2["agents/tasks/各域.tasks.yaml\n子域任务（inputs / outputs / verify / rollback）"]
-    T1 --> T2
-  end
-
-  subgraph layer2["② 范围策略层 — 解决「越界改动、跨模块污染」"]
-    S1["ops/agent-scope-check.mjs\n改动路径校验"]
-    S2["ops/agent-ci-scope.mjs\nCI 域自动判定"]
-    S1 -.-> S2
-  end
-
-  subgraph layer3["③ 质量门禁层 — 解决「完成」不可信、本地 CI 不一致"]
-    G1["pnpm agent:gate\ntypecheck + lint + test:run"]
-    G2["pnpm gate:pr  含 E2E critical"]
-    G3["pnpm gate:release  发布前全量"]
-    G1 --> G2 --> G3
-  end
-
-  layer1 --> layer2 --> layer3
-
-  style layer1 fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
-  style layer2 fill:#15803d,color:#ffffff,stroke:#15803d
-  style layer3 fill:#b45309,color:#ffffff,stroke:#b45309</pre>
-
-<p>接下来逐层拆解每一层是怎么做的。</p>
-<hr>
-<h2 id="4-基础设施：全栈类型安全"><a href="#4-基础设施：全栈类型安全" class="headerlink" title="4. 基础设施：全栈类型安全"></a>4. 基础设施：全栈类型安全</h2><p>在介绍三层控制之前，先说一个贯穿整个架构的基础设计——<strong>Schema 单一事实源</strong>，它是所有层都依赖的地基。</p>
-<pre class="mermaid">flowchart TB
-  SHARED["packages/shared/schemas/speech.ts\nZod Schema（唯一定义）"]
-
-  SHARED --> API_INPUT["apps/api\ntRPC input 类型推导"]
-  SHARED --> WEB_FORM["apps/web\n表单校验 + 类型引用"]
-  SHARED --> WORKER_PAYLOAD["apps/worker\nBullMQ Job payload 类型"]
-  SHARED --> PRISMA_HELPER["packages/db\nPrisma JSON 字段解析辅助"]
-
-  style SHARED fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8,stroke-width:2px</pre>
-
-<p><strong>为什么这对 AI 很重要</strong>：AI 改字段时最容易出现”前端改了、后端忘了同步”的问题。有了单一事实源，AI 只需改 <code>packages/shared</code>，TypeScript 严格模式会把所有下游不兼容的用法<strong>立即报成类型错误</strong>，在 <code>pnpm typecheck</code> 阶段就暴露，不需要靠 AI “记住”要改哪些地方。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Agent 改字段的固定顺序：</span><br><span class="line">  packages/shared → apps/api → apps/web</span><br><span class="line"></span><br><span class="line">scope 校验会拦截顺序错误（先改 web 再补 shared）</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="5-第一层：任务定义（机读-YAML）"><a href="#5-第一层：任务定义（机读-YAML）" class="headerlink" title="5. 第一层：任务定义（机读 YAML）"></a>5. 第一层：任务定义（机读 YAML）</h2><h3 id="5-1-问题：文字文档对-AI-不够”精确”"><a href="#5-1-问题：文字文档对-AI-不够”精确”" class="headerlink" title="5.1 问题：文字文档对 AI 不够”精确”"></a>5.1 问题：文字文档对 AI 不够”精确”</h3><p>传统做法是把任务写在 Markdown 里，Agent 读文字执行。<br>问题在于：<strong>文字模糊，AI 对”完成”的判断是主观的</strong>，无法强制验证。</p>
-<p>同时 AI 的上下文窗口有限，读完整仓库文档代价很高。</p>
-<h3 id="5-2-解法：每个任务都有可执行的-verify-和-rollback"><a href="#5-2-解法：每个任务都有可执行的-verify-和-rollback" class="headerlink" title="5.2 解法：每个任务都有可执行的 verify 和 rollback"></a>5.2 解法：每个任务都有可执行的 verify 和 rollback</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># agents/agent-orchestration.tasks.yaml（入口）</span></span><br><span class="line"><span class="attr">task_catalog:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/web.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/api.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/worker.tasks.yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">agents/tasks/shared.tasks.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">execution_policy:</span></span><br><span class="line">  <span class="attr">scope_workflow:</span> <span class="string">&quot;pnpm agent:scope:auto → pnpm agent:scope:&lt;scope&gt;&quot;</span></span><br><span class="line">  <span class="attr">quality_gate:</span> <span class="string">&quot;pnpm agent:gate&quot;</span></span><br><span class="line">  <span class="attr">s4_mechanical_loop:</span> <span class="string">&quot;pnpm agent:s4:mechanical-loop&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">tasks:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">task-003-gate-command</span></span><br><span class="line">    <span class="attr">title:</span> <span class="string">增加最小门禁命令</span></span><br><span class="line">    <span class="attr">owner_scope:</span> <span class="string">all</span>          <span class="comment"># ← 允许修改范围</span></span><br><span class="line">    <span class="attr">inputs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">    <span class="attr">outputs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">    <span class="attr">verify:</span>                   <span class="comment"># ← 执行完的验证命令（可执行！）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;pnpm agent:scope:all&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;pnpm agent:gate&quot;</span></span><br><span class="line">    <span class="attr">rollback:</span>                 <span class="comment"># ← 失败时的回滚命令</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;git checkout -- package.json&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>关键设计点</strong>：</p>
-<pre class="mermaid">flowchart LR
-  T["task YAML"]
-
-  T --> I["inputs\n依赖哪些文件"]
-  T --> O["outputs\n产出哪些文件"]
-  T --> S["owner_scope\n允许修改哪些目录"]
-  T --> V(["verify\n如何验证完成（命令）"])
-  T --> R(["rollback\n失败如何撤销（命令）"])
-
-  style T fill:#1e40af,color:#ffffff,stroke:#1e40af
-  style I fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
-  style O fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
-  style S fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
-  style V fill:#14532d,color:#ffffff,stroke:#15803d,stroke-width:2px
-  style R fill:#7f1d1d,color:#ffffff,stroke:#b91c1c,stroke-width:2px</pre>
-
-<p>YAML 把”该改哪里、改完验什么、失败怎么回退”全部结构化，AI 直接读字段执行，<strong>不需要推理，也不需要记忆</strong>。</p>
-<hr>
-<h2 id="6-第二层：范围策略（Scope-Policy）"><a href="#6-第二层：范围策略（Scope-Policy）" class="headerlink" title="6. 第二层：范围策略（Scope Policy）"></a>6. 第二层：范围策略（Scope Policy）</h2><h3 id="6-1-问题：Agent-容易”手滑”改错地方"><a href="#6-1-问题：Agent-容易”手滑”改错地方" class="headerlink" title="6.1 问题：Agent 容易”手滑”改错地方"></a>6.1 问题：Agent 容易”手滑”改错地方</h3><p>大型 Monorepo 中，一次功能改动通常只应触碰某个子域。但 AI 没有物理边界感，容易在执行过程中顺手改了不该改的文件。</p>
-<h3 id="6-2-解法：Scope-映射-路径校验脚本"><a href="#6-2-解法：Scope-映射-路径校验脚本" class="headerlink" title="6.2 解法：Scope 映射 + 路径校验脚本"></a>6.2 解法：Scope 映射 + 路径校验脚本</h3><p>每次 Agent 改完代码，都要经过路径级别的合规性检查：</p>
-<pre class="mermaid">flowchart TB
-  subgraph scope_map["Scope → 允许修改的目录"]
-    WEB["scope: web → apps/web/..."]
-    API["scope: api → apps/api/..."]
-    WORKER["scope: worker → apps/worker/..."]
-    BACKEND["scope: backend → apps/api + worker/..."]
-    CONTRACT["scope: contract → packages/..."]
-    ALL["scope: all → 全仓库"]
-  end
-
-  subgraph always_ok["始终允许修改（任何 scope）"]
-    META["agents/ · docs/ · ops/\n.github/workflows/\nAGENTS.md · package.json"]
-  end</pre>
-
-<p><strong>脚本核心逻辑</strong>（<code>ops/agent-scope-check.mjs</code>）：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 获取本次所有改动文件（git diff + 暂存区 + 未追踪文件）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getChangedFiles</span>(<span class="params">base, head</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> refFiles    = <span class="title function_">execSync</span>(<span class="string">`git diff --name-only &quot;<span class="subst">$&#123;base&#125;</span>...<span class="subst">$&#123;head&#125;</span>&quot;`</span>)</span><br><span class="line">  <span class="keyword">const</span> stagedFiles = <span class="title function_">execSync</span>(<span class="string">&#x27;git diff --name-only --cached&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> untracked   = <span class="title function_">execSync</span>(<span class="string">&#x27;git ls-files --others --exclude-standard&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> [...<span class="keyword">new</span> <span class="title class_">Set</span>([...refFiles, ...stagedFiles, ...untracked])]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 逐文件检查是否在允许路径内</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isAllowedFile</span>(<span class="params">file, prefixes</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable constant_">ALWAYS_ALLOWED_FILES</span>.<span class="title function_">has</span>(file)) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="variable constant_">ALWAYS_ALLOWED_PREFIX</span>.<span class="title function_">some</span>(<span class="function"><span class="params">p</span> =&gt;</span> file.<span class="title function_">startsWith</span>(p))) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">return</span> prefixes.<span class="title function_">some</span>(<span class="function"><span class="params">p</span> =&gt;</span> file.<span class="title function_">startsWith</span>(p))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 有违规文件 → exit(1)，CI / 本地均亮红灯</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="6-3-两步执行（改代码后必做）"><a href="#6-3-两步执行（改代码后必做）" class="headerlink" title="6.3 两步执行（改代码后必做）"></a>6.3 两步执行（改代码后必做）</h3><pre class="mermaid">sequenceDiagram
-  participant Dev as Agent / 开发者
-  participant Auto as pnpm agent:scope:auto
-  participant Check as pnpm agent scope SCOPE
-  participant CI as GitHub Actions
-
-  Dev->>Auto: 改完代码后执行
-  Auto-->>Dev: scope=web，reason=单域改动
-  Dev->>Check: pnpm agent:scope:web
-  Check-->>Dev: ✅ 范围检查通过 (exit 0)
-
-  Note over Dev,CI: 推 PR 后 CI 执行完全相同的步骤
-  CI->>Auto: node ops/agent-ci-scope.mjs
-  CI->>Check: pnpm agent:scope:web
-  Check-->>CI: ✅ 与本地结论一致</pre>
-
-<blockquote>
-<p><code>scope:auto</code> 只<strong>输出判定结论</strong>（JSON），不做拦截；<br><code>scope:&lt;scope&gt;</code> 才是真正执行边界校验、可能 exit(1) 的步骤。<br>两步缺一不可，本地与 CI 行为完全对齐。</p>
-</blockquote>
-<hr>
-<h2 id="7-第三层：质量门禁（Quality-Gate）"><a href="#7-第三层：质量门禁（Quality-Gate）" class="headerlink" title="7. 第三层：质量门禁（Quality Gate）"></a>7. 第三层：质量门禁（Quality Gate）</h2><h3 id="7-1-问题：AI-说”完成”不算完成"><a href="#7-1-问题：AI-说”完成”不算完成" class="headerlink" title="7.1 问题：AI 说”完成”不算完成"></a>7.1 问题：AI 说”完成”不算完成</h3><p>AI 最常见的幻觉：改完代码后说”已实现，应该没问题”。<br>人无法高效 review 每一行 AI 写的代码，也不应该靠人来替 AI 把关基础质量。</p>
-<h3 id="7-2-解法：把”完成”重新定义为客观的-exit-code"><a href="#7-2-解法：把”完成”重新定义为客观的-exit-code" class="headerlink" title="7.2 解法：把”完成”重新定义为客观的 exit code"></a>7.2 解法：把”完成”重新定义为客观的 exit code</h3><pre class="mermaid">flowchart LR
-  subgraph subjective["❌ 主观判断（不可信）"]
-    S1["AI 觉得逻辑对了"]
-    S2["AI 看代码没报错"]
-    S3["AI 解释了为什么正确"]
-  end
-
-  subgraph objective["✅ 客观标准（可验证）"]
-    O1["pnpm typecheck\n0 个类型错误"]
-    O2["pnpm lint\n0 个 lint 违规"]
-    O3["pnpm test:run\n所有测试通过"]
-    O4["pnpm gate:pr\nE2E critical 通过"]
-    O1 --> DONE["exit code = 0\n才允许宣称完成"]
-    O2 --> DONE
-    O3 --> DONE
-    O4 --> DONE
-  end</pre>
-
-<h3 id="7-3-门禁层级"><a href="#7-3-门禁层级" class="headerlink" title="7.3 门禁层级"></a>7.3 门禁层级</h3><pre class="mermaid">flowchart LR
-  subgraph local["本地开发"]
-    G1["pnpm agent:gate\ntypecheck + lint + test:run"]
-    G_LOOP["pnpm agent:s4:mechanical-loop\nBiome 自动修 + gate 循环 3 轮"]
-  end
-
-  subgraph pr["PR 合并前"]
-    G2["pnpm gate:pr\nG1 + critical E2E"]
-  end
-
-  subgraph release["发布前"]
-    G3["pnpm gate:release\nG2 + full E2E"]
-  end
-
-  subgraph nightly["夜间巡检"]
-    G4["pnpm gate:nightly\n全量回归"]
-  end
-
-  G1 --> G2 --> G3 --> G4
-  G_LOOP -.-> G1</pre>
-
-<h3 id="7-4-S4-机械修验闭环"><a href="#7-4-S4-机械修验闭环" class="headerlink" title="7.4 S4 机械修验闭环"></a>7.4 S4 机械修验闭环</h3><p>Agent 不只是被动接受门禁结果，还有一套”自动修复 + 反复验证”的闭环：</p>
-<pre class="mermaid">flowchart TD
-  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:SCOPE"]
-  I0 --> LOOP["开始机械修验循环"]
-  LOOP --> BIOME["pnpm check\nBiome 自动修复格式/lint"]
-  BIOME --> GATE["pnpm agent:gate\ntypecheck + lint + test:run"]
-  GATE --> PASS{"exit 0？"}
-  PASS -->|✅ 通过| DONE["S4 通过 → 进入 S5 交付"]
-  PASS -->|❌ 失败| ROUND{"已到第 3 轮？"}
-  ROUND -->|否| COGNITIVE["Agent 读报错\n认知修复改代码"]
-  COGNITIVE --> LOOP
-  ROUND -->|是| STOP["停止循环\n输出根因与阻塞点\n等待人工决策"]</pre>
-
-<table>
-<thead>
-<tr>
-<th>层级</th>
-<th>承担者</th>
-<th>能力</th>
-<th>举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>机械层</strong></td>
-<td><code>pnpm check</code> (Biome)</td>
-<td>自动修复格式&#x2F;lint</td>
-<td>自动补分号、整理 import</td>
-</tr>
-<tr>
-<td><strong>认知层</strong></td>
-<td>AI Agent</td>
-<td>理解报错、修逻辑</td>
-<td>修类型不匹配、修失败断言</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>硬约束</strong>：机械修复<strong>只在开发环境</strong>执行，<strong>禁止在 CI 中写回源码</strong>。</p>
-</blockquote>
-<hr>
-<h2 id="8-执行机制：S0–S5-状态机"><a href="#8-执行机制：S0–S5-状态机" class="headerlink" title="8. 执行机制：S0–S5 状态机"></a>8. 执行机制：S0–S5 状态机</h2><p>有了三层控制架构，还需要一套状态机来约束 Agent 的<strong>执行顺序</strong>——防止 AI 跳过分析直接写代码，或改了代码不验证就宣称完成。</p>
-<pre class="mermaid">stateDiagram-v2
-  direction LR
-  [*] --> S0 : 收到需求
-  S0 --> S1 : 上下文确认完成
-  S1 --> S2 : Spec 确认
-  S2 --> S3 : 任务计划确认
-  S3 --> S4 : 实施完成
-  S4 --> S5 : 门禁全绿
-  S5 --> [*] : 交付
-
-  S4 --> S3 : 门禁失败 → 修复
-  S3 --> S2 : 设计推翻
-  S2 --> S1 : 依赖冲突</pre>
-
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>名称</th>
-<th>核心动作</th>
-<th>完成判定</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>S0</strong></td>
-<td>上下文确认</td>
-<td>读 AGENTS.md、确认分支、确认 worktree</td>
-<td>上下文包产出</td>
-</tr>
-<tr>
-<td><strong>S1</strong></td>
-<td>需求结构化</td>
-<td>产出技术 Spec、列验收标准</td>
-<td>用户确认 Spec</td>
-</tr>
-<tr>
-<td><strong>S2</strong></td>
-<td>任务计划</td>
-<td>读任务 YAML、拆子任务、定 verify 命令</td>
-<td>用户确认计划</td>
-</tr>
-<tr>
-<td><strong>S3</strong></td>
-<td>实施</td>
-<td>改代码、完成 I.0 范围校验</td>
-<td>代码落盘</td>
-</tr>
-<tr>
-<td><strong>S4</strong></td>
-<td>验证门禁</td>
-<td><code>pnpm agent:s4:mechanical-loop</code> → 修 → 循环</td>
-<td><code>pnpm agent:gate</code> 至少一次 0 退出码</td>
-</tr>
-<tr>
-<td><strong>S5</strong></td>
-<td>交付报告</td>
-<td>输出摘要、证据、风险提示</td>
-<td>用户明确通过</td>
-</tr>
-</tbody></table>
-<p><strong>核心硬规则</strong>：</p>
-<pre class="mermaid">flowchart LR
-  subgraph forbidden["❌ 任何情况下禁止"]
-    F1["未通过 S4 说'完成'"]
-    F2["测试失败说'基本通过'"]
-    F3["未确认 Spec 直接写代码"]
-    F4["CI 中自动提交修复代码"]
-  end</pre>
-
-<hr>
-<h2 id="9-扩展：Multi-Agent-并行协作（Git-Worktree）"><a href="#9-扩展：Multi-Agent-并行协作（Git-Worktree）" class="headerlink" title="9. 扩展：Multi-Agent 并行协作（Git Worktree）"></a>9. 扩展：Multi-Agent 并行协作（Git Worktree）</h2><h3 id="9-1-为什么需要多-Agent？"><a href="#9-1-为什么需要多-Agent？" class="headerlink" title="9.1 为什么需要多 Agent？"></a>9.1 为什么需要多 Agent？</h3><p>大需求往往跨 <code>api</code> + <code>web</code> + <code>packages/shared</code> 三个域。若单 Agent 串行：</p>
-<ul>
-<li>等待时间长</li>
-<li>越界风险大</li>
-<li>上下文窗口被不相关代码消耗</li>
-</ul>
-<p><strong>解法</strong>：用 <code>git worktree</code> 开多个目录，每个 Agent 只看自己的范围，并行推进。</p>
-<h3 id="9-2-三窗口分工模型"><a href="#9-2-三窗口分工模型" class="headerlink" title="9.2 三窗口分工模型"></a>9.2 三窗口分工模型</h3><pre class="mermaid">flowchart TB
-  subgraph main["主窗口（主仓库路径）\n契约 Agent"]
-    SHARED["packages/...\n定义 Zod Schema / 类型 / 常量"]
-  end
-
-  subgraph api_worktree["~/ser-feature-api\n后端 Agent"]
-    API["apps/api/...\n实现 tRPC Procedure + Service"]
-    WORKER["apps/worker/...\n实现异步任务消费"]
-  end
-
-  subgraph web_worktree["~/ser-feature-web\n前端 Agent"]
-    WEB["apps/web/...\n实现页面 + tRPC Client 调用"]
-  end
-
-  SHARED -->|共享类型| API
-  SHARED -->|共享类型| WEB
-
-  style main fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
-  style api_worktree fill:#15803d,color:#ffffff,stroke:#15803d
-  style web_worktree fill:#92400e,color:#ffffff,stroke:#92400e</pre>
-
-<p><strong>Cursor rules 自动锁定范围</strong>（<code>.cursor/rules/worktree.mdc</code>）：</p>
-<pre class="mermaid">flowchart TB
-  subgraph rule_table["路径识别 → 自动锁定"]
-    R1["路径含 -api → 后端 Agent → 只改 apps/api + worker/..."]
-    R2["路径含 -web → 前端 Agent → 只改 apps/web/..."]
-    R3["主仓库路径 → 契约 Agent → 只改 packages/..."]
-  end</pre>
-
-<p>当 Agent 收到越界指令时，<strong>必须拒绝并提示</strong>：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当前 worktree 范围限制，此文件应由 [主窗口] 负责</span><br></pre></td></tr></table></figure>
-
-<h3 id="9-3-并行协作时序"><a href="#9-3-并行协作时序" class="headerlink" title="9.3 并行协作时序"></a>9.3 并行协作时序</h3><pre class="mermaid">sequenceDiagram
-  participant P as Overseer（用户）
-  participant M as 主窗口（契约）
-  participant A as api 窗口（后端）
-  participant W as web 窗口（前端）
-
-  P->>M: 定义新功能的 Zod Schema
-  M-->>P: shared 修改完成，输出交接块
-
-  par 并行开发
-    P->>A: 解锁后端窗口，实现 tRPC + Worker
-    P->>W: 解锁前端窗口，实现 UI + 数据获取
-  end
-
-  A-->>P: api 实现完成，pnpm gate ✅
-  W-->>P: web 实现完成，pnpm gate ✅
-
-  P->>P: 合并所有 worktree 到 main branch
-  P->>P: pnpm gate:pr（完整 PR 门禁）</pre>
-
-<hr>
-<h2 id="10-自动化：CI-集成"><a href="#10-自动化：CI-集成" class="headerlink" title="10. 自动化：CI 集成"></a>10. 自动化：CI 集成</h2><p>本地机制需要同步到 CI，才能防止”本地跑通、PR 合并后才发现问题”。</p>
-<h3 id="10-1-agent-ready-gate-yml-工作流"><a href="#10-1-agent-ready-gate-yml-工作流" class="headerlink" title="10.1 agent-ready-gate.yml 工作流"></a>10.1 <code>agent-ready-gate.yml</code> 工作流</h3><p>每个 PR 都会触发以下检查序列：</p>
-<pre class="mermaid">flowchart TD
-  PR["PR 打开 / 推送"] --> CHECKOUT["Checkout 代码\nfetch-depth: 0"]
-  CHECKOUT --> INSTALL["pnpm install --frozen-lockfile"]
-  INSTALL --> ENV["准备 CI 环境\nASR_PROVIDER=mock"]
-  ENV --> DETECT["Detect scope\nnode ops/agent-ci-scope.mjs\n输出 scope + reason"]
-  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:SCOPE"]
-  SCOPE_CHECK --> GATE["pnpm gate:pr\ntypecheck + lint + unit + critical E2E"]
-  GATE --> DONE["✅ 合并准入"]
-
-  SCOPE_CHECK -->|违规文件| FAIL_SCOPE["❌ 越界失败\n列出违规文件"]
-  GATE -->|失败| FAIL_GATE["❌ 门禁失败\n上传 playwright-report"]</pre>
-
-<h3 id="10-2-scope-自动判定逻辑"><a href="#10-2-scope-自动判定逻辑" class="headerlink" title="10.2 scope 自动判定逻辑"></a>10.2 scope 自动判定逻辑</h3><pre class="mermaid">flowchart TD
-  FILES["获取 PR 改动文件列表\ngit diff base...head"] --> FILTER["过滤 always-allowed 文件\nagents/ docs/ ops/ AGENTS.md ..."]
-  FILTER --> CLASSIFY["按目录前缀分类\nweb / api / worker / contract"]
-  CLASSIFY --> JUDGE{"改动域数量"}
-  JUDGE -->|0 个业务域| RESULT_META["scope: all\n仅元信息改动"]
-  JUDGE -->|1 个域| RESULT_SINGLE["scope: 该域\n单域改动"]
-  JUDGE -->|多个域| RESULT_CROSS["scope: all\n跨域改动"]
-  JUDGE -->|含未知路径| RESULT_UNKNOWN["scope: all\n未归属目录，兜底"]</pre>
-
-<hr>
-<h2 id="11-实战：一个需求的完整执行流程"><a href="#11-实战：一个需求的完整执行流程" class="headerlink" title="11. 实战：一个需求的完整执行流程"></a>11. 实战：一个需求的完整执行流程</h2><p>以「新增语音评分展示」为例，串联所有机制：</p>
-<pre class="mermaid">flowchart TD
-  subgraph S0["S0 上下文确认"]
-    C1["确认仓库路径与分支"]
-    C2["读 AGENTS.md + ARCHITECTURE.md\n确认改动涉及 shared + api + web 三层"]
-  end
-
-  subgraph S1["S1 需求结构化"]
-    SP["Spec 要点：\n① shared/schemas 加 scoreDisplay 字段\n② api 回传评分数据\n③ web 展示 accuracy/fluency UI\n④ 验收：前端可见评分数值"]
-  end
-
-  subgraph S2["S2 任务计划"]
-    TP["读 agent-orchestration.tasks.yaml\n拆 3 个子任务：\nshared(contract) → api → web\n模式：主仓串行 + 两 worktree 并行"]
-  end
-
-  subgraph S3["S3 实施"]
-    I1["主窗口：改 packages/shared/schemas/speech.ts"]
-    I2["api 窗口：改 apps/api 回传字段"]
-    I3["web 窗口：改 apps/web 展示 UI"]
-    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:SCOPE"]
-    I1 --> I2
-    I1 --> I3
-    I2 --> SC
-    I3 --> SC
-  end
-
-  subgraph S4["S4 验证"]
-    ML["pnpm agent:s4:mechanical-loop\nBiome 修 + gate 循环"]
-    ML --> RESULT{"exit 0？"}
-    RESULT -->|✅| PASS["三个域全部 gate 通过"]
-    RESULT -->|❌| FIX["读报错 → 改代码 → 继续"]
-    FIX --> ML
-  end
-
-  subgraph S5["S5 交付"]
-    RPT["输出改动摘要、验证证据、影响文件\n发 PR → 触发 agent-ready-gate.yml"]
-  end
-
-  S0 --> S1 --> S2 --> S3 --> S4 --> S5</pre>
-
-<hr>
-<h2 id="12-回顾：这套架构如何针对性地解决-AI-的五大弱点？"><a href="#12-回顾：这套架构如何针对性地解决-AI-的五大弱点？" class="headerlink" title="12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？"></a>12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？</h2><p>把第 2 章的问题和前面的解法对照验证：</p>
-<table>
-<thead>
-<tr>
-<th>AI 认知弱点</th>
-<th>架构解法</th>
-<th>核心机制</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>上下文窗口有限</strong></td>
-<td>机读 YAML 把关键信息压缩成结构化索引</td>
-<td><code>inputs / outputs / owner_scope</code> 字段直接可读</td>
-</tr>
-<tr>
-<td><strong>无法感知副作用</strong></td>
-<td>Schema 单一事实源 + TypeScript Strict</td>
-<td>改一处，编译器全链路报错兜底</td>
-</tr>
-<tr>
-<td><strong>无法判断”完成”</strong></td>
-<td>质量门禁把主观变客观</td>
-<td>exit code 不可伪造</td>
-</tr>
-<tr>
-<td><strong>并发改动冲突</strong></td>
-<td>Worktree 物理隔离 + Scope 拦截双重防线</td>
-<td>物理文件系统隔离 + 路径校验</td>
-</tr>
-<tr>
-<td><strong>无跨会话记忆</strong></td>
-<td>每任务预声明 <code>rollback</code> 命令</td>
-<td>一行 <code>git checkout</code> 无需回忆</td>
-</tr>
-</tbody></table>
-<h3 id="12-1-一个反直觉的结论"><a href="#12-1-一个反直觉的结论" class="headerlink" title="12.1 一个反直觉的结论"></a>12.1 一个反直觉的结论</h3><blockquote>
-<p><strong>对 AI 友好的架构，对人类也友好。</strong></p>
-</blockquote>
-<p>上面每一条设计，对人类开发者同样有价值：</p>
-<ul>
-<li>Schema 单源让人类改字段不会遗漏</li>
-<li>门禁让 Code Review 有客观基准</li>
-<li>Rollback 让人类也能快速回退</li>
-<li>Worktree 让多人并行工作减少冲突</li>
-</ul>
-<p>AI 只是让这些<strong>本来就应该做好的工程实践</strong>变得更加不可或缺——因为 AI 没有容错余地，工程约束的缺失会被立刻放大。</p>
-<hr>
-<h2 id="13-关键设计原则总结"><a href="#13-关键设计原则总结" class="headerlink" title="13. 关键设计原则总结"></a>13. 关键设计原则总结</h2><pre class="mermaid">flowchart TB
-  ROOT["Agent 工程化原则"]
-
-  ROOT --> P1["✅ 可执行"]
-  ROOT --> P2["⏪ 可回滚"]
-  ROOT --> P3["📋 可审计"]
-  ROOT --> P4["🔒 有边界"]
-  ROOT --> P5["🚦 CI 只验证不修复"]
-
-  P1 --> P1A["任务有 verify 命令"]
-  P1 --> P1B["verify = 客观退出码，非主观描述"]
-
-  P2 --> P2A["每任务声明 rollback 命令"]
-  P2 --> P2B["失败直接 git checkout 恢复"]
-
-  P3 --> P3A["S5 交付报告含命令与输出证据"]
-  P3 --> P3B["CI logs 保留 playwright-report"]
-
-  P4 --> P4A["worktree 物理目录隔离"]
-  P4 --> P4B["scope-check 路径逻辑隔离"]
-  P4 --> P4C["两者叠加，双重防越界"]
-
-  P5 --> P5A["Agent 在开发环境改代码"]
-  P5 --> P5B["CI 跑门禁并上报结果"]
-  P5 --> P5C["禁止 CI 自动提交修复"]
-
-  style ROOT fill:#1e40af,color:#fff,stroke:#1e40af
-  style P1 fill:#15803d,color:#ffffff,stroke:#15803d
-  style P2 fill:#991b1b,color:#ffffff,stroke:#991b1b
-  style P3 fill:#1d4ed8,color:#ffffff,stroke:#1d4ed8
-  style P4 fill:#92400e,color:#ffffff,stroke:#92400e
-  style P5 fill:#6b21a8,color:#ffffff,stroke:#6b21a8</pre>
-
-<table>
-<thead>
-<tr>
-<th>原则</th>
-<th>在本项目中的体现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>“完成”可验证</strong></td>
-<td><code>verify</code> 命令列表，0 退出码才算完成</td>
-</tr>
-<tr>
-<td><strong>改动有边界</strong></td>
-<td><code>agent-scope-check.mjs</code> 拦截越界文件</td>
-</tr>
-<tr>
-<td><strong>失败可回滚</strong></td>
-<td><code>rollback</code> 命令，一行恢复</td>
-</tr>
-<tr>
-<td><strong>多 Agent 有隔离</strong></td>
-<td>worktree 物理目录 + Cursor rules 锁定范围</td>
-</tr>
-<tr>
-<td><strong>CI 是只读门禁</strong></td>
-<td>CI 只验证，不修改代码</td>
-</tr>
-<tr>
-<td><strong>门禁层次分明</strong></td>
-<td><code>agent:gate</code> &lt; <code>gate:pr</code> &lt; <code>gate:release</code> &lt; <code>gate:nightly</code></td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="14-常用命令速查"><a href="#14-常用命令速查" class="headerlink" title="14. 常用命令速查"></a>14. 常用命令速查</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ===== S3 代码落盘后，必须两步 scope 校验 =====</span></span><br><span class="line">pnpm agent:scope:auto          <span class="comment"># 输出 JSON: &#123; scope, reason &#125;</span></span><br><span class="line">pnpm agent:scope:&lt;scope&gt;       <span class="comment"># 替换 &lt;scope&gt; 为上一步 JSON 中的值</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== S4 验证门禁 =====</span></span><br><span class="line">pnpm agent:s4:mechanical-loop  <span class="comment"># 机械修验：Biome + gate 循环 3 轮（开发环境）</span></span><br><span class="line">pnpm agent:gate                <span class="comment"># 最小门禁：typecheck + lint + test:run</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== PR / 发布 =====</span></span><br><span class="line">pnpm gate:<span class="built_in">pr</span>                   <span class="comment"># PR 级：含 @critical E2E</span></span><br><span class="line">pnpm gate:release              <span class="comment"># 发布前：含 @full E2E</span></span><br><span class="line">pnpm gate:nightly              <span class="comment"># 夜间全量回归</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ===== E2E 前置（裸跑 playwright 前必须） =====</span></span><br><span class="line">pnpm <span class="built_in">test</span>:e2e:preflight --ensure-browsers</span><br><span class="line">pnpm <span class="built_in">test</span>:e2e                  <span class="comment"># 已封装自检，推荐用这个</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="15-延伸思考"><a href="#15-延伸思考" class="headerlink" title="15. 延伸思考"></a>15. 延伸思考</h2><pre class="mermaid">flowchart LR
-  subgraph now["现状（已具备）"]
-    N1["S0–S5 状态机"]
-    N2["scope-check 越界拦截"]
-    N3["mechanical-loop 自修复"]
-    N4["worktree 多 Agent 协作"]
-    N5["CI agent-ready-gate"]
-  end
-
-  subgraph future["可扩展方向"]
-    F1["多仓库跨 repo 协作\n（通过 shared package registry）"]
-    F2["Agent 执行日志可视化\n（打通 S5 证据 + Sentry）"]
-    F3["自动化测试覆盖率追踪\n（gate 失败时 AI 写测试补洞）"]
-    F4["任务 YAML 生成器\n（从 PRD 自动产出 tasks.yaml）"]
-  end
-
-  now --> future</pre>
-
-<hr>
-<blockquote>
-<p><strong>一句话总结</strong>：本项目的 Agent 工程化不是「让 AI 写更多代码」，<br>而是「让 AI 写的代码<strong>可信、可控、可回滚</strong>」——<br>通过任务定义、范围校验、质量门禁三层机制，<br>把 LLM Agent 变成工程意义上<strong>可治理的团队成员</strong>。</p>
-</blockquote>
-<hr>
-<p><em>文档版本：与仓库 <code>agents/workflow.md</code>、<code>ARCHITECTURE.md</code>（2026-05）对齐；如实现变更请以代码为准。</em></p>
-<hr>
-<h2 id="关注与相关"><a href="#关注与相关" class="headerlink" title="关注与相关"></a>关注与相关</h2><p><strong>Neo的数智空间</strong><br>技术分享 | AI 周报 | 工具实测 | 生活方式观察</p>
-<ul>
-<li><strong>微信公众号</strong>：搜索「Neo的数智空间」获取图文版</li>
-<li><strong>B 站视频版</strong>：【B站视频链接 &#x2F; BV号】（口播 + 架构讲解）</li>
-<li><strong>相关阅读</strong>（待更新）：工具实测系列 | AI 工程化实践</li>
-</ul>
-<hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpig4v3q0000e4mr4xhjh1cb" data-title="AI Agent 自动化工程实践" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
 </section>
@@ -2124,7 +2118,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -2134,7 +2128,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 10px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 10px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
     </div>
   </div>
 
@@ -2160,6 +2154,10 @@
           </li>
         
           <li>
+            <a href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例</a>
+          </li>
+        
+          <li>
             <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/">5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）</a>
           </li>
         
@@ -2169,10 +2167,6 @@
         
           <li>
             <a href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
           </li>
         
       </ul>

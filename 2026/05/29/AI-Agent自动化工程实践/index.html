@@ -4,23 +4,25 @@
   <meta charset="utf-8">
   
   
-  <title>AI Agent 自动化工程实践 | Neo的博客</title>
+  <title>ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例 | Neo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="以英语口语识别 Monorepo 为例，拆解 AI Agent 工程化三层控制架构：任务定义、范围策略、质量门禁。让 LLM 改代码可信、可控、可回滚。">
+  <meta name="description" content="以全栈商品平台 Monorepo 为例，拆解 AI Agent 工程化三层控制架构：任务定义、范围策略、质量门禁。让 LLM 改代码可信、可控、可回滚。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AI Agent 自动化工程实践">
-<meta property="og:url" content="https://neo-share.github.io/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:title" content="ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例">
+<meta property="og:url" content="https://neo-share.github.io/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Neo的博客">
-<meta property="og:description" content="以英语口语识别 Monorepo 为例，拆解 AI Agent 工程化三层控制架构：任务定义、范围策略、质量门禁。让 LLM 改代码可信、可控、可回滚。">
+<meta property="og:description" content="以全栈商品平台 Monorepo 为例，拆解 AI Agent 工程化三层控制架构：任务定义、范围策略、质量门禁。让 LLM 改代码可信、可控、可回滚。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-05-22T02:00:00.000Z">
-<meta property="article:modified_time" content="2026-05-22T02:00:00.000Z">
+<meta property="article:published_time" content="2026-05-29T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-29T02:00:00.000Z">
 <meta property="article:author" content="Neo">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="工程化">
+<meta property="article:tag" content="Monorepo">
 <meta property="article:tag" content="Neo的数智空间">
 <meta property="article:tag" content="技术分享">
+<meta property="article:tag" content="Harness">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Neo的博客" type="application/atom+xml">
@@ -84,8 +86,8 @@
       <div class="outer">
         <section id="main"><article id="post-AI-Agent自动化工程实践" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="article-date">
-  <time class="dt-published" datetime="2026-05-22T02:00:00.000Z" itemprop="datePublished">2026-05-22</time>
+    <a href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="dt-published" datetime="2026-05-29T02:00:00.000Z" itemprop="datePublished">2026-05-29</time>
 </a>
     
   <div class="article-category">
@@ -100,7 +102,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      AI Agent 自动化工程实践
+      ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例
     </h1>
   
 
@@ -117,28 +119,25 @@
 <li><a href="#6-%E7%AC%AC%E4%BA%8C%E5%B1%82%E8%8C%83%E5%9B%B4%E7%AD%96%E7%95%A5scope-policy">6. 第二层：范围策略（Scope Policy）</a></li>
 <li><a href="#7-%E7%AC%AC%E4%B8%89%E5%B1%82%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81quality-gate">7. 第三层：质量门禁（Quality Gate）</a></li>
 <li><a href="#8-%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6s0s5-%E7%8A%B6%E6%80%81%E6%9C%BA">8. 执行机制：S0–S5 状态机</a></li>
-<li><a href="#9-%E6%89%A9%E5%B1%95multi-agent-%E5%B9%B6%E8%A1%8C%E5%8D%8F%E4%BD%9Cgit-worktree">9. 扩展：Multi-Agent 并行协作</a></li>
+<li><a href="#9-%E6%89%A9%E5%B1%95multi-agent-%E5%B9%B6%E8%A1%8C%E5%8D%8F%E4%BD%9Cgit-worktree">9. 扩展：Multi-Agent 并行协作（Git Worktree）</a></li>
 <li><a href="#10-%E8%87%AA%E5%8A%A8%E5%8C%96ci-%E9%9B%86%E6%88%90">10. 自动化：CI 集成</a></li>
 <li><a href="#11-%E5%AE%9E%E6%88%98%E4%B8%80%E4%B8%AA%E9%9C%80%E6%B1%82%E7%9A%84%E5%AE%8C%E6%95%B4%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">11. 实战：一个需求的完整执行流程</a></li>
-<li><a href="#12-%E5%9B%9E%E9%A1%BE%E8%BF%99%E5%A5%97%E6%9E%B6%E6%9E%84%E5%A6%82%E4%BD%95%E9%92%88%E5%AF%B9%E6%80%A7%E5%9C%B0%E8%A7%A3%E5%86%B3-ai-%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BC%B1%E7%82%B9">12. 回顾：架构如何针对性解决 AI 五大弱点</a></li>
+<li><a href="#12-%E5%9B%9E%E9%A1%BE%E8%BF%99%E5%A5%97%E6%9E%B6%E6%9E%84%E5%A6%82%E4%BD%95%E9%92%88%E5%AF%B9%E6%80%A7%E5%9C%B0%E8%A7%A3%E5%86%B3-ai-%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BC%B1%E7%82%B9">12. 回顾：这套架构如何针对性地解决 AI 的五大弱点？</a></li>
 <li><a href="#13-%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%E6%80%BB%E7%BB%93">13. 关键设计原则总结</a></li>
 <li><a href="#14-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5">14. 常用命令速查</a></li>
 <li><a href="#15-%E5%BB%B6%E4%BC%B8%E6%80%9D%E8%80%83">15. 延伸思考</a></li>
-<li><a href="#%E5%85%B3%E6%B3%A8%E4%B8%8E%E7%9B%B8%E5%85%B3">关注与相关</a></li>
 </ul>
-<hr>
-<h2 id="1-背景：这是一个什么系统？"><a href="#1-背景：这是一个什么系统？" class="headerlink" title="1. 背景：这是一个什么系统？"></a>1. 背景：这是一个什么系统？</h2><p><strong>英语口语识别平台</strong>（<code>spoken-english-recognition</code>）是一个面向口语练习场景的全栈应用，核心链路是：</p>
+<h2 id="1-背景：这是一个什么系统？"><a href="#1-背景：这是一个什么系统？" class="headerlink" title="1. 背景：这是一个什么系统？"></a>1. 背景：这是一个什么系统？</h2><p><strong>本仓库</strong>（<code>market</code>）是一个全栈 <strong>商品平台</strong>，当前核心链路是：</p>
 <blockquote>
-<p>用户上传录音 → 异步 ASR 转写 → 词级时间轴 → 可标注的学习界面</p>
+<p>用户注册登录 → 浏览商品 → 下单 → 查看订单；管理端维护 RBAC 与系统配置</p>
 </blockquote>
 <pre class="mermaid">flowchart LR
-  U["用户上传录音"] --> API["API 创建任务\n入队 BullMQ"]
-  API --> WORKER["Worker 调用 ASR\nWhisper / 阿里云 / Mock"]
-  WORKER --> DB["回写 PostgreSQL\n词轴 + 评分 + 状态"]
-  DB --> WEB["前端轮询回显\n可点击词 · 标记 · IPA"]</pre>
+  U["用户浏览器"] --> WEB["Web / Admin"]
+  WEB --> API["API tRPC"]
+  API --> DB["PostgreSQL"]</pre>
 
 <p><strong>Monorepo 分层结构</strong>（pnpm workspaces + Turborepo）：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spoken-english-recognition/</span><br><span class="line">├── apps/</span><br><span class="line">│   ├── web/      Next.js 15 + React 19 前端</span><br><span class="line">│   ├── api/      Fastify + tRPC v11 后端</span><br><span class="line">│   └── worker/   BullMQ 异步转写消费者</span><br><span class="line">├── packages/</span><br><span class="line">│   ├── shared/   跨端 Zod Schema（单一事实源）</span><br><span class="line">│   ├── db/       Prisma 6 单例</span><br><span class="line">│   └── asr/      ASR Provider 抽象（whisper / mock / aliyun）</span><br><span class="line">├── agents/       ← Agent 执行规范与机读任务入口</span><br><span class="line">├── ops/          ← 自动化脚本</span><br><span class="line">└── .github/workflows/</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">market/</span><br><span class="line">├── apps/</span><br><span class="line">│   ├── web/      用户端 Next.js</span><br><span class="line">│   ├── admin/    管理端 Next.js</span><br><span class="line">│   ├── api/      Fastify + tRPC</span><br><span class="line">│   └── worker/   占位进程（可扩展异步任务）</span><br><span class="line">├── packages/</span><br><span class="line">│   ├── shared/   跨端 Zod Schema（单一事实源）</span><br><span class="line">│   └── db/       Prisma 单例</span><br><span class="line">├── agents/       Agent 执行规范与机读任务入口</span><br><span class="line">└── ops/          自动化脚本</span><br></pre></td></tr></table></figure>
 
 <p>这个项目从第一行代码起就把 <strong>AI Agent 当成主要开发者</strong>——本文讲的正是为此专门设计的一套工程化机制。</p>
 <hr>
@@ -177,7 +176,7 @@
   subgraph ai_pain["AI 天然存在的认知局限"]
     P1["🔍 上下文窗口有限\n无法一次性读完整个 Monorepo"]
     P2["💥 无法感知副作用\n改了字段 A，不知道模块 B 会跟着坏"]
-    P3["🎭 无法判断「完成」\n主观认为正确 ≠ 实际可运行"]
+    P3["🎭 无法判断"完成"\n主观认为正确 ≠ 实际可运行"]
     P4["⚡ 并发改动冲突\n多个 Agent 同时写同一文件"]
     P5["🧠 无跨会话记忆\n出错后想回退，但不记得改了什么"]
   end</pre>
@@ -188,7 +187,7 @@
 <pre class="mermaid">flowchart TB
   subgraph layer1["① 任务定义层 — 解决「不知道改哪里、怎么判完成」"]
     T1["agents/agent-orchestration.tasks.yaml\n机读入口"]
-    T2["agents/tasks/各域.tasks.yaml\n子域任务（inputs / outputs / verify / rollback）"]
+    T2["agents/tasks/*.tasks.yaml\n子域任务（inputs / outputs / verify / rollback）"]
     T1 --> T2
   end
 
@@ -198,9 +197,9 @@
     S1 -.-> S2
   end
 
-  subgraph layer3["③ 质量门禁层 — 解决「完成」不可信、本地 CI 不一致"]
+  subgraph layer3["③ 质量门禁层 — 解决「"完成"不可信、本地 CI 不一致」"]
     G1["pnpm agent:gate\ntypecheck + lint + test:run"]
-    G2["pnpm gate:pr  含 E2E critical"]
+    G2["pnpm gate:pr  含 E2E @critical"]
     G3["pnpm gate:release  发布前全量"]
     G1 --> G2 --> G3
   end
@@ -215,7 +214,7 @@
 <hr>
 <h2 id="4-基础设施：全栈类型安全"><a href="#4-基础设施：全栈类型安全" class="headerlink" title="4. 基础设施：全栈类型安全"></a>4. 基础设施：全栈类型安全</h2><p>在介绍三层控制之前，先说一个贯穿整个架构的基础设计——<strong>Schema 单一事实源</strong>，它是所有层都依赖的地基。</p>
 <pre class="mermaid">flowchart TB
-  SHARED["packages/shared/schemas/speech.ts\nZod Schema（唯一定义）"]
+  SHARED["packages/shared/schemas/product.ts\nZod Schema（唯一定义）"]
 
   SHARED --> API_INPUT["apps/api\ntRPC input 类型推导"]
   SHARED --> WEB_FORM["apps/web\n表单校验 + 类型引用"]
@@ -239,8 +238,9 @@
   T --> I["inputs\n依赖哪些文件"]
   T --> O["outputs\n产出哪些文件"]
   T --> S["owner_scope\n允许修改哪些目录"]
-  T --> V(["verify\n如何验证完成（命令）"])
-  T --> R(["rollback\n失败如何撤销（命令）"])
+  T --> Vverify
+如何验证完成（命令）
+  T --> R[/"rollback\n失败如何撤销（命令）"/]
 
   style T fill:#1e40af,color:#ffffff,stroke:#1e40af
   style I fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
@@ -255,11 +255,11 @@
 <h3 id="6-2-解法：Scope-映射-路径校验脚本"><a href="#6-2-解法：Scope-映射-路径校验脚本" class="headerlink" title="6.2 解法：Scope 映射 + 路径校验脚本"></a>6.2 解法：Scope 映射 + 路径校验脚本</h3><p>每次 Agent 改完代码，都要经过路径级别的合规性检查：</p>
 <pre class="mermaid">flowchart TB
   subgraph scope_map["Scope → 允许修改的目录"]
-    WEB["scope: web → apps/web/..."]
-    API["scope: api → apps/api/..."]
-    WORKER["scope: worker → apps/worker/..."]
-    BACKEND["scope: backend → apps/api + worker/..."]
-    CONTRACT["scope: contract → packages/..."]
+    WEB["scope: web → apps/web/**"]
+    API["scope: api → apps/api/**"]
+    WORKER["scope: worker → apps/worker/**"]
+    BACKEND["scope: backend → apps/api/** + apps/worker/**"]
+    CONTRACT["scope: contract → packages/**"]
     ALL["scope: all → 全仓库"]
   end
 
@@ -273,11 +273,11 @@
 <h3 id="6-3-两步执行（改代码后必做）"><a href="#6-3-两步执行（改代码后必做）" class="headerlink" title="6.3 两步执行（改代码后必做）"></a>6.3 两步执行（改代码后必做）</h3><pre class="mermaid">sequenceDiagram
   participant Dev as Agent / 开发者
   participant Auto as pnpm agent:scope:auto
-  participant Check as pnpm agent scope SCOPE
+  participant Check as pnpm agent:scope:<scope>
   participant CI as GitHub Actions
 
   Dev->>Auto: 改完代码后执行
-  Auto-->>Dev: scope=web，reason=单域改动
+  Auto-->>Dev: {"scope":"web","reason":"单域改动"}
   Dev->>Check: pnpm agent:scope:web
   Check-->>Dev: ✅ 范围检查通过 (exit 0)
 
@@ -302,11 +302,8 @@
     O1["pnpm typecheck\n0 个类型错误"]
     O2["pnpm lint\n0 个 lint 违规"]
     O3["pnpm test:run\n所有测试通过"]
-    O4["pnpm gate:pr\nE2E critical 通过"]
-    O1 --> DONE["exit code = 0\n才允许宣称完成"]
-    O2 --> DONE
-    O3 --> DONE
-    O4 --> DONE
+    O4["pnpm gate:pr\nE2E @critical 通过"]
+    O1 & O2 & O3 & O4 --> DONE["exit code = 0\n才允许宣称完成"]
   end</pre>
 
 <h3 id="7-3-门禁层级"><a href="#7-3-门禁层级" class="headerlink" title="7.3 门禁层级"></a>7.3 门禁层级</h3><pre class="mermaid">flowchart LR
@@ -316,11 +313,11 @@
   end
 
   subgraph pr["PR 合并前"]
-    G2["pnpm gate:pr\nG1 + critical E2E"]
+    G2["pnpm gate:pr\nG1 + @critical E2E"]
   end
 
   subgraph release["发布前"]
-    G3["pnpm gate:release\nG2 + full E2E"]
+    G3["pnpm gate:release\nG2 + @full E2E"]
   end
 
   subgraph nightly["夜间巡检"]
@@ -332,7 +329,7 @@
 
 <h3 id="7-4-S4-机械修验闭环"><a href="#7-4-S4-机械修验闭环" class="headerlink" title="7.4 S4 机械修验闭环"></a>7.4 S4 机械修验闭环</h3><p>Agent 不只是被动接受门禁结果，还有一套”自动修复 + 反复验证”的闭环：</p>
 <pre class="mermaid">flowchart TD
-  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:SCOPE"]
+  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:<scope>"]
   I0 --> LOOP["开始机械修验循环"]
   LOOP --> BIOME["pnpm check\nBiome 自动修复格式/lint"]
   BIOME --> GATE["pnpm agent:gate\ntypecheck + lint + test:run"]
@@ -449,16 +446,16 @@
 <p><strong>解法</strong>：用 <code>git worktree</code> 开多个目录，每个 Agent 只看自己的范围，并行推进。</p>
 <h3 id="9-2-三窗口分工模型"><a href="#9-2-三窗口分工模型" class="headerlink" title="9.2 三窗口分工模型"></a>9.2 三窗口分工模型</h3><pre class="mermaid">flowchart TB
   subgraph main["主窗口（主仓库路径）\n契约 Agent"]
-    SHARED["packages/...\n定义 Zod Schema / 类型 / 常量"]
+    SHARED["packages/**\n定义 Zod Schema / 类型 / 常量"]
   end
 
   subgraph api_worktree["~/ser-feature-api\n后端 Agent"]
-    API["apps/api/...\n实现 tRPC Procedure + Service"]
-    WORKER["apps/worker/...\n实现异步任务消费"]
+    API["apps/api/**\n实现 tRPC Procedure + Service"]
+    WORKER["apps/worker/**\n实现异步任务消费"]
   end
 
   subgraph web_worktree["~/ser-feature-web\n前端 Agent"]
-    WEB["apps/web/...\n实现页面 + tRPC Client 调用"]
+    WEB["apps/web/**\n实现页面 + tRPC Client 调用"]
   end
 
   SHARED -->|共享类型| API
@@ -469,11 +466,12 @@
   style web_worktree fill:#92400e,color:#ffffff,stroke:#92400e</pre>
 
 <p><strong>Cursor rules 自动锁定范围</strong>（<code>.cursor/rules/worktree.mdc</code>）：</p>
-<pre class="mermaid">flowchart TB
+<pre class="mermaid">flowchart LR
   subgraph rule_table["路径识别 → 自动锁定"]
-    R1["路径含 -api → 后端 Agent → 只改 apps/api + worker/..."]
-    R2["路径含 -web → 前端 Agent → 只改 apps/web/..."]
-    R3["主仓库路径 → 契约 Agent → 只改 packages/..."]
+    direction TB
+    R1["路径含 -api → 后端 Agent → 只改 apps/api/** + apps/worker/**"]
+    R2["路径含 -web → 前端 Agent → 只改 apps/web/**"]
+    R3["主仓库路径 → 契约 Agent → 只改 packages/**"]
   end</pre>
 
 <p>当 Agent 收到越界指令时，<strong>必须拒绝并提示</strong>：</p>
@@ -505,10 +503,10 @@
 <pre class="mermaid">flowchart TD
   PR["PR 打开 / 推送"] --> CHECKOUT["Checkout 代码\nfetch-depth: 0"]
   CHECKOUT --> INSTALL["pnpm install --frozen-lockfile"]
-  INSTALL --> ENV["准备 CI 环境\nASR_PROVIDER=mock"]
+  INSTALL --> ENV["准备 CI 环境\n.env.example + postgres"]
   ENV --> DETECT["Detect scope\nnode ops/agent-ci-scope.mjs\n输出 scope + reason"]
-  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:SCOPE"]
-  SCOPE_CHECK --> GATE["pnpm gate:pr\ntypecheck + lint + unit + critical E2E"]
+  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:<scope>"]
+  SCOPE_CHECK --> GATE["pnpm gate:pr\ntypecheck + lint + unit + @critical E2E"]
   GATE --> DONE["✅ 合并准入"]
 
   SCOPE_CHECK -->|违规文件| FAIL_SCOPE["❌ 越界失败\n列出违规文件"]
@@ -524,7 +522,7 @@
   JUDGE -->|含未知路径| RESULT_UNKNOWN["scope: all\n未归属目录，兜底"]</pre>
 
 <hr>
-<h2 id="11-实战：一个需求的完整执行流程"><a href="#11-实战：一个需求的完整执行流程" class="headerlink" title="11. 实战：一个需求的完整执行流程"></a>11. 实战：一个需求的完整执行流程</h2><p>以「新增语音评分展示」为例，串联所有机制：</p>
+<h2 id="11-实战：一个需求的完整执行流程"><a href="#11-实战：一个需求的完整执行流程" class="headerlink" title="11. 实战：一个需求的完整执行流程"></a>11. 实战：一个需求的完整执行流程</h2><p>以电商场景 <strong>「用户端订单列表支持按订单状态筛选」</strong> 为例，串联所有机制（对应域：<code>order</code>，状态枚举 <code>PENDING / PAID / COMPLETED / CANCELLED</code>）：</p>
 <pre class="mermaid">flowchart TD
   subgraph S0["S0 上下文确认"]
     C1["确认仓库路径与分支"]
@@ -532,7 +530,7 @@
   end
 
   subgraph S1["S1 需求结构化"]
-    SP["Spec 要点：\n① shared/schemas 加 scoreDisplay 字段\n② api 回传评分数据\n③ web 展示 accuracy/fluency UI\n④ 验收：前端可见评分数值"]
+    SP["Spec 要点：\n① shared/schemas/order 确认 OrderListInput.status 为筛选入参\n② api order.list 按 status 过滤并分页\n③ web 订单页增加状态 Tab，调 tRPC 拉列表\n④ 验收：切换「待支付/已完成」仅展示对应状态订单"]
   end
 
   subgraph S2["S2 任务计划"]
@@ -540,14 +538,12 @@
   end
 
   subgraph S3["S3 实施"]
-    I1["主窗口：改 packages/shared/schemas/speech.ts"]
-    I2["api 窗口：改 apps/api 回传字段"]
-    I3["web 窗口：改 apps/web 展示 UI"]
-    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:SCOPE"]
-    I1 --> I2
-    I1 --> I3
-    I2 --> SC
-    I3 --> SC
+    I1["主窗口：改 packages/shared/src/schemas/order.ts\n（入参/出参与 OrderStatusSchema 对齐）"]
+    I2["api 窗口：改 apps/api/modules/order\n（list 查询加 status 条件）"]
+    I3["web 窗口：改 apps/web 订单列表页\n（状态 Tab + useQuery 传 status）"]
+    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:<scope>"]
+    I1 --> I2 & I3
+    I2 & I3 --> SC
   end
 
   subgraph S4["S4 验证"]
@@ -717,11 +713,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpig4v3q0000e4mr4xhjh1cb" data-title="AI Agent 自动化工程实践" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="https://neo-share.github.io/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" data-id="cmpig4v3q0000e4mr4xhjh1cb" data-title="ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li></ul>
 
     </footer>
   </div>
@@ -729,15 +725,20 @@
     
 <nav id="article-nav">
   
-    <a href="/2026/05/23/Neo%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84-%E7%BB%99%E6%9C%8B%E5%8F%8B%E7%9A%84%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2026/05/30/%E4%B8%AD%E5%9B%BD%E4%BA%BA%E7%88%B1%E5%AD%98%E9%92%B1%E3%80%81%E7%BE%8E%E5%9B%BD%E4%BA%BA%E7%88%B1%E8%8A%B1%E9%92%B1%E2%80%94%E2%80%94AI%E6%97%B6%E4%BB%A3%E8%AF%A5%E5%A4%9A%E5%88%9B%E9%80%A0%E8%BF%98%E6%98%AF%E5%A4%9A%E6%B6%88%E8%B4%B9/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">前一篇</strong>
       <div class="article-nav-title">
         
-          Neo 是做什么的？——一篇给朋友的自我介绍
+          中国人爱存钱、美国人爱花钱？——AI 时代该多创造还是多消费
         
       </div>
     </a>
   
+  
+    <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）</div>
+    </a>
   
 </nav>
 
@@ -763,7 +764,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -773,7 +774,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 10px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 10px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
     </div>
   </div>
 
@@ -799,6 +800,10 @@
           </li>
         
           <li>
+            <a href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例</a>
+          </li>
+        
+          <li>
             <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/">5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）</a>
           </li>
         
@@ -808,10 +813,6 @@
         
           <li>
             <a href="/2026/05/23/%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%B4%AD%E7%89%A9App-%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9C%BC%E9%87%8C%E7%9A%84Agent%E5%8C%96/">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
           </li>
         
       </ul>
