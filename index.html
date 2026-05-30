@@ -411,7 +411,7 @@
   subgraph ai_pain["AI 天然存在的认知局限"]
     P1["🔍 上下文窗口有限\n无法一次性读完整个 Monorepo"]
     P2["💥 无法感知副作用\n改了字段 A，不知道模块 B 会跟着坏"]
-    P3["🎭 无法判断"完成"\n主观认为正确 ≠ 实际可运行"]
+    P3["🎭 无法判断「完成」\n主观认为正确 ≠ 实际可运行"]
     P4["⚡ 并发改动冲突\n多个 Agent 同时写同一文件"]
     P5["🧠 无跨会话记忆\n出错后想回退，但不记得改了什么"]
   end</pre>
@@ -432,7 +432,7 @@
     S1 -.-> S2
   end
 
-  subgraph layer3["③ 质量门禁层 — 解决「"完成"不可信、本地 CI 不一致」"]
+  subgraph layer3["③ 质量门禁层 — 解决「完成」不可信、本地 CI 不一致」"]
     G1["pnpm agent:gate\ntypecheck + lint + test:run"]
     G2["pnpm gate:pr  含 E2E @critical"]
     G3["pnpm gate:release  发布前全量"]
