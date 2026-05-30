@@ -238,9 +238,8 @@
   T --> I["inputs\n依赖哪些文件"]
   T --> O["outputs\n产出哪些文件"]
   T --> S["owner_scope\n允许修改哪些目录"]
-  T --> Vverify
-如何验证完成（命令）
-  T --> R[/"rollback\n失败如何撤销（命令）"/]
+  T --> V["verify\n如何验证完成（命令）"]
+  T --> R["rollback\n失败如何撤销（命令）"]
 
   style T fill:#1e40af,color:#ffffff,stroke:#1e40af
   style I fill:#e0f2fe,color:#0c4a6e,stroke:#0369a1,stroke-width:2px
@@ -273,7 +272,7 @@
 <h3 id="6-3-两步执行（改代码后必做）"><a href="#6-3-两步执行（改代码后必做）" class="headerlink" title="6.3 两步执行（改代码后必做）"></a>6.3 两步执行（改代码后必做）</h3><pre class="mermaid">sequenceDiagram
   participant Dev as Agent / 开发者
   participant Auto as pnpm agent:scope:auto
-  participant Check as pnpm agent:scope:<scope>
+  participant Check as pnpm agent:scope:{scope}
   participant CI as GitHub Actions
 
   Dev->>Auto: 改完代码后执行
@@ -329,7 +328,7 @@
 
 <h3 id="7-4-S4-机械修验闭环"><a href="#7-4-S4-机械修验闭环" class="headerlink" title="7.4 S4 机械修验闭环"></a>7.4 S4 机械修验闭环</h3><p>Agent 不只是被动接受门禁结果，还有一套”自动修复 + 反复验证”的闭环：</p>
 <pre class="mermaid">flowchart TD
-  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:<scope>"]
+  START["S3 代码落盘"] --> I0["I.0 scope 校验\nagent:scope:auto → agent:scope:{scope}"]
   I0 --> LOOP["开始机械修验循环"]
   LOOP --> BIOME["pnpm check\nBiome 自动修复格式/lint"]
   BIOME --> GATE["pnpm agent:gate\ntypecheck + lint + test:run"]
@@ -505,7 +504,7 @@
   CHECKOUT --> INSTALL["pnpm install --frozen-lockfile"]
   INSTALL --> ENV["准备 CI 环境\n.env.example + postgres"]
   ENV --> DETECT["Detect scope\nnode ops/agent-ci-scope.mjs\n输出 scope + reason"]
-  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:<scope>"]
+  DETECT --> SCOPE_CHECK["Run scope check\npnpm agent:scope:{scope}"]
   SCOPE_CHECK --> GATE["pnpm gate:pr\ntypecheck + lint + unit + @critical E2E"]
   GATE --> DONE["✅ 合并准入"]
 
@@ -541,9 +540,11 @@
     I1["主窗口：改 packages/shared/src/schemas/order.ts\n（入参/出参与 OrderStatusSchema 对齐）"]
     I2["api 窗口：改 apps/api/modules/order\n（list 查询加 status 条件）"]
     I3["web 窗口：改 apps/web 订单列表页\n（状态 Tab + useQuery 传 status）"]
-    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:<scope>"]
-    I1 --> I2 & I3
-    I2 & I3 --> SC
+    SC["每步：pnpm agent:scope:auto\n→ pnpm agent:scope:{scope}"]
+    I1 --> I2
+    I1 --> I3
+    I2 --> SC
+    I3 --> SC
   end
 
   subgraph S4["S4 验证"]
