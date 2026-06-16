@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>AI 研发交付编排：从需求到上线的 How 手册 | Neo的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="姊妹篇《软件开发最佳实践》的 How：14 阶段、七道门禁、状态机与切片并行，把模糊目标变成 AI 可执行任务，让人只在关键节点签字。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 研发交付编排：从需求到上线的 How 手册">
+<meta property="og:url" content="https://neo-share.github.io/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="Neo的博客">
+<meta property="og:description" content="姊妹篇《软件开发最佳实践》的 How：14 阶段、七道门禁、状态机与切片并行，把模糊目标变成 AI 可执行任务，让人只在关键节点签字。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-15T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-15T02:00:00.000Z">
+<meta property="article:author" content="Neo">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Neo的数智空间">
+<meta property="article:tag" content="技术分享">
+<meta property="article:tag" content="研发交付">
+<meta property="article:tag" content="软件工程">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Neo的博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Neo的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">记录技术与生活</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://Neo-share.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-AI研发交付编排：从需求到上线的How手册" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/" class="article-date">
+  <time class="dt-published" datetime="2026-06-15T02:00:00.000Z" itemprop="datePublished">2026-06-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      AI 研发交付编排：从需求到上线的 How 手册
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1-%E7%BC%96%E6%8E%92%E5%B8%88%E5%9C%A8%E6%B5%81%E7%A8%8B%E9%87%8C%E5%B9%B2%E4%BB%80%E4%B9%88">1. 编排师在流程里干什么？</a></li>
+<li><a href="#2-%E6%B5%81%E7%A8%8B%E6%80%BB%E8%A7%88%E4%BA%94%E4%B8%AA%E9%98%B6%E6%AE%B5%E5%8D%81%E5%9B%9B%E4%B8%AA%E8%8A%82%E7%82%B9">2. 流程总览：五个阶段、十四个节点</a></li>
+<li><a href="#3-%E6%A0%B8%E5%BF%83%E6%9D%A1%E4%BB%B6%E6%A0%B8%E5%BF%83%E4%B8%8E%E5%8F%AF%E9%80%89">3. 核心、条件核心与可选</a></li>
+<li><a href="#4-%E9%AB%98%E9%A2%91%E5%BE%AA%E7%8E%AF">4. 高频循环</a></li>
+<li><a href="#5-%E5%B9%B6%E8%A1%8C%E6%8C%89%E5%88%87%E7%89%87%E4%B8%8D%E6%8C%89%E5%B2%97%E4%BD%8D">5. 并行：按切片，不按岗位</a></li>
+<li><a href="#6-%E6%8E%A8%E8%8D%90%E5%B7%A5%E4%BD%9C%E9%A1%B9%E7%8A%B6%E6%80%81%E6%9C%BA">6. 推荐工作项状态机</a></li>
+<li><a href="#7-%E4%B8%83%E9%81%93%E9%98%B6%E6%AE%B5%E9%97%A8%E7%A6%81">7. 七道阶段门禁</a></li>
+<li><a href="#8-%E4%B9%9D%E4%B8%AA%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%E8%8A%82%E7%82%B9">8. 九个人工确认节点</a></li>
+<li><a href="#9-%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BE%B9%E7%95%8C">9. 自动化边界</a></li>
+<li><a href="#10-%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E7%9A%84%E8%A1%94%E6%8E%A5">10. 与工程实践的衔接</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>写给谁</strong>：实践 AI 主力研发的开发者、技术负责人<br><strong>一句话</strong>：把模糊目标变成 AI 可执行任务，让人只在<strong>门禁</strong>签字。<br><strong>核心命题</strong>：阶段 + 门禁 + 状态机 + 并行切片，是 AI 时代交付稳定的 How。</p>
+</blockquote>
+<p>姊妹篇 <a href="https://neo-share.github.io/2026/06/08/AI%E6%97%B6%E4%BB%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9AAI%E5%81%9A%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%BA%BA%E5%81%9A%E5%86%B3%E7%AD%96/">《AI 时代的软件开发最佳实践》</a> 讲了 <strong>Why&#x2F;What</strong>。本文是 <strong>How</strong>——一条需求从进池到上线，经过哪些阶段、哪些节点必须人确认、哪些可交给 AI。</p>
+<p>工程落地（Monorepo 任务 YAML、Scope、CI 门禁）见 <a href="https://neo-share.github.io/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">《AI Agent 自动化工程实践》</a>。</p>
+<hr>
+<h2 id="1-编排师在流程里干什么？"><a href="#1-编排师在流程里干什么？" class="headerlink" title="1. 编排师在流程里干什么？"></a>1. 编排师在流程里干什么？</h2><p><strong>AI 研发交付编排师</strong>编排目标、约束、AI 任务和门禁，不替代业务&#x2F;技术&#x2F;发布 owner 的最终决策。</p>
+<p>接管：需求梳理、方案草稿、拆任务、指挥 AI 实现&#x2F;测试&#x2F;修 BUG、准备门禁材料。<br>不替代：立项、架构取舍、发版回滚、业务验收。</p>
+<hr>
+<h2 id="2-流程总览：五个阶段、十四个节点"><a href="#2-流程总览：五个阶段、十四个节点" class="headerlink" title="2. 流程总览：五个阶段、十四个节点"></a>2. 流程总览：五个阶段、十四个节点</h2><pre class="mermaid">flowchart LR
+  Start([开始]) --> Demand["需求与立项"]
+  Demand --> Design["方案与设计"]
+  Design --> Plan["拆分与排期"]
+  Plan --> Build["开发与验证"]
+  Build --> Release["发布与监控"]
+  Release --> Improve["验收与沉淀"]
+  Improve -->|"新需求"| Demand</pre>
+
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1–3</td>
+<td>需求收集、立项排期、需求评审</td>
+</tr>
+<tr>
+<td>4–7</td>
+<td>技术调研、方案评审、契约评审（条件）、UI 评审（可选）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>任务拆分与估时</td>
+</tr>
+<tr>
+<td>9–11</td>
+<td>代码实现、自测与评审、自动化测试与联调</td>
+</tr>
+<tr>
+<td>12</td>
+<td>BUG 闭环（贯穿，非单点）</td>
+</tr>
+<tr>
+<td>13–14</td>
+<td>发布审批与灰度、线上监控与复盘</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-核心、条件核心与可选"><a href="#3-核心、条件核心与可选" class="headerlink" title="3. 核心、条件核心与可选"></a>3. 核心、条件核心与可选</h2><ul>
+<li><strong>核心</strong>：1–5、8–11、13–14 默认必经</li>
+<li><strong>条件核心</strong>：跨模块&#x2F;契约变更 → 阶段 6 契约评审</li>
+<li><strong>可选</strong>：UI、PoC、安全&#x2F;性能&#x2F;迁移、合规、运营准备、事故复盘</li>
+<li><strong>贯穿</strong>：BUG 修复闭环</li>
+</ul>
+<hr>
+<h2 id="4-高频循环"><a href="#4-高频循环" class="headerlink" title="4. 高频循环"></a>4. 高频循环</h2><ul>
+<li><strong>需求循环</strong>：范围&#x2F;价值&#x2F;排期问题 → 回到立项</li>
+<li><strong>方案循环</strong>：不可行&#x2F;契约风险 → 回到需求或方案</li>
+<li><strong>验证循环</strong>：自测&#x2F;Review&#x2F;测试&#x2F;联调失败 → 回到开发</li>
+<li><strong>BUG</strong>：待确认 → 待修复 → 修复中 → 待回归 → 已修复</li>
+</ul>
+<hr>
+<h2 id="5-并行：按切片，不按岗位"><a href="#5-并行：按切片，不按岗位" class="headerlink" title="5. 并行：按切片，不按岗位"></a>5. 并行：按切片，不按岗位</h2><p>需求评审后可并行：调研、PoC、UI 梳理、测试策略、契约草案。</p>
+<p>任务拆分后按<strong>纵向切片</strong>并行：主流程、权限边界、列表查询、异常态——共享基础先定最小契约。</p>
+<p>契约稳定后可提前写自动化测试；发布说明、监控、灰度、回滚可在开发中后段并行准备。</p>
+<hr>
+<h2 id="6-推荐工作项状态机"><a href="#6-推荐工作项状态机" class="headerlink" title="6. 推荐工作项状态机"></a>6. 推荐工作项状态机</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">需求池 → … → 开发中 → 验证中 → 待发布审批 → 发布中 → 已上线 → 已验收</span><br></pre></td></tr></table></figure>
+
+<p>验证子状态：自测 → Review → 自动化测试 → 环境验收（失败回开发）。<br>发布子状态：CI → 部署 → 灰度 → 正式发布（异常回开发或回滚决策）。</p>
+<hr>
+<h2 id="7-七道阶段门禁"><a href="#7-七道阶段门禁" class="headerlink" title="7. 七道阶段门禁"></a>7. 七道阶段门禁</h2><p>需求、方案、UI（触发时）、开发、测试、发布、验收——每道门禁有明确准出标准（价值&#x2F;范围&#x2F;契约&#x2F;CI&#x2F;监控等）。</p>
+<hr>
+<h2 id="8-九个人工确认节点"><a href="#8-九个人工确认节点" class="headerlink" title="8. 九个人工确认节点"></a>8. 九个人工确认节点</h2><p>立项、需求、方案、契约、UI（触发时）、合并、发布、放量回滚、业务验收——<strong>必须人工确认</strong>，不可默认自动化。</p>
+<hr>
+<h2 id="9-自动化边界"><a href="#9-自动化边界" class="headerlink" title="9. 自动化边界"></a>9. 自动化边界</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI 可自动</td>
+<td>摘要、草稿、测试用例、CI 分析、明确 BUG 修复</td>
+</tr>
+<tr>
+<td>必须人工</td>
+<td>立项、方案取舍、合并、发布、验收</td>
+</tr>
+<tr>
+<td>禁止默认自动</td>
+<td>改生产数据、发版回滚、改权限密钥、对外正式通知</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="10-与工程实践的衔接"><a href="#10-与工程实践的衔接" class="headerlink" title="10. 与工程实践的衔接"></a>10. 与工程实践的衔接</h2><table>
+<thead>
+<tr>
+<th>流程</th>
+<th>工程落地</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务拆分</td>
+<td><code>agents/*.tasks.yaml</code></td>
+</tr>
+<tr>
+<td>范围控制</td>
+<td>Scope 校验</td>
+</tr>
+<tr>
+<td>开发门禁</td>
+<td>CI quality gate</td>
+</tr>
+<tr>
+<td>并行</td>
+<td>Git Worktree 多 Agent</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>14 阶段 + 五段主链路</strong></li>
+<li><strong>七道门禁 + 九个确认节点</strong></li>
+<li><strong>切片并行 + 贯穿 BUG 闭环</strong></li>
+<li><strong>三张自动化边界清单</strong></li>
+</ol>
+<p><strong>姊妹篇</strong>：<a href="https://neo-share.github.io/2026/06/08/AI%E6%97%B6%E4%BB%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9AAI%E5%81%9A%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%BA%BA%E5%81%9A%E5%86%B3%E7%AD%96/">软件开发最佳实践（Why&#x2F;What）</a> · <a href="https://neo-share.github.io/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">Agent 工程实践（落地 How）</a></p>
+<h3 id="行动建议"><a href="#行动建议" class="headerlink" title="行动建议"></a>行动建议</h3><ol>
+<li>画团队主状态机，标缺失准出标准</li>
+<li>列门禁表：九节点谁签字、AI 备什么材料</li>
+<li>选一个需求试纵向切片并行</li>
+</ol>
+<hr>
+<p><strong>关注「Neo的数智空间」</strong><br>技术分享：AI 研发交付与工程实践</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/" data-id="cmqggt6yb00004kmr2avb10wp" data-title="AI 研发交付编排：从需求到上线的 How 手册" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/06/08/AI%E6%97%B6%E4%BB%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9AAI%E5%81%9A%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%BA%BA%E5%81%9A%E5%86%B3%E7%AD%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">AI 时代的软件开发最佳实践：AI 做执行，人做决策</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 12px;">深度观察</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 10px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/06/">六月 2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/05/">五月 2026</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/">AI 研发交付编排：从需求到上线的 How 手册</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/08/AI%E6%97%B6%E4%BB%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9AAI%E5%81%9A%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%BA%BA%E5%81%9A%E5%86%B3%E7%AD%96/">AI 时代的软件开发最佳实践：AI 做执行，人做决策</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/30/%E4%B8%AD%E5%9B%BD%E4%BA%BA%E7%88%B1%E5%AD%98%E9%92%B1%E3%80%81%E7%BE%8E%E5%9B%BD%E4%BA%BA%E7%88%B1%E8%8A%B1%E9%92%B1%E2%80%94%E2%80%94AI%E6%97%B6%E4%BB%A3%E8%AF%A5%E5%A4%9A%E5%88%9B%E9%80%A0%E8%BF%98%E6%98%AF%E5%A4%9A%E6%B6%88%E8%B4%B9/">中国人爱存钱、美国人爱花钱？——AI 时代该多创造还是多消费</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/29/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">ALL in AI，Harness 工程全栈探索 —— 以 Monorepo 为例</a>
+          </li>
+        
+          <li>
+            <a href="/2026/05/27/5%E4%B8%AA%E5%85%8D%E8%B4%B9AI%E5%B7%A5%E5%85%B7%EF%BC%8C%E6%88%91%E6%AF%8F%E5%A4%A9%E9%83%BD%E5%9C%A8%E7%94%A82026%E6%99%AE%E9%80%9A%E4%BA%BA%E6%8F%90%E6%95%88%E6%8C%87%E5%8D%97/">5 个免费 AI 工具，我每天都在用（2026 普通人提效指南）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 Neo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.3/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!window.mermaid) return;
+      var opts = {"startOnLoad":false,"theme":"neutral","securityLevel":"loose"};
+      mermaid.initialize(opts);
+      mermaid.run({ querySelector: '.article-entry pre.mermaid, pre.mermaid' });
+    });
+  </script>
+
+
+
+
+
+
+  </div>
+</body>
+</html>
