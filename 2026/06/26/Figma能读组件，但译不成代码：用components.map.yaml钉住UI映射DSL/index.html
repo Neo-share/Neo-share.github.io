@@ -110,7 +110,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL"><a href="#Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL" class="headerlink" title="Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL"></a>Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL</h1><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>团队已经在 Figma 里维护了和代码对齐的组件库。你把订单列表页的设计稿 URL 丢给 Cursor，Figma MCP 能老老实实告诉你：这里有一个 <code>Button/Primary</code>，<code>Disabled=true</code>，<code>Label=&quot;取消订单&quot;</code>。</p>
+        <h1 id="Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL"><a href="#Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL" class="headerlink" title="Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL"></a>Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL</h1><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>团队已经在 Figma 里维护了和代码对齐的组件库。你把订单列表页的设计稿 URL 丢给 Cursor，Figma MCP 能老老实实告诉你：这里有一个 <code>Button/Primary</code>，<code>Disabled=true</code>，<code>Label=&quot;取消订单&quot;</code>。</p>
 <p>然后呢？</p>
 <p>AI 仍然要猜：<code>import</code> 路径是 <code>@acme/ui/Button</code> 还是 <code>@/components/Button</code>？Figma 的 <code>Variant=Primary</code> 对应代码里的 <code>variant=&quot;primary&quot;</code> 还是 <code>type=&quot;primary&quot;</code>？文案是塞 <code>children</code> 还是单独的 <code>label</code> prop？</p>
 <p><strong>这不是模型笨，是信息本来就不在设计稿里。</strong> MCP 读得到设计语义，读不到你们仓库的 import 约定。我的结论是：在 Figma 和页面代码之间，维护一份 **<code>components.map.yaml</code>**——把组件集名、Property、Variable 翻译成本地组件和 props。这份文件就是 UI 侧的 DSL；MCP 负责读，map 负责译，行为 DSL 负责「什么时候能点」。</p>
