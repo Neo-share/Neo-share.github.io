@@ -824,6 +824,339 @@
 
 
   
+    <article id="post-Figma能读组件，但译不成代码：用components.map.yaml钉住UI映射DSL" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/06/26/Figma%E8%83%BD%E8%AF%BB%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%86%E8%AF%91%E4%B8%8D%E6%88%90%E4%BB%A3%E7%A0%81%EF%BC%9A%E7%94%A8components.map.yaml%E9%92%89%E4%BD%8FUI%E6%98%A0%E5%B0%84DSL/" class="article-date">
+  <time class="dt-published" datetime="2026-06-26T02:00:00.000Z" itemprop="datePublished">2026-06-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/">职场进阶</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/06/26/Figma%E8%83%BD%E8%AF%BB%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%86%E8%AF%91%E4%B8%8D%E6%88%90%E4%BB%A3%E7%A0%81%EF%BC%9A%E7%94%A8components.map.yaml%E9%92%89%E4%BD%8FUI%E6%98%A0%E5%B0%84DSL/">Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL"><a href="#Figma-能读组件，但译不成代码：用-components-map-yaml-钉住-UI-映射-DSL" class="headerlink" title="Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL"></a>Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL</h1><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>团队已经在 Figma 里维护了和代码对齐的组件库。你把订单列表页的设计稿 URL 丢给 Cursor，Figma MCP 能老老实实告诉你：这里有一个 <code>Button/Primary</code>，<code>Disabled=true</code>，<code>Label=&quot;取消订单&quot;</code>。</p>
+<p>然后呢？</p>
+<p>AI 仍然要猜：<code>import</code> 路径是 <code>@acme/ui/Button</code> 还是 <code>@/components/Button</code>？Figma 的 <code>Variant=Primary</code> 对应代码里的 <code>variant=&quot;primary&quot;</code> 还是 <code>type=&quot;primary&quot;</code>？文案是塞 <code>children</code> 还是单独的 <code>label</code> prop？</p>
+<p><strong>这不是模型笨，是信息本来就不在设计稿里。</strong> MCP 读得到设计语义，读不到你们仓库的 import 约定。我的结论是：在 Figma 和页面代码之间，维护一份 **<code>components.map.yaml</code>**——把组件集名、Property、Variable 翻译成本地组件和 props。这份文件就是 UI 侧的 DSL；MCP 负责读，map 负责译，行为 DSL 负责「什么时候能点」。</p>
+<p>姊妹篇《当 AI 读不懂你的 PRD》讲的是<strong>行为链</strong>（lifecycle、rules、capabilities）。本文讲<strong>表现链</strong>——设计稿怎么稳定落成代码，而不靠 AI 每次重新猜一遍。</p>
+<hr>
+<h2 id="2-为什么-MCP-不够，还要一份-map"><a href="#2-为什么-MCP-不够，还要一份-map" class="headerlink" title="2. 为什么 MCP 不够，还要一份 map"></a>2. 为什么 MCP 不够，还要一份 map</h2><p>Figma MCP 拉 URL 时，通常能拿到：</p>
+<table>
+<thead>
+<tr>
+<th>MCP 能提供</th>
+<th>仍需要对齐文件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>组件实例名 <code>Button/Primary</code></td>
+<td>代码 <code>import</code> 路径 <code>@acme/ui/Button</code></td>
+</tr>
+<tr>
+<td>Property <code>Variant=Primary</code></td>
+<td>代码 <code>variant=&quot;primary&quot;</code>（大小写、命名）</td>
+</tr>
+<tr>
+<td>Property <code>Label</code> 文本</td>
+<td>代码 <code>children</code> 还是 <code>label</code> prop</td>
+</tr>
+<tr>
+<td>Variable <code>action/primary</code></td>
+<td>代码 <code>tokens.color.action.primary</code></td>
+</tr>
+<tr>
+<td>页面级组合（按钮 + 业务逻辑）</td>
+<td>wrapper 组件路径</td>
+</tr>
+</tbody></table>
+<p><code>components.map.yaml</code> 的作用 &#x3D; <strong>翻译层</strong>。它不是重复 Figma，也不是替代 MCP。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Figma URL</span><br><span class="line">    → MCP 读实例（Button/Primary, Disabled=true, Label=&quot;取消订单&quot;）</span><br><span class="line">    → components.map.yaml 查表</span><br><span class="line">    → import &#123; Button &#125; from &#x27;@acme/ui/Button&#x27;</span><br><span class="line">      &lt;Button variant=&quot;primary&quot; disabled&gt;...&lt;/Button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>常见误区：以为「组件库已经对齐了，MCP 够用了」。对齐的是<strong>设计侧语义</strong>；<strong>仓库侧约定</strong>（路径、prop 名、token 引用）仍然要有一份显式映射，否则 AI 每次还原都会漂移。</p>
+<hr>
+<h2 id="3-与-PRD-行为-DSL-的分工"><a href="#3-与-PRD-行为-DSL-的分工" class="headerlink" title="3. 与 PRD &#x2F; 行为 DSL 的分工"></a>3. 与 PRD &#x2F; 行为 DSL 的分工</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">行为链（姊妹篇）                 表现链（本文）</span><br><span class="line">─────────────────               ─────────────────</span><br><span class="line">PRD → lifecycle / rules         Figma 组件库</span><br><span class="line">     → capabilities                    ↓</span><br><span class="line">     → acceptance               MCP + URL</span><br><span class="line">                                      ↓</span><br><span class="line">                               components.map.yaml  ← UI DSL</span><br><span class="line">                               tokens.map.yaml</span><br><span class="line">                                      ↓</span><br><span class="line">                               页面代码 + wrapper</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>谁回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>取消按钮 Primary 样式</td>
+<td>Figma + MCP + <code>components.map#button</code></td>
+</tr>
+<tr>
+<td><code>variant</code> &#x2F; <code>disabled</code> props 怎么写</td>
+<td><code>components.map.yaml</code></td>
+</tr>
+<tr>
+<td>paid 超 30 分钟按钮 disabled</td>
+<td><code>capabilities.yaml</code> guards（行为 DSL）</td>
+</tr>
+<tr>
+<td>点击后调什么 API</td>
+<td><code>lifecycle.yaml</code>（行为 DSL）</td>
+</tr>
+<tr>
+<td>间距 token 16 vs 20</td>
+<td><code>tokens.map.yaml</code> + <code>UI_IMPLEMENTATION_STATUS</code></td>
+</tr>
+</tbody></table>
+<p><strong>UI DSL 不管业务规则；行为 DSL 不管 import 路径。</strong></p>
+<p>交汇点：<code>components.map#order_cancel_button</code> 的 <code>links.capability</code> 指向 <code>capabilities#cap_buyer_cancel</code>——页面上「长什么样」和「什么时候能点」在此挂钩，但各自维护。</p>
+<hr>
+<h2 id="4-体系总览：三文件-MCP"><a href="#4-体系总览：三文件-MCP" class="headerlink" title="4. 体系总览：三文件 + MCP"></a>4. 体系总览：三文件 + MCP</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">     Figma 组件库（设计源）</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">页面 URL ──→ Figma MCP（读实例与属性）</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">    components.map.yaml     ← 组件 ↔ import ↔ props</span><br><span class="line">    tokens.map.yaml         ← Variable ↔ 代码 token（可选）</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">    页面实现代码</span><br><span class="line">    wrapper（业务 + UI 组合）</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line"> UI_IMPLEMENTATION_STATUS.md  ← 视觉/映射差距汇总</span><br><span class="line">             │</span><br><span class="line"> （行为差距仍见 IMPLEMENTATION_STATUS.md）</span><br></pre></td></tr></table></figure>
+
+<p>和姊妹篇的六文件行为链并列，UI 侧最小三件套：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>components.map.yaml</code></td>
+<td>Figma 组件 → import 谁、props 怎么填</td>
+</tr>
+<tr>
+<td><code>tokens.map.yaml</code></td>
+<td>Figma Variable → 代码 token</td>
+</tr>
+<tr>
+<td><code>UI_IMPLEMENTATION_STATUS.md</code></td>
+<td>稿 vs 代码 UI 还差什么</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-第一层：components-map-yaml（核心-UI-DSL）"><a href="#5-第一层：components-map-yaml（核心-UI-DSL）" class="headerlink" title="5. 第一层：components.map.yaml（核心 UI DSL）"></a>5. 第一层：components.map.yaml（核心 UI DSL）</h2><p><strong>职责</strong>：每条 Figma 组件集 ↔ 本地组件 ↔ props 映射。</p>
+<h4 id="5-1-结构说明"><a href="#5-1-结构说明" class="headerlink" title="5.1 结构说明"></a>5.1 结构说明</h4><table>
+<thead>
+<tr>
+<th>块</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>meta.figma_library</code></td>
+<td>组件库 file_key，MCP 定位用</td>
+</tr>
+<tr>
+<td><code>components[].figma.component_set</code></td>
+<td>与 Figma 组件集名一致</td>
+</tr>
+<tr>
+<td><code>components[].figma.node_id</code></td>
+<td>可选，库大时稳定锚点</td>
+</tr>
+<tr>
+<td><code>components[].code.import</code></td>
+<td>AI 应使用的 import</td>
+</tr>
+<tr>
+<td><code>components[].code.path</code></td>
+<td>仓库内路径</td>
+</tr>
+<tr>
+<td><code>components[].props[]</code></td>
+<td>Figma Property → 代码 prop</td>
+</tr>
+<tr>
+<td><code>status</code> &#x2F; <code>gap</code></td>
+<td>映射或实现是否同步</td>
+</tr>
+</tbody></table>
+<h4 id="5-2-基础组件：1-1-映射"><a href="#5-2-基础组件：1-1-映射" class="headerlink" title="5.2 基础组件：1:1 映射"></a>5.2 基础组件：1:1 映射</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">button</span></span><br><span class="line">  <span class="attr">figma:</span></span><br><span class="line">    <span class="attr">component_set:</span> <span class="string">Button</span></span><br><span class="line">  <span class="attr">code:</span></span><br><span class="line">    <span class="attr">import:</span> <span class="string">&quot;@acme/ui/Button&quot;</span></span><br><span class="line">  <span class="attr">props:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">figma:</span> &#123; <span class="attr">property:</span> <span class="string">Variant</span>, <span class="attr">value:</span> <span class="string">Primary</span> &#125;</span><br><span class="line">      <span class="attr">code:</span> &#123; <span class="attr">prop:</span> <span class="string">variant</span>, <span class="attr">value:</span> <span class="string">primary</span> &#125;</span><br><span class="line">    <span class="bullet">-</span> <span class="attr">figma:</span> &#123; <span class="attr">property:</span> <span class="string">Disabled</span>, <span class="attr">value:</span> <span class="literal">true</span> &#125;</span><br><span class="line">      <span class="attr">code:</span> &#123; <span class="attr">prop:</span> <span class="string">disabled</span>, <span class="attr">value:</span> <span class="literal">true</span> &#125;</span><br><span class="line">    <span class="bullet">-</span> <span class="attr">figma:</span> &#123; <span class="attr">property:</span> <span class="string">Label</span>, <span class="attr">type:</span> <span class="string">TEXT</span> &#125;</span><br><span class="line">      <span class="attr">code:</span> &#123; <span class="attr">prop:</span> <span class="string">children</span> &#125;</span><br><span class="line">  <span class="attr">status:</span> <span class="string">done</span></span><br></pre></td></tr></table></figure>
+
+<p>MCP 返回 <code>Button/Primary, Disabled=true, Label=&quot;取消订单&quot;</code> 时，查 <code>#button</code> 即可生成基础代码。</p>
+<h4 id="5-3-页面级-wrapper：业务按钮"><a href="#5-3-页面级-wrapper：业务按钮" class="headerlink" title="5.3 页面级 wrapper：业务按钮"></a>5.3 页面级 wrapper：业务按钮</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">order_cancel_button</span></span><br><span class="line">  <span class="attr">figma:</span></span><br><span class="line">    <span class="attr">component_set:</span> <span class="string">Button</span></span><br><span class="line">    <span class="attr">usage:</span> <span class="string">Button/Primary</span> <span class="string">+</span> <span class="string">Label=&quot;取消订单&quot;</span></span><br><span class="line">  <span class="attr">code:</span></span><br><span class="line">    <span class="attr">import:</span> <span class="string">&quot;@acme/ui/Button&quot;</span></span><br><span class="line">    <span class="attr">wrapper:</span> <span class="string">apps/web/src/features/order/CancelOrderButton.tsx</span></span><br><span class="line">  <span class="attr">links:</span></span><br><span class="line">    <span class="attr">capability:</span> <span class="string">domain/order/capabilities.yaml#cap_buyer_cancel</span></span><br><span class="line">  <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">  <span class="attr">gap:</span> <span class="string">wrapper</span> <span class="string">未按</span> <span class="string">guards</span> <span class="string">控制</span> <span class="string">disabled</span></span><br></pre></td></tr></table></figure>
+
+<p>要点：</p>
+<ul>
+<li>基础组件映射 <strong>1:1</strong></li>
+<li>业务按钮用 <strong>wrapper</strong> 条目 + <code>links.capability</code> 接行为 DSL</li>
+<li>Figma 稿上的 disabled 是<strong>视觉态</strong>；真实 disabled 由 <strong>capabilities guards</strong> 驱动</li>
+</ul>
+<p>稿上按钮可点、规则说应 disabled 时——<strong>以 capabilities 为准</strong>，UI 实现 disabled 态。这和姊妹篇里的「实现漂移」是同一类问题，只是发生在 UI 层。</p>
+<hr>
+<h2 id="6-第二层：tokens-map-yaml（可选但推荐）"><a href="#6-第二层：tokens-map-yaml（可选但推荐）" class="headerlink" title="6. 第二层：tokens.map.yaml（可选但推荐）"></a>6. 第二层：tokens.map.yaml（可选但推荐）</h2><p><strong>职责</strong>：Figma Variables 与代码 Design Tokens 对齐。</p>
+<p>命名已完全一致时，文件可以很薄，只记 <code>status/gap</code>；命名不一致时必须显式映射：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">spacing.button.padding-x</span></span><br><span class="line">  <span class="attr">figma:</span> <span class="string">spacing/button/padding-x</span></span><br><span class="line">  <span class="attr">code:</span> <span class="string">tokens.spacing.button.px</span></span><br><span class="line">  <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">  <span class="attr">gap:</span> <span class="string">Figma</span> <span class="number">20</span><span class="string">，代码</span> <span class="number">16</span></span><br></pre></td></tr></table></figure>
+
+<p>MCP 读到样式值时，AI 查表决定用 token 还是硬编码——<strong>应优先 token</strong>。差距记在 <code>UI_IMPLEMENTATION_STATUS</code>，别藏在某个 PR 评论里。</p>
+<hr>
+<h2 id="7-第三层：UI-IMPLEMENTATION-STATUS-md"><a href="#7-第三层：UI-IMPLEMENTATION-STATUS-md" class="headerlink" title="7. 第三层：UI_IMPLEMENTATION_STATUS.md"></a>7. 第三层：UI_IMPLEMENTATION_STATUS.md</h2><p><strong>职责</strong>：汇总 <strong>Figma 稿 vs 代码 UI</strong> 的差距，不重复行为规则全文。</p>
+<p>与 <code>IMPLEMENTATION_STATUS.md</code> 并列：</p>
+<table>
+<thead>
+<tr>
+<th>文档</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IMPLEMENTATION_STATUS</td>
+<td>规则、API、状态机</td>
+</tr>
+<tr>
+<td>UI_IMPLEMENTATION_STATUS</td>
+<td>还原度、组件映射、token 漂移</td>
+</tr>
+</tbody></table>
+<p>条目应链接 <code>components.map#id</code> 与设计 node-id，方便 AI 和人都沿链定位。</p>
+<hr>
+<h2 id="8-案例闭环：还原「取消订单」按钮"><a href="#8-案例闭环：还原「取消订单」按钮" class="headerlink" title="8. 案例闭环：还原「取消订单」按钮"></a>8. 案例闭环：还原「取消订单」按钮</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1. 设计稿 URL（订单列表 frame, node 100:200）</span><br><span class="line">      → MCP 读到 Button/Primary, Label=&quot;取消订单&quot;</span><br><span class="line"></span><br><span class="line">2. components.map#button</span><br><span class="line">      → import Button, variant=primary, children=Label</span><br><span class="line"></span><br><span class="line">3. components.map#order_cancel_button</span><br><span class="line">      → 应用层用 CancelOrderButton wrapper，非裸 Button</span><br><span class="line"></span><br><span class="line">4. capabilities#cap_buyer_cancel</span><br><span class="line">      → paid + 超 30min / 已发货 → disabled=true</span><br><span class="line"></span><br><span class="line">5. tokens.map#spacing.button.padding-x</span><br><span class="line">      → 校验 padding 是否用 token</span><br><span class="line"></span><br><span class="line">6. UI_IMPLEMENTATION_STATUS §订单列表</span><br><span class="line">      → partial：disabled 行为未接；padding token 未同步</span><br></pre></td></tr></table></figure>
+
+<p>给 AI 的任务模板可以长这样：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">设计：https://figma.com/design/...?node-id=100-200</span><br><span class="line">UI 映射：domain/ui/components.map.yaml</span><br><span class="line">Token：domain/ui/tokens.map.yaml</span><br><span class="line">行为：domain/order/capabilities.yaml#cap<span class="emphasis">_buyer_</span>cancel</span><br><span class="line">实现：apps/web/src/pages/orders/OrderList.tsx</span><br><span class="line">差距：UI<span class="emphasis">_IMPLEMENTATION_</span>STATUS §订单列表</span><br></pre></td></tr></table></figure>
+
+<p><strong>产品意图 + 设计锚点 + 行为锚点 + 差距</strong>——和姊妹篇行为 DSL 的任务描述是同一套思路，只是入口从 <code>glossary#order_cancel</code> 换成了 <code>components.map#order_cancel_button</code>。</p>
+<hr>
+<h2 id="9-与-Code-Connect-的关系"><a href="#9-与-Code-Connect-的关系" class="headerlink" title="9. 与 Code Connect 的关系"></a>9. 与 Code Connect 的关系</h2><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>定位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>components.map.yaml</code></td>
+<td>轻量、人&#x2F;AI 可读、全团队可维护</td>
+</tr>
+<tr>
+<td>Code Connect (<code>.figma.ts</code>)</td>
+<td>映射写入代码仓，MCP 可直接返回 snippet</td>
+</tr>
+</tbody></table>
+<p>二者是<strong>同一 DSL 的不同载体</strong>，不是二选一的对立方案：</p>
+<ul>
+<li><strong>起步</strong>：YAML 映射表 + MCP，成本低、改起来快</li>
+<li><strong>规模化</strong>：关键组件补 Code Connect，MCP 直接吐 snippet</li>
+<li><strong>CI</strong>：<code>domain:ui-check</code> 校验 Figma 组件集名 ⊆ map 条目</li>
+</ul>
+<p>我见过团队一上来就铺 Code Connect，维护成本反而拖慢迭代；也见过只有 MCP、没有 map，每次还原 import 路径都不一样。<strong>先 YAML，再按需上 Connect</strong>，通常更稳。</p>
+<hr>
+<h2 id="10-维护时机：跟着组件库走，不跟着每个页面走"><a href="#10-维护时机：跟着组件库走，不跟着每个页面走" class="headerlink" title="10. 维护时机：跟着组件库走，不跟着每个页面走"></a>10. 维护时机：跟着组件库走，不跟着每个页面走</h2><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>更新什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Figma 新增组件 &#x2F; variant</td>
+<td><code>components.map.yaml</code> + 代码</td>
+</tr>
+<tr>
+<td>代码改 props 名</td>
+<td><code>components.map.yaml</code></td>
+</tr>
+<tr>
+<td>Figma Variable 改名</td>
+<td><code>tokens.map.yaml</code></td>
+</tr>
+<tr>
+<td>只改页面布局、仍用库组件</td>
+<td><strong>通常不改 map</strong></td>
+</tr>
+<tr>
+<td>业务规则变（何时 disabled）</td>
+<td><code>capabilities.yaml</code>，非 map</td>
+</tr>
+</tbody></table>
+<p>UI DSL 跟着<strong>组件库版本</strong>走。别把每个页面的布局微调都写进 map——那是 MCP 读实例该干的事。</p>
+<hr>
+<h2 id="11-冲突优先级（UI-相关）"><a href="#11-冲突优先级（UI-相关）" class="headerlink" title="11. 冲突优先级（UI 相关）"></a>11. 冲突优先级（UI 相关）</h2><p>写入 <code>AGENTS.md</code>，和姊妹篇行为链合并成完整优先级：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 用户明确指令</span><br><span class="line">2. acceptance.verify 通过（含 E2E 视觉/交互）</span><br><span class="line">3. 行为 DSL（capabilities / rules）</span><br><span class="line">4. tokens.map.yaml（设计 Token）</span><br><span class="line">5. components.map.yaml（组件 import / props）</span><br><span class="line">6. Figma MCP 读到的页面实例（布局与组合）</span><br><span class="line">7. 代码 UI 现状</span><br></pre></td></tr></table></figure>
+
+<p>行为与表现冲突时：<strong>capabilities 赢</strong>；map 和 MCP 负责把 disabled 态画对，不是决定能不能点。</p>
+<hr>
+<h2 id="12-落地最小结构"><a href="#12-落地最小结构" class="headerlink" title="12. 落地最小结构"></a>12. 落地最小结构</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">domain/</span><br><span class="line">  ui/</span><br><span class="line">    components.map.yaml      # UI DSL 核心</span><br><span class="line">    tokens.map.yaml          # 可选</span><br><span class="line">  order/</span><br><span class="line">    capabilities.yaml        # 含 links 或 ui.wrapper 引用</span><br><span class="line">  IMPLEMENTATION_STATUS.md   # 行为差距</span><br><span class="line">  UI_IMPLEMENTATION_STATUS.md</span><br><span class="line">packages/ui/src/</span><br><span class="line">  Button.tsx</span><br><span class="line">  tokens/</span><br><span class="line">AGENTS.md                    # 文档索引 + 上述优先级</span><br></pre></td></tr></table></figure>
+
+<p>落地步骤：</p>
+<ol>
+<li>从模板复制 <code>templates/ui/</code> 到项目 <code>domain/ui/</code></li>
+<li>把示例路径换成真实 import 和 wrapper 路径</li>
+<li>先钉 3–5 个高频组件（Button、Input、Modal…），别一次铺全库</li>
+<li>在 <code>AGENTS.md</code> 写入 UI 冲突优先级与文档索引</li>
+<li>新页面还原任务：<strong>先查 map，再写代码</strong>——而非让 AI 裸读 Figma 硬猜</li>
+</ol>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>问题</td>
+<td>MCP 读得到设计实例，猜不出 import 和 props 约定</td>
+</tr>
+<tr>
+<td>方法</td>
+<td><code>components.map.yaml</code> 作翻译层；<code>tokens.map.yaml</code> 对齐 Variable</td>
+</tr>
+<tr>
+<td>分工</td>
+<td>UI DSL 管表现；行为 DSL 管何时何能点；<code>links.capability</code> 挂钩</td>
+</tr>
+<tr>
+<td>差距</td>
+<td><code>UI_IMPLEMENTATION_STATUS.md</code> 与行为差距文档并列</td>
+</tr>
+<tr>
+<td>演进</td>
+<td>YAML 起步 → 关键组件补 Code Connect → CI 校验</td>
+</tr>
+</tbody></table>
+<p>主题本质：对齐的 Figma 组件库解决「设计侧语义」；<strong>components.map.yaml 解决「翻译到本地代码」</strong>——这就是 UI 侧真正需要维护的那一份 DSL。</p>
+<hr>
+<h2 id="行动建议"><a href="#行动建议" class="headerlink" title="行动建议"></a>行动建议</h2><ol>
+<li><strong>明天就能做</strong>：选一个你正在用 MCP 还原的页面，建 <code>components.map.yaml</code>，把页面上 3 个组件的 import 和 props 写进去。</li>
+<li><strong>本周可做</strong>：给业务按钮加 wrapper 条目 + <code>links.capability</code>，在 <code>UI_IMPLEMENTATION_STATUS.md</code> 记一笔当前还原差距。</li>
+<li><strong>值得投入</strong>：和姊妹篇行为 DSL 共用同一套 <code>status/gap</code> 元数据——AI 才知道哪里能假装做完、哪里还不能。</li>
+</ol>
+<p>设计稿会变，组件库会迭代，但 <strong>「Figma 实例 → 本地 import」这张网</strong> 一旦钉住，MCP 才真正从「能看」变成「能译」。</p>
+<hr>
+<hr>
+<p><strong>延伸阅读</strong>：<a href="https://neo-share.github.io/2026/06/26/%E5%BD%93AI%E8%AF%BB%E4%B8%8D%E6%87%82%E4%BD%A0%E7%9A%84PRD%EF%BC%9A%E7%94%A8%E9%A2%86%E5%9F%9FDSL%E6%9E%B6%E8%B5%B7%E4%BA%A7%E5%93%81%E8%AF%AD%E8%A8%80%E4%B8%8E%E4%BB%A3%E7%A0%81%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5/">当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥</a>（行为 DSL 姊妹篇）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/06/26/Figma%E8%83%BD%E8%AF%BB%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%86%E8%AF%91%E4%B8%8D%E6%88%90%E4%BB%A3%E7%A0%81%EF%BC%9A%E7%94%A8components.map.yaml%E9%92%89%E4%BD%8FUI%E6%98%A0%E5%B0%84DSL/" data-id="cmquysmmb0000rzmr4et99h6e" data-title="Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DSL/" rel="tag">DSL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Figma/" rel="tag">Figma</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MCP/" rel="tag">MCP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" rel="tag">职场进阶</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F/" rel="tag">设计系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-听懂和说出之间，缺的不是词汇，是一条闭环" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/06/24/%E5%90%AC%E6%87%82%E5%92%8C%E8%AF%B4%E5%87%BA%E4%B9%8B%E9%97%B4%EF%BC%8C%E7%BC%BA%E7%9A%84%E4%B8%8D%E6%98%AF%E8%AF%8D%E6%B1%87%EF%BC%8C%E6%98%AF%E4%B8%80%E6%9D%A1%E9%97%AD%E7%8E%AF/" class="article-date">
@@ -2836,410 +3169,6 @@
 
 
   
-    <article id="post-Web应用的Agent化演进" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/" class="article-date">
-  <time class="dt-published" datetime="2026-05-23T02:00:00.000Z" itemprop="datePublished">2026-05-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><a href="#%E5%85%88%E8%AE%B2%E7%BB%93%E8%AE%BA%E8%BF%99%E4%B8%8D%E6%98%AF%E5%8F%AF%E9%80%89%E6%BD%AE%E6%B5%81">先讲结论：这不是可选潮流</a></li>
-<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF-agent-%E5%BA%94%E7%94%A8">什么是「Agent 应用」？</a></li>
-<li><a href="#%E5%BA%94%E7%94%A8-agent-%E5%8C%96%E5%8F%91%E7%94%9F%E5%9C%A8%E5%93%AA%E5%87%A0%E4%B8%AA%E5%B1%82%E6%AC%A1">「应用 Agent 化」发生在哪几个层次？</a></li>
-<li><a href="#%E4%BA%A4%E4%BA%92%E8%8C%83%E5%BC%8F%E4%BB%8E%E9%A1%B5%E9%9D%A2%E5%AF%BC%E8%88%AA%E5%88%B0%E7%9B%AE%E6%A0%87%E5%AE%8C%E6%88%90">交互范式：从「页面导航」到「目标完成」</a></li>
-<li><a href="#%E6%8A%80%E6%9C%AF%E6%A0%88%E5%8F%98%E5%8C%96web-%E5%BC%80%E5%8F%91%E8%80%85%E4%BC%9A%E7%A2%B0%E4%BB%80%E4%B9%88">技术栈变化：Web 开发者会碰什么？</a></li>
-<li><a href="#%E7%8E%B0%E6%9C%89%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%B8%90%E8%BF%9B-agent-%E5%8C%96">现有应用如何渐进 Agent 化？</a></li>
-<li><a href="#web-%E5%BC%80%E5%8F%91%E8%80%85%E7%8E%B0%E5%9C%A8%E8%AF%A5%E8%A1%A5%E5%93%AA%E4%BA%9B%E8%83%BD%E5%8A%9B">Web 开发者现在该补哪些能力？</a></li>
-<li><a href="#%E9%A3%8E%E9%99%A9%E4%B8%8E%E8%BE%B9%E7%95%8C%E7%90%86%E6%80%A7-agent-%E5%8C%96">风险与边界：理性 Agent 化</a></li>
-<li><a href="#%E5%92%8C%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%80%E6%96%87%E7%9A%84%E5%85%B3%E7%B3%BB">和「工程实践」一文的关系</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93%E7%BB%99-web-%E5%BC%80%E5%8F%91%E8%80%85%E7%9A%84%E4%B8%80%E5%8F%A5%E8%AF%9D">总结：给 Web 开发者的一句话</a></li>
-<li><a href="#%E5%85%B3%E6%B3%A8%E4%B8%8E%E7%9B%B8%E5%85%B3">关注与相关</a></li>
-</ul>
-<hr>
-<h2 id="先讲结论：这不是可选潮流"><a href="#先讲结论：这不是可选潮流" class="headerlink" title="先讲结论：这不是可选潮流"></a>先讲结论：这不是可选潮流</h2><p>如果你过去十年做的是 Web 应用，你大概率熟悉这条主线：</p>
-<blockquote>
-<p>表单 + 列表 + 详情页 → REST&#x2F;GraphQL → 状态管理 → 部署上线</p>
-</blockquote>
-<p>这条链路不会一夜消失，但<strong>产品交付的默认假设正在变</strong>：用户不再只想「点哪里进哪里」，而是想<strong>用自然语言完成目标</strong>，由系统理解意图、编排步骤、调用能力、给出结果。</p>
-<p>我认为：<strong>几乎所有现有 Web &#x2F; 移动 &#x2F; 桌面应用，都会在 3–5 年内经历「Agent 化」改造</strong>——不是全部变成聊天机器人，而是把「理解意图 + 自主执行 + 可审计」嵌进核心流程。</p>
-<p>对 Web 开发者而言，这意味着：</p>
-<table>
-<thead>
-<tr>
-<th>过去你优化的</th>
-<th>未来你要优化的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>首屏、路由、组件复用</td>
-<td>意图识别准确率、工具调用成功率</td>
-</tr>
-<tr>
-<td>表单校验与字段联动</td>
-<td>任务分解、步骤可回滚、人机确认点</td>
-</tr>
-<tr>
-<td>API 延迟与缓存</td>
-<td>Agent 上下文、Token 成本、流式响应体验</td>
-</tr>
-<tr>
-<td>权限按钮显隐</td>
-<td>工具级授权、操作审计、越权拦截</td>
-</tr>
-</tbody></table>
-<p><strong>Agent 应用开发，就是 Web 开发的下一站。</strong> 越早理解演进路径，越不会在「给老系统贴一个 Copilot 侧边栏」时走弯路。</p>
-<hr>
-<h2 id="什么是「Agent-应用」？"><a href="#什么是「Agent-应用」？" class="headerlink" title="什么是「Agent 应用」？"></a>什么是「Agent 应用」？</h2><h3 id="一句话定义"><a href="#一句话定义" class="headerlink" title="一句话定义"></a>一句话定义</h3><p><strong>Agent 应用</strong>：以大型语言模型（LLM）为推理核心，能够根据用户目标<strong>自主规划、调用工具、读写状态、在多步执行中保持上下文</strong>的软件系统。</p>
-<p>它和「带 AI 功能的传统应用」的差别，不在于有没有模型，而在于<strong>谁主导流程</strong>。</p>
-<pre class="mermaid">flowchart TB
-  subgraph traditional["传统 Web 应用"]
-    U1["用户"] --> UI1["固定 UI 流程"]
-    UI1 --> API1["确定性 API"]
-    API1 --> DB1["数据库"]
-  end
-
-  subgraph agent["Agent 应用"]
-    U2["用户（自然语言目标）"] --> ORCH["编排层 / Agent Runtime"]
-    ORCH --> LLM["LLM 推理与规划"]
-    LLM --> TOOLS["工具：API · DB · 搜索 · 代码 · 浏览器"]
-    TOOLS --> STATE["会话状态 · 任务状态 · 审计日志"]
-    ORCH --> UI2["动态 UI / 流式反馈 / 确认卡片"]
-  end</pre>
-
-<h3 id="四个关键特征（Web-开发者版）"><a href="#四个关键特征（Web-开发者版）" class="headerlink" title="四个关键特征（Web 开发者版）"></a>四个关键特征（Web 开发者版）</h3><ol>
-<li><strong>意图驱动</strong>：用户说「帮我把上周未发货的订单批量提醒客服」，而不是点开 5 个筛选器。</li>
-<li><strong>工具调用（Tool Use）</strong>：Agent 不「猜」数据，而是通过你暴露的 HTTP、tRPC、SQL、搜索等<strong>受控接口</strong>拿真数据、做真操作。</li>
-<li><strong>多步执行</strong>：一次对话可能触发查库 → 生成草稿 → 等人确认 → 批量写入；需要<strong>任务状态机</strong>，不是单次 request&#x2F;response。</li>
-<li><strong>可治理</strong>：每次调用谁、改了什么、为何失败，必须可追溯——这和 Web 里的「操作日志 + 权限」是一脉相承的。</li>
-</ol>
-<hr>
-<h2 id="「应用-Agent-化」发生在哪几个层次？"><a href="#「应用-Agent-化」发生在哪几个层次？" class="headerlink" title="「应用 Agent 化」发生在哪几个层次？"></a>「应用 Agent 化」发生在哪几个层次？</h2><p>不必一夜之间重写产品。业界常见的演进是<strong>由浅入深三层</strong>：</p>
-<pre class="mermaid">flowchart LR
-  L1["L1 体验层\nCopilot / 侧边栏 / 命令面板"]
-  L2["L2 能力层\nAPI 工具化 · MCP · Function Calling"]
-  L3["L3 架构层\n意图路由 · 任务编排 · 人机协同"]
-
-  L1 --> L2 --> L3</pre>
-
-<table>
-<thead>
-<tr>
-<th>层次</th>
-<th>用户感知</th>
-<th>你要改什么</th>
-<th>典型工期</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>L1 体验层</strong></td>
-<td>「有个 AI 助手帮我查&#x2F;写」</td>
-<td>前端加对话 UI；后端加 <code>/chat</code> 代理</td>
-<td>天～周</td>
-</tr>
-<tr>
-<td><strong>L2 能力层</strong></td>
-<td>「AI 能直接办业务」</td>
-<td>把现有 REST 封装成 Tool Schema；统一鉴权与幂等</td>
-<td>周～月</td>
-</tr>
-<tr>
-<td><strong>L3 架构层</strong></td>
-<td>「打开应用就是完成任务」</td>
-<td>任务编排、状态机、审批流、审计与回滚</td>
-<td>月～季</td>
-</tr>
-</tbody></table>
-<p><strong>误区</strong>：长期停在 L1——所有业务仍靠人手点页面，AI 只能「回答问题」。<br><strong>正路</strong>：L1 获客、L2 沉淀可调用能力、L3 让核心路径走 Agent 编排。</p>
-<hr>
-<h2 id="交互范式：从「页面导航」到「目标完成」"><a href="#交互范式：从「页面导航」到「目标完成」" class="headerlink" title="交互范式：从「页面导航」到「目标完成」"></a>交互范式：从「页面导航」到「目标完成」</h2><h3 id="传统-Web：界面即流程"><a href="#传统-Web：界面即流程" class="headerlink" title="传统 Web：界面即流程"></a>传统 Web：界面即流程</h3><p>开发者用路由和组件<strong>预定义</strong>用户路径：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dashboard → /orders → /orders/:id → 点击「导出」→ 下载</span><br></pre></td></tr></table></figure>
-
-<p>优点是确定性强、可测试、性能好；缺点是<strong>学习成本高</strong>——新用户要记住菜单在哪、字段什么意思。</p>
-<h3 id="Agent-化-Web：界面即「执行结果的投影」"><a href="#Agent-化-Web：界面即「执行结果的投影」" class="headerlink" title="Agent 化 Web：界面即「执行结果的投影」"></a>Agent 化 Web：界面即「执行结果的投影」</h3><p>用户给出<strong>目标</strong>，系统生成<strong>当前最优的 UI</strong>（可能是表格、卡片、确认框、流式日志）：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">「导出上周华东区退款单并标红异常金额」</span><br><span class="line">  → Agent 解析意图</span><br><span class="line">  → 调用 listOrders + filterRegion + exportCsv</span><br><span class="line">  → 流式展示进度</span><br><span class="line">  → 异常行高亮预览</span><br><span class="line">  → 用户确认后下载</span><br></pre></td></tr></table></figure>
-
-<p>对前端的影响：</p>
-<ul>
-<li><strong>组件库仍然重要</strong>，但更多「按需组装」，而不是固定 wizard。</li>
-<li><strong>流式 UI</strong>（SSE &#x2F; WebSocket）成为标配：用户要看到 Agent「正在查库 &#x2F; 正在写文件」。</li>
-<li><strong>确认点（Human-in-the-loop）</strong> 是一等公民：涉及钱、权限、删除时，必须卡住等人点确认——这和表单里的「二次确认」同源，只是触发条件由 Agent 决策。</li>
-</ul>
-<h3 id="三种-UI-模式并存（未来-3-年的常态）"><a href="#三种-UI-模式并存（未来-3-年的常态）" class="headerlink" title="三种 UI 模式并存（未来 3 年的常态）"></a>三种 UI 模式并存（未来 3 年的常态）</h3><table>
-<thead>
-<tr>
-<th>模式</th>
-<th>适用场景</th>
-<th>Web 实现要点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>对话式</strong></td>
-<td>探索、咨询、模糊需求</td>
-<td>消息列表 + 工具调用卡片 + Markdown&#x2F;代码块渲染</td>
-</tr>
-<tr>
-<td><strong>命令式</strong></td>
-<td>高频专家用户</td>
-<td><code>Cmd+K</code> 面板、斜杠命令、自然语言 → 结构化动作</td>
-</tr>
-<tr>
-<td><strong>传统页面</strong></td>
-<td>强合规、精确录入</td>
-<td>保留表单；Agent 负责预填、校验解释、批量生成</td>
-</tr>
-</tbody></table>
-<p>好的 Agent 化产品不是「去掉页面」，而是<strong>让页面与对话共享同一套业务能力</strong>。</p>
-<hr>
-<h2 id="技术栈变化：Web-开发者会碰什么？"><a href="#技术栈变化：Web-开发者会碰什么？" class="headerlink" title="技术栈变化：Web 开发者会碰什么？"></a>技术栈变化：Web 开发者会碰什么？</h2><h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><table>
-<thead>
-<tr>
-<th>领域</th>
-<th>传统重点</th>
-<th>Agent 化后新增</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>状态</td>
-<td>Redux &#x2F; Zustand 页面状态</td>
-<td><strong>会话状态</strong>、任务 ID、工具调用历史</td>
-</tr>
-<tr>
-<td>网络</td>
-<td>fetch &#x2F; React Query</td>
-<td><strong>SSE 流</strong>、分片渲染、中断与重试</td>
-</tr>
-<tr>
-<td>组件</td>
-<td>表单、表格</td>
-<td><strong>Tool Result 渲染器</strong>（表格&#x2F;图表&#x2F; diff &#x2F; 文件预览）</td>
-</tr>
-<tr>
-<td>安全</td>
-<td>XSS、CSRF</td>
-<td><strong>提示注入防护</strong>、敏感操作二次确认 UI</td>
-</tr>
-</tbody></table>
-<p>技术选型上，React &#x2F; Vue &#x2F; Next &#x2F; Nuxt 都仍适用；变化的是<strong>边界</strong>：前端不再只调 BFF，还要展示「Agent 正在调用哪些工具、结果是否可信」。</p>
-<h3 id="后端与-BFF"><a href="#后端与-BFF" class="headerlink" title="后端与 BFF"></a>后端与 BFF</h3><p>你需要为 Agent 提供<strong>机器可读、人类可审计</strong>的能力接口：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示意：把「业务动作」声明为 Tool，而不是让 LLM 拼 SQL</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> tools = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;list_orders&#x27;</span>,</span><br><span class="line">    <span class="attr">description</span>: <span class="string">&#x27;按时间、区域、状态筛选订单，只读&#x27;</span>,</span><br><span class="line">    <span class="attr">parameters</span>: orderFilterSchema,</span><br><span class="line">    <span class="attr">handler</span>: listOrders,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;batch_notify_support&#x27;</span>,</span><br><span class="line">    <span class="attr">description</span>: <span class="string">&#x27;对订单 ID 列表发送客服提醒，需 approval&#x27;</span>,</span><br><span class="line">    <span class="attr">parameters</span>: notifySchema,</span><br><span class="line">    <span class="attr">handler</span>: batchNotify,</span><br><span class="line">    <span class="attr">requiresApproval</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-
-<p>实践要点：</p>
-<ul>
-<li><strong>Schema 先行</strong>：Zod &#x2F; JSON Schema 同时服务 LLM、TypeScript 与文档。</li>
-<li><strong>幂等与限流</strong>：Agent 可能重复调用同一工具。</li>
-<li><strong>权限下沉到工具级</strong>：「能聊天」≠「能删库」。</li>
-</ul>
-<h3 id="编排与运行时"><a href="#编排与运行时" class="headerlink" title="编排与运行时"></a>编排与运行时</h3><table>
-<thead>
-<tr>
-<th>组件</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Agent Runtime</strong></td>
-<td>管理 prompt、模型路由、工具循环、超时</td>
-</tr>
-<tr>
-<td><strong>任务队列</strong></td>
-<td>长任务异步化（生成报告、批量导入）</td>
-</tr>
-<tr>
-<td><strong>状态存储</strong></td>
-<td>会话、计划步骤、checkpoint（便于断点续跑）</td>
-</tr>
-<tr>
-<td><strong>可观测性</strong></td>
-<td>每次 tool call 的 input&#x2F;output&#x2F;latency&#x2F;cost</td>
-</tr>
-</tbody></table>
-<p>开源与商业方案都在快速成熟（LangGraph、Temporal、各类 Agent SDK、Cursor 等）。Web 团队不必自研模型，但必须<strong>自研领域工具与治理策略</strong>。</p>
-<h3 id="与-MCP、OpenAPI-的关系"><a href="#与-MCP、OpenAPI-的关系" class="headerlink" title="与 MCP、OpenAPI 的关系"></a>与 MCP、OpenAPI 的关系</h3><ul>
-<li><strong>OpenAPI &#x2F; tRPC</strong>：描述「你的业务 API 长什么样」。</li>
-<li><strong>MCP（Model Context Protocol）</strong>：描述「外部能力如何以标准方式接到 Agent」。</li>
-</ul>
-<p>Web 团队的最小行动：<strong>先把内部高频 API 整理成 Tool 清单</strong>（名称、描述、参数、副作用、权限），再考虑是否挂 MCP Server。否则 Agent 只能在文档里「幻觉」业务。</p>
-<hr>
-<h2 id="现有应用如何渐进-Agent-化？"><a href="#现有应用如何渐进-Agent-化？" class="headerlink" title="现有应用如何渐进 Agent 化？"></a>现有应用如何渐进 Agent 化？</h2><p>下面是一条<strong>可落地的迁移路径</strong>（适合已有用户量的 Web 产品）：</p>
-<pre class="mermaid">flowchart TD
-  A["盘点高频用户目标\n（不是页面，是任务）"] --> B["选 3–5 个只读场景\n做 L1+L2 PoC"]
-  B --> C["统一 Tool 层 + 鉴权 + 审计日志"]
-  C --> D["引入任务状态机\n支持多步与失败恢复"]
-  D --> E["核心写操作加审批流\nHuman-in-the-loop"]
-  E --> F["评估成本与 SLA\n模型路由 / 缓存 / 小模型兜底"]</pre>
-
-<h3 id="第一步：用「用户任务」倒推，不是用「页面」正推"><a href="#第一步：用「用户任务」倒推，不是用「页面」正推" class="headerlink" title="第一步：用「用户任务」倒推，不是用「页面」正推"></a>第一步：用「用户任务」倒推，不是用「页面」正推</h3><p>写下用户真正想完成的句子，例如：</p>
-<ul>
-<li>「把这周转化率下降的 SKU 列出来并解释可能原因」</li>
-<li>「根据模板生成活动页并预览」</li>
-<li>「把测试环境数据库同步到 staging（危险）」</li>
-</ul>
-<p>每个任务映射到：<strong>需要哪些读接口、哪些写接口、哪些必须人工确认</strong>。</p>
-<h3 id="第二步：Tool-化，而不是-Prompt-化"><a href="#第二步：Tool-化，而不是-Prompt-化" class="headerlink" title="第二步：Tool 化，而不是 Prompt 化"></a>第二步：Tool 化，而不是 Prompt 化</h3><p>不要把业务逻辑写进 prompt 里「你帮我算一下折扣……」。<br><strong>折扣规则应在代码里</strong>；Agent 只负责选择调用 <code>calculate_discount</code> 并展示结果。</p>
-<p>这样：</p>
-<ul>
-<li>单元测试仍然覆盖业务代码；</li>
-<li>Agent 行为可通过「工具是否被正确调用」来评估；</li>
-<li>换模型时业务风险可控。</li>
-</ul>
-<h3 id="第三步：人机协同与审计"><a href="#第三步：人机协同与审计" class="headerlink" title="第三步：人机协同与审计"></a>第三步：人机协同与审计</h3><p>Web 应用已有登录态、RBAC、操作日志——Agent 化后应升级为：</p>
-<table>
-<thead>
-<tr>
-<th>机制</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>工具级 RBAC</strong></td>
-<td>角色 A 只能 <code>read_*</code>，角色 B 才可 <code>write_*</code></td>
-</tr>
-<tr>
-<td><strong>审批流</strong></td>
-<td>写操作生成 pending task，负责人在 UI 批准</td>
-</tr>
-<tr>
-<td><strong>证据链</strong></td>
-<td>用户问题 → 计划 → 每次 tool 输入输出 → 最终结果</td>
-</tr>
-<tr>
-<td><strong>回滚</strong></td>
-<td>批量写操作支持 dry-run 与撤销</td>
-</tr>
-</tbody></table>
-<h3 id="第四步：体验与成本工程"><a href="#第四步：体验与成本工程" class="headerlink" title="第四步：体验与成本工程"></a>第四步：体验与成本工程</h3><ul>
-<li><strong>流式反馈</strong>：减少「黑盒等待」带来的不信任。</li>
-<li><strong>模型路由</strong>：简单分类用小模型，复杂规划用大模型。</li>
-<li><strong>缓存</strong>：相同只读查询命中 Redis，避免重复 Token。</li>
-<li><strong>失败降级</strong>：工具超时 → 明确告知用户并给出「改用手动页面」的链接。</li>
-</ul>
-<hr>
-<h2 id="Web-开发者现在该补哪些能力？"><a href="#Web-开发者现在该补哪些能力？" class="headerlink" title="Web 开发者现在该补哪些能力？"></a>Web 开发者现在该补哪些能力？</h2><h3 id="短期（1–2-个月可上手）"><a href="#短期（1–2-个月可上手）" class="headerlink" title="短期（1–2 个月可上手）"></a>短期（1–2 个月可上手）</h3><ol>
-<li><strong>Tool &#x2F; Function Calling 设计</strong>：会写清晰 description、严格 parameters、合理错误码。</li>
-<li><strong>流式接口与前端渲染</strong>：SSE、分块 JSON、中断请求。</li>
-<li><strong>Prompt 与产品边界</strong>：哪些交给模型、哪些必须代码兜底。</li>
-<li><strong>基础评估</strong>：同一用户目标，多轮测试「是否调对工具、是否越权」。</li>
-</ol>
-<h3 id="中期（3–6-个月形成团队能力）"><a href="#中期（3–6-个月形成团队能力）" class="headerlink" title="中期（3–6 个月形成团队能力）"></a>中期（3–6 个月形成团队能力）</h3><ol>
-<li><strong>任务编排与状态机</strong>：多步任务、失败重试、checkpoint。</li>
-<li><strong>安全</strong>：提示注入、敏感数据脱敏、工具沙箱。</li>
-<li><strong>可观测性</strong>：trace 每次对话的成本、延迟、工具失败率。</li>
-<li><strong>评测体系</strong>：黄金数据集 + 自动化回归（发布前跑一轮 Agent 场景）。</li>
-</ol>
-<h3 id="长期（差异化竞争力）"><a href="#长期（差异化竞争力）" class="headerlink" title="长期（差异化竞争力）"></a>长期（差异化竞争力）</h3><ol>
-<li><strong>领域 Agent 架构</strong>：电商、CRM、DevOps 各自的最优工具粒度。</li>
-<li><strong>与 CI&#x2F;CD、工单、监控打通</strong>：Agent 不只是 UI，而是<strong>运维与研发闭环</strong>的一部分。</li>
-<li><strong>多 Agent 协作</strong>：规划 Agent、执行 Agent、审查 Agent 分工（对 Monorepo 团队尤其相关）。</li>
-</ol>
-<hr>
-<h2 id="风险与边界：理性-Agent-化"><a href="#风险与边界：理性-Agent-化" class="headerlink" title="风险与边界：理性 Agent 化"></a>风险与边界：理性 Agent 化</h2><table>
-<thead>
-<tr>
-<th>风险</th>
-<th>表现</th>
-<th>Web 侧应对</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>幻觉</strong></td>
-<td>编造不存在的数据</td>
-<td>强制 Tool 取数；UI 标注「未验证」</td>
-</tr>
-<tr>
-<td><strong>越权</strong></td>
-<td>Agent 调了不该调的接口</td>
-<td>工具级鉴权 + scope 校验</td>
-</tr>
-<tr>
-<td><strong>成本</strong></td>
-<td>Token 账单失控</td>
-<td>配额、缓存、模型分级</td>
-</tr>
-<tr>
-<td><strong>延迟</strong></td>
-<td>多轮工具调用慢</td>
-<td>异步任务 + 进度页</td>
-</tr>
-<tr>
-<td><strong>合规</strong></td>
-<td>日志含 PII</td>
-<td>脱敏、 retention、区域部署</td>
-</tr>
-</tbody></table>
-<p><strong>不是所有功能都适合 Agent 化。</strong> 强监管表单录入、毫秒级交易、严格确定性计算，仍应以传统代码为主，Agent 做辅助。</p>
-<hr>
-<h2 id="和「工程实践」一文的关系"><a href="#和「工程实践」一文的关系" class="headerlink" title="和「工程实践」一文的关系"></a>和「工程实践」一文的关系</h2><p>本文偏<strong>方向与产品&#x2F;架构思维</strong>，面向「我要不要做、怎么做规划」。</p>
-<p>若你已在 Monorepo 或复杂全栈项目里让 <strong>AI Agent 参与改代码、跑 CI、控范围</strong>，可继续阅读同系列的工程化实践文：</p>
-<ul>
-<li><a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a> —— 任务状态机、scope 校验、质量门禁，解决「Agent 写代码如何可信」。</li>
-</ul>
-<p>两篇合在一起，对应 Agent 时代的两个战场：</p>
-<pre class="mermaid">flowchart LR
-  P["产品运行时\n用户目标 → Agent 执行"] 
-  E["研发运行时\n需求 → Agent 改代码 → CI"]
-
-  P --- E</pre>
-
-<p><strong>产品 Agent 化</strong> + <strong>研发 Agent 化</strong>，会同时发生在一家互联网公司里。Web 开发者往往两边都会碰到。</p>
-<hr>
-<h2 id="总结：给-Web-开发者的一句话"><a href="#总结：给-Web-开发者的一句话" class="headerlink" title="总结：给 Web 开发者的一句话"></a>总结：给 Web 开发者的一句话</h2><blockquote>
-<p><strong>未来不属于「会做页面」或「会做 API」的单点技能，而属于能把业务能力封装成 Agent 可调用的、可治理的、可观测的工具，并在体验层做好人机协同的人。</strong></p>
-</blockquote>
-<p>应用都会 Agent 化，但<strong>不是把应用变成聊天软件</strong>，而是：</p>
-<ol>
-<li><strong>用户侧</strong>：从导航菜单走向目标完成；  </li>
-<li><strong>架构侧</strong>：从 CRUD 接口走向 Tool + 编排 + 审计；  </li>
-<li><strong>团队侧</strong>：从只交付功能走向交付「可被 AI 安全调用」的能力。</li>
-</ol>
-<p>如果你今天维护的是一个正常的 Web 应用，<strong>现在就可以从 L1 的体验试点和 L2 的 Tool 清单开始</strong>——等竞争对手把核心流程做成「一句话办完」，再补功课的成本会高一个数量级。</p>
-<hr>
-<p><em>写作日期：2026-05；技术栈与生态变化快，实现细节请以你当前选用的 Agent SDK &#x2F; 模型提供商文档为准。</em></p>
-<hr>
-<h2 id="关注与相关"><a href="#关注与相关" class="headerlink" title="关注与相关"></a>关注与相关</h2><p><strong>Neo的数智空间</strong><br>每周二：工具实测 | 每周五：AI 周报 | 不定期：深度观察</p>
-<ul>
-<li><strong>微信公众号</strong>：搜索「Neo的数智空间」获取图文版  </li>
-<li><strong>B 站视频版</strong>：【BV或视频链接】（口播 + 示意画面）  </li>
-<li><strong>生活向姊妹篇</strong>：<a href="%E3%80%90%E5%8D%9A%E5%AE%A2%E9%93%BE%E6%8E%A5%E3%80%91">未来的购物 App 会变怎样？——普通人眼里的「Agent 化」</a></li>
-</ul>
-<hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://neo-share.github.io/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/" data-id="cmpig4v3s0001e4mr6ekubwx5" data-title="Web 应用的 Agent 化：面向开发者的未来演进" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -3265,7 +3194,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%8D%8F%E4%BD%9C/" rel="tag">AI协作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%BC%80%E5%8F%91/" rel="tag">AI开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple-Intelligence/" rel="tag">Apple Intelligence</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DSL/" rel="tag">DSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M5/" rel="tag">M5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MacBook-Air/" rel="tag">MacBook Air</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PRD/" rel="tag">PRD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iPhone/" rel="tag">iPhone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" rel="tag">二语习得</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%A3%E8%AF%AD/" rel="tag">口语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%AF%E7%89%88/" rel="tag">港版</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" rel="tag">移动办公</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" rel="tag">职场进阶</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%B1%E8%AF%AD/" rel="tag">英语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%8D%8F%E4%BD%9C/" rel="tag">AI协作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%BC%80%E5%8F%91/" rel="tag">AI开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple-Intelligence/" rel="tag">Apple Intelligence</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DSL/" rel="tag">DSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Figma/" rel="tag">Figma</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M5/" rel="tag">M5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCP/" rel="tag">MCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MacBook-Air/" rel="tag">MacBook Air</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PRD/" rel="tag">PRD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iPhone/" rel="tag">iPhone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" rel="tag">二语习得</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%A3%E8%AF%AD/" rel="tag">口语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%AF%E7%89%88/" rel="tag">港版</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" rel="tag">移动办公</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" rel="tag">职场进阶</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%B1%E8%AF%AD/" rel="tag">英语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F/" rel="tag">设计系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -3275,7 +3204,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/AI%E5%8D%8F%E4%BD%9C/" style="font-size: 10px;">AI协作</a> <a href="/tags/AI%E5%BC%80%E5%8F%91/" style="font-size: 10px;">AI开发</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Apple-Intelligence/" style="font-size: 10px;">Apple Intelligence</a> <a href="/tags/DSL/" style="font-size: 10px;">DSL</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/M5/" style="font-size: 10px;">M5</a> <a href="/tags/MacBook-Air/" style="font-size: 10px;">MacBook Air</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/PRD/" style="font-size: 10px;">PRD</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/iPhone/" style="font-size: 10px;">iPhone</a> <a href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" style="font-size: 10px;">二语习得</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%8F%A3%E8%AF%AD/" style="font-size: 10px;">口语</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 12px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 14px;">深度观察</a> <a href="/tags/%E6%B8%AF%E7%89%88/" style="font-size: 10px;">港版</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 12px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" style="font-size: 10px;">移动办公</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" style="font-size: 10px;">职场进阶</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 10px;">英语</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 12px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/AI%E5%8D%8F%E4%BD%9C/" style="font-size: 10px;">AI协作</a> <a href="/tags/AI%E5%BC%80%E5%8F%91/" style="font-size: 10px;">AI开发</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Apple-Intelligence/" style="font-size: 10px;">Apple Intelligence</a> <a href="/tags/DSL/" style="font-size: 12px;">DSL</a> <a href="/tags/Figma/" style="font-size: 10px;">Figma</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/M5/" style="font-size: 10px;">M5</a> <a href="/tags/MCP/" style="font-size: 10px;">MCP</a> <a href="/tags/MacBook-Air/" style="font-size: 10px;">MacBook Air</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/PRD/" style="font-size: 10px;">PRD</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/iPhone/" style="font-size: 10px;">iPhone</a> <a href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" style="font-size: 10px;">二语习得</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">前端</a> <a href="/tags/%E5%8F%A3%E8%AF%AD/" style="font-size: 10px;">口语</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 12px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 14px;">深度观察</a> <a href="/tags/%E6%B8%AF%E7%89%88/" style="font-size: 10px;">港版</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 12px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" style="font-size: 10px;">移动办公</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" style="font-size: 12px;">职场进阶</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 10px;">英语</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">设计系统</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 12px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
     </div>
   </div>
 
@@ -3305,15 +3234,15 @@
           </li>
         
           <li>
+            <a href="/2026/06/26/Figma%E8%83%BD%E8%AF%BB%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BD%86%E8%AF%91%E4%B8%8D%E6%88%90%E4%BB%A3%E7%A0%81%EF%BC%9A%E7%94%A8components.map.yaml%E9%92%89%E4%BD%8FUI%E6%98%A0%E5%B0%84DSL/">Figma 能读组件，但译不成代码：用 components.map.yaml 钉住 UI 映射 DSL</a>
+          </li>
+        
+          <li>
             <a href="/2026/06/24/%E5%90%AC%E6%87%82%E5%92%8C%E8%AF%B4%E5%87%BA%E4%B9%8B%E9%97%B4%EF%BC%8C%E7%BC%BA%E7%9A%84%E4%B8%8D%E6%98%AF%E8%AF%8D%E6%B1%87%EF%BC%8C%E6%98%AF%E4%B8%80%E6%9D%A1%E9%97%AD%E7%8E%AF/">听懂和说出之间，缺的不是词汇，是一条闭环</a>
           </li>
         
           <li>
             <a href="/2026/06/19/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%8E%B0%E5%9C%A8%E5%B0%B1%E8%AF%A5%E9%80%89%E6%B8%AF%E7%89%88iPhone17Pro%E2%80%94%E2%80%94%E4%BB%8EAI%E5%8F%AF%E7%94%A8%E6%80%A7%E4%B8%8E%E7%A1%AC%E4%BB%B6%E5%89%8D%E7%9E%BB%E8%AF%B4%E8%B5%B7/">为什么现在就该选港版 iPhone 17 Pro？——从 AI 可用性与硬件前瞻说起</a>
-          </li>
-        
-          <li>
-            <a href="/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/">AI 研发交付编排：从需求到上线的 How 手册</a>
           </li>
         
       </ul>
