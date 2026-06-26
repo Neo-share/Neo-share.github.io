@@ -528,7 +528,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥"><a href="#当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥" class="headerlink" title="当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥"></a>当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥</h1><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>如果你把 PRD 丢给 Cursor，让它「按需求改订单模块」，它大概率会做对一半、漏掉一半。</p>
+        <h1 id="当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥"><a href="#当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥" class="headerlink" title="当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥"></a>当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥</h1><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>如果你把 PRD 丢给 Cursor，让它「按需求改订单模块」，它大概率会做对一半、漏掉一半。</p>
 <p>不是模型不够聪明，而是<strong>产品语言和代码实现之间，本来就隔着一层翻译损耗</strong>。AI 没参加过你们的需求会，默认只能读代码和零散文档——很容易把「订单取消」理解成某个 <code>cancelOrder</code> 函数，漏掉退款、库存、通知；或者把 PRD 里的<strong>规划</strong>当成<strong>已实现</strong>，改完才发现动错了层。</p>
 <p>我的结论是：<strong>别让 AI 靠猜。</strong> 在 PRD 和代码之间，用一组<strong>小 DSL</strong>（术语、状态机、规则、验收）加上<strong>差距文档</strong>，把「用户说的」和「代码里的」钉在同一张网上。对 AI 而言，<strong>元数据（status&#x2F;gap）+ 映射（code&#x2F;tests）+ 治理（冲突听谁的）</strong>，和规则语义本身一样重要。</p>
 <hr>
