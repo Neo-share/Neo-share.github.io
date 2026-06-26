@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥 | Neo的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="产品语言与代码之间有翻译损耗。用术语映射、小 DSL 组合与可执行验收，让 AI 知道改哪、怎样算做完、哪里还不能假装做完。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥">
+<meta property="og:url" content="https://neo-share.github.io/2026/06/26/%E5%BD%93AI%E8%AF%BB%E4%B8%8D%E6%87%82%E4%BD%A0%E7%9A%84PRD%EF%BC%9A%E7%94%A8%E9%A2%86%E5%9F%9FDSL%E6%9E%B6%E8%B5%B7%E4%BA%A7%E5%93%81%E8%AF%AD%E8%A8%80%E4%B8%8E%E4%BB%A3%E7%A0%81%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5/index.html">
+<meta property="og:site_name" content="Neo的博客">
+<meta property="og:description" content="产品语言与代码之间有翻译损耗。用术语映射、小 DSL 组合与可执行验收，让 AI 知道改哪、怎样算做完、哪里还不能假装做完。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-26T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-26T02:00:00.000Z">
+<meta property="article:author" content="Neo">
+<meta property="article:tag" content="Neo的数智空间">
+<meta property="article:tag" content="软件工程">
+<meta property="article:tag" content="DSL">
+<meta property="article:tag" content="PRD">
+<meta property="article:tag" content="AI协作">
+<meta property="article:tag" content="职场进阶">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Neo的博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Neo的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">记录技术与生活</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://Neo-share.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-当AI读不懂你的PRD：用领域DSL架起产品语言与代码之间的桥" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/06/26/%E5%BD%93AI%E8%AF%BB%E4%B8%8D%E6%87%82%E4%BD%A0%E7%9A%84PRD%EF%BC%9A%E7%94%A8%E9%A2%86%E5%9F%9FDSL%E6%9E%B6%E8%B5%B7%E4%BA%A7%E5%93%81%E8%AF%AD%E8%A8%80%E4%B8%8E%E4%BB%A3%E7%A0%81%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5/" class="article-date">
+  <time class="dt-published" datetime="2026-06-26T02:00:00.000Z" itemprop="datePublished">2026-06-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/">职场进阶</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥"><a href="#当-AI-读不懂你的-PRD：用领域-DSL-架起产品语言与代码之间的桥" class="headerlink" title="当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥"></a>当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥</h1><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h2 id="1-先讲结论"><a href="#1-先讲结论" class="headerlink" title="1. 先讲结论"></a>1. 先讲结论</h2><p>如果你把 PRD 丢给 Cursor，让它「按需求改订单模块」，它大概率会做对一半、漏掉一半。</p>
+<p>不是模型不够聪明，而是<strong>产品语言和代码实现之间，本来就隔着一层翻译损耗</strong>。AI 没参加过你们的需求会，默认只能读代码和零散文档——很容易把「订单取消」理解成某个 <code>cancelOrder</code> 函数，漏掉退款、库存、通知；或者把 PRD 里的<strong>规划</strong>当成<strong>已实现</strong>，改完才发现动错了层。</p>
+<p>我的结论是：<strong>别让 AI 靠猜。</strong> 在 PRD 和代码之间，用一组<strong>小 DSL</strong>（术语、状态机、规则、验收）加上<strong>差距文档</strong>，把「用户说的」和「代码里的」钉在同一张网上。对 AI 而言，<strong>元数据（status&#x2F;gap）+ 映射（code&#x2F;tests）+ 治理（冲突听谁的）</strong>，和规则语义本身一样重要。</p>
+<hr>
+<h2 id="2-问题的本质：一句话，六条路径"><a href="#2-问题的本质：一句话，六条路径" class="headerlink" title="2. 问题的本质：一句话，六条路径"></a>2. 问题的本质：一句话，六条路径</h2><p>做过订单系统的人，大概都见过这种 PRD：</p>
+<blockquote>
+<p>用户可在支付后 <strong>30 分钟内</strong>取消<strong>未发货</strong>订单，<strong>全额退款</strong>并<strong>收到通知</strong>。</p>
+</blockquote>
+<p>落到代码里，至少拆成六个问题：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>隐含问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>概念</td>
+<td>「取消」和「撤销订单」是不是一回事？</td>
+</tr>
+<tr>
+<td>状态</td>
+<td><code>pending</code> 和 <code>paid</code> 取消逻辑是否相同？</td>
+</tr>
+<tr>
+<td>规则</td>
+<td>已发货、超 30 分钟怎么处理？</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>买家能点取消吗？管理员能否强制取消？</td>
+</tr>
+<tr>
+<td>验收</td>
+<td>什么叫「做完了」？</td>
+</tr>
+<tr>
+<td>实现</td>
+<td>现在代码差在哪？</td>
+</tr>
+</tbody></table>
+<p><strong>产品侧</strong>关心用户价值、边界场景；<strong>代码侧</strong>关心模块、接口、状态机。两者之间天然有缝。更麻烦的是，这条缝往往藏在 senior 工程师脑子里、会议记录里、某条 Issue 评论里——<strong>AI 读不到</strong>。</p>
+<p>所以要做的第一件事，不是写更长的 PRD，而是<strong>把两类事实分开</strong>，别让 AI 混读：</p>
+<table>
+<thead>
+<tr>
+<th>事实类型</th>
+<th>权威来源</th>
+<th>AI 应如何使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目标 &#x2F; 产品意图</td>
+<td>PRD、需求文档</td>
+<td>理解「为什么要做」「用户看到什么」</td>
+</tr>
+<tr>
+<td>已实现行为</td>
+<td>代码 + 差距文档</td>
+<td>理解「现在实际怎样」</td>
+</tr>
+<tr>
+<td>接口 &#x2F; 领域形状</td>
+<td>types、OpenAPI、Proto</td>
+<td>理解「数据结构长什么样」</td>
+</tr>
+<tr>
+<td>完成判定</td>
+<td>测试、门禁命令</td>
+<td>理解「算不算做完」</td>
+</tr>
+</tbody></table>
+<p>常见误区有两个方向：把 PRD 规划写成「已实现」；或让 AI 只读代码却按 PRD 改产品行为。差距文档（如 <code>IMPLEMENTATION_STATUS.md</code>）要显式写清：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 订单取消</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**产品定义**</span>：用户可在支付后 30 分钟内取消，全额退款。</span><br><span class="line"></span><br><span class="line"><span class="strong">**当前实现**</span>：</span><br><span class="line"><span class="bullet">-</span> pending 状态可取消</span><br><span class="line"><span class="bullet">-</span> paid 状态仅支持部分退款</span><br><span class="line"><span class="bullet">-</span> 未发送取消通知邮件</span><br><span class="line"></span><br><span class="line"><span class="strong">**差距原因**</span>：支付网关 v1 不支持部分场景退款（#1234）</span><br></pre></td></tr></table></figure>
+
+<p>AI 读到这段，就知道：接下来的改动是在<strong>补差距</strong>，还是在<strong>改产品定义</strong>——这是两种完全不同的任务。</p>
+<hr>
+<h2 id="3-DSL-的角色：桥梁，不是又一门语言"><a href="#3-DSL-的角色：桥梁，不是又一门语言" class="headerlink" title="3. DSL 的角色：桥梁，不是又一门语言"></a>3. DSL 的角色：桥梁，不是又一门语言</h2><p>很多人听到 DSL，会想到规则引擎、代码生成器、一门新语法。在这个语境下，更准确的说法是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">产品语言（自然语言）  →  DSL（结构化领域语言）  →  代码实现</span><br><span class="line">     PRD / 用户故事           状态机 / 规则 / 配置           TypeScript / Go / ...</span><br></pre></td></tr></table></figure>
+
+<p>DSL 是中间层：比 PRD <strong>精确</strong>（同一概念固定 id，隐含规则写出来），比代码 <strong>接近业务</strong>（用领域词，不是框架细节），且 <strong>可校验</strong>（能跑 linter、和代码枚举对比）。</p>
+<p>广义上，OpenAPI、JSON Schema、状态机 YAML、验收配置都是 DSL。关键是：<strong>领域词汇 + 结构化 + 可校验</strong>。</p>
+<p>它与术语表、契约、差距文档<strong>互补</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>和 DSL 的关系</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>术语映射表</td>
+<td>DSL 的关键字&#x2F;枚举就是术语的正式名</td>
+</tr>
+<tr>
+<td>契约层</td>
+<td>DSL 生成或约束 OpenAPI &#x2F; Schema</td>
+</tr>
+<tr>
+<td>状态机表</td>
+<td>常见形态：<code>pending → paid → cancelled</code></td>
+</tr>
+<tr>
+<td>差距文档</td>
+<td>DSL 描述「应该怎样」；差距 &#x3D; DSL 与代码的 diff</td>
+</tr>
+<tr>
+<td>完成判定</td>
+<td>acceptance DSL 驱动 <code>verify</code> 命令</td>
+</tr>
+</tbody></table>
+<p><strong>什么时候值得上？</strong> 状态机、审批流、定价规则、多 Agent 长期协作的域。<strong>什么时候不必强行上？</strong> 一次性 UI 文案、探索期需求、规则少且变更快——维护成本高于收益。</p>
+<p>原则只有一条：<strong>只有当你愿意把 DSL 当「权威定义」并维护同步时，它才值得。</strong></p>
+<hr>
+<h2 id="4-推荐形态：小-DSL-组合，别造「伪代码-PRD」"><a href="#4-推荐形态：小-DSL-组合，别造「伪代码-PRD」" class="headerlink" title="4. 推荐形态：小 DSL 组合，别造「伪代码 PRD」"></a>4. 推荐形态：小 DSL 组合，别造「伪代码 PRD」</h2><p>不要仿自然语言造一门大 DSL。推荐<strong>小 DSL 组合</strong>——每种只解决一类差距：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PRD（叙述、背景、优先级）</span><br><span class="line">    ↓ 提炼</span><br><span class="line">① 术语 DSL          — 概念叫什么、别名叫什么</span><br><span class="line">② 行为 DSL          — 状态、流程、权限、规则</span><br><span class="line">③ 契约 DSL          — 输入输出、字段、错误码</span><br><span class="line">④ 验收 DSL          — 什么算做完、怎么测</span><br><span class="line">    ↓ 生成 / 约束</span><br><span class="line">代码实现 + 测试 + 差距文档</span><br></pre></td></tr></table></figure>
+
+<p>一个好域（比如「订单取消」）通常 &#x3D; <strong>glossary 片段 + lifecycle + rules + acceptance</strong>，再加一份差距汇总。</p>
+<h4 id="4-1-术语-DSL：最先做，收益最大"><a href="#4-1-术语-DSL：最先做，收益最大" class="headerlink" title="4.1 术语 DSL：最先做，收益最大"></a>4.1 术语 DSL：最先做，收益最大</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">terms:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">order_cancel</span></span><br><span class="line">    <span class="attr">product:</span> <span class="string">订单取消</span></span><br><span class="line">    <span class="attr">aliases:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">撤销订单</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">取消购买</span></span><br><span class="line">    <span class="attr">code:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">packages/order/src/cancel.ts#cancelOrder</span></span><br><span class="line">    <span class="attr">notes:</span> <span class="string">仅</span> <span class="string">pending/paid；paid</span> <span class="string">需走</span> <span class="string">RefundJob</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">    <span class="attr">gap:</span> <span class="string">paid</span> <span class="string">状态退款未全量覆盖</span></span><br></pre></td></tr></table></figure>
+
+<p><code>id</code> 是全体系的稳定引用键。后续 lifecycle、rules、acceptance 都回溯到这里。</p>
+<h4 id="4-2-行为-DSL：状态机-决策表-权限"><a href="#4-2-行为-DSL：状态机-决策表-权限" class="headerlink" title="4.2 行为 DSL：状态机 + 决策表 + 权限"></a>4.2 行为 DSL：状态机 + 决策表 + 权限</h4><p><strong>状态机</strong>管「能发生哪些转移」：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">transitions:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">t_cancel_paid</span></span><br><span class="line">    <span class="attr">from:</span> <span class="string">paid</span></span><br><span class="line">    <span class="attr">to:</span> <span class="string">cancelled</span></span><br><span class="line">    <span class="attr">on:</span> <span class="string">user_cancel</span></span><br><span class="line">    <span class="attr">guards:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">not_shipped</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">within_minutes:</span> <span class="number">30</span></span><br><span class="line">    <span class="attr">effects:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">refund_full</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">notify_user</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">    <span class="attr">gap:</span> <span class="string">paid</span> <span class="string">状态退款仅部分场景，见</span> <span class="comment">#1234</span></span><br><span class="line">    <span class="attr">mapping:</span></span><br><span class="line">      <span class="attr">code:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">packages/order/src/cancel.ts#cancelPaidOrder</span></span><br><span class="line">      <span class="attr">tests:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">packages/order/tests/cancel.paid.spec.ts</span></span><br><span class="line">      <span class="attr">ui:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">apps/web/src/pages/orders/OrderActions.tsx</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>决策表</strong>管「转移时业务判定与错误码」：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">refund_full_within_window</span></span><br><span class="line">    <span class="attr">when:</span></span><br><span class="line">      <span class="attr">status:</span> <span class="string">paid</span></span><br><span class="line">      <span class="attr">minutes_since_pay:</span> &#123; <span class="attr">lte:</span> <span class="number">30</span> &#125;</span><br><span class="line">      <span class="attr">shipped:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">then:</span> <span class="string">refund_full</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">reject_already_shipped</span></span><br><span class="line">    <span class="attr">when:</span></span><br><span class="line">      <span class="attr">status:</span> <span class="string">paid</span></span><br><span class="line">      <span class="attr">shipped:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">then:</span> <span class="string">reject</span></span><br><span class="line">    <span class="attr">reason:</span> <span class="string">ORDER_ALREADY_SHIPPED</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">done</span></span><br></pre></td></tr></table></figure>
+
+<p>lifecycle 给架构师和 AI 看全局；rules 给 QA 和产品看细则——同一业务规则<strong>刻意分层</strong>，不是重复劳动。</p>
+<p><strong>能力 DSL</strong>回答「页面上谁能在什么时候看到取消按钮」：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">capabilities:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">cap_buyer_cancel</span></span><br><span class="line">    <span class="attr">actor:</span> <span class="string">buyer</span></span><br><span class="line">    <span class="attr">action:</span> <span class="string">cancel</span></span><br><span class="line">    <span class="attr">allowed_states:</span> [<span class="string">pending</span>, <span class="string">paid</span>]</span><br><span class="line">    <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">    <span class="attr">gap:</span> <span class="string">paid</span> <span class="string">状态下按钮未按</span> <span class="string">guards</span> <span class="string">隐藏</span></span><br></pre></td></tr></table></figure>
+
+<p>这是典型的<strong>实现漂移</strong>：产品看起来「有按钮」，规则说「不能点」。</p>
+<h4 id="4-3-契约与验收：用现成标准-可执行命令"><a href="#4-3-契约与验收：用现成标准-可执行命令" class="headerlink" title="4.3 契约与验收：用现成标准 + 可执行命令"></a>4.3 契约与验收：用现成标准 + 可执行命令</h4><p>契约层优先用 OpenAPI、JSON Schema、Zod，在 schema 上挂产品语义：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">OrderStatus:</span></span><br><span class="line">  <span class="attr">enum:</span> [<span class="string">pending</span>, <span class="string">paid</span>, <span class="string">cancelled</span>]</span><br><span class="line">  <span class="attr">x-product:</span></span><br><span class="line">    <span class="attr">pending:</span> <span class="string">待支付</span></span><br><span class="line">    <span class="attr">paid:</span> <span class="string">已支付，30</span> <span class="string">分钟内可取消</span></span><br></pre></td></tr></table></figure>
+
+<p>验收 DSL 把「做完」变成命令：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stories:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">AC-002</span></span><br><span class="line">    <span class="attr">label:</span> <span class="string">paid</span> <span class="string">订单在窗口内可取消并退款</span></span><br><span class="line">    <span class="attr">covers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">t_cancel_paid</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">refund_full_within_window</span></span><br><span class="line">    <span class="attr">given:</span> <span class="string">订单</span> <span class="string">paid，支付未超过</span> <span class="number">30</span> <span class="string">分钟，未发货</span></span><br><span class="line">    <span class="attr">when:</span> <span class="string">买家取消</span></span><br><span class="line">    <span class="attr">then:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">订单</span> <span class="string">cancelled</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">全额退款</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">发送取消通知</span></span><br><span class="line">    <span class="attr">verify:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">pnpm</span> <span class="string">test</span> <span class="string">packages/order</span> <span class="string">--</span> <span class="string">cancel.paid</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">playwright</span> <span class="string">test</span> <span class="string">tests/e2e/order-cancel.spec.ts</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">partial</span></span><br><span class="line">    <span class="attr">gap:</span> <span class="string">通知邮件未发送</span></span><br></pre></td></tr></table></figure>
+
+<p><code>covers</code> 建立 <strong>验收 ↔ 规则 ↔ 状态机</strong> 的追溯链。<code>verify</code> 是 AI 与 CI 的完成判定——比「体验良好」客观得多。</p>
+<hr>
+<h2 id="5-完整-DSL-的七层：不是一门语法，是一套体系"><a href="#5-完整-DSL-的七层：不是一门语法，是一套体系" class="headerlink" title="5. 完整 DSL 的七层：不是一门语法，是一套体系"></a>5. 完整 DSL 的七层：不是一门语法，是一套体系</h2><p>「完整 DSL」在仓库里是一个<strong>体系（DSL System）</strong>，可分成七层：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│  7. 治理层    版本、权威、状态、变更记录                    │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  6. 工具链    解析、校验、生成、对比、文档                  │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  5. 映射层    产品词 ↔ DSL ↔ 代码 ↔ 测试                  │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  4. 元数据    id、label、status、gap、owner、refs         │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  3. 语义层    规则含义、约束、冲突策略                      │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  2. 语法层    文件格式、结构、关键字、类型                  │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  1. 词汇层    领域概念、枚举、Actor、事件名                 │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br><span class="line">         PRD（叙述）                    代码（实现）</span><br></pre></td></tr></table></figure>
+
+<p><strong>最小完整的判定标准</strong>（缺一则不算「完整 DSL」）：</p>
+<ol>
+<li>有 Schema 约束语法</li>
+<li>有稳定 id 与产品 label</li>
+<li>有业务语义（不只是名词表）</li>
+<li>有 status&#x2F;gap</li>
+<li>有到代码或测试的 mapping</li>
+<li>有自动化校验（至少 CI 一条命令）</li>
+</ol>
+<p>没有 <code>status: partial</code> 和 <code>gap</code>，AI 会把 DSL 误读成「已全部实现」。没有 <code>mapping</code>，改 <code>t_cancel_paid</code> 时只能全库搜索。</p>
+<hr>
+<h2 id="6-案例闭环：六文件钉住一条需求"><a href="#6-案例闭环：六文件钉住一条需求" class="headerlink" title="6. 案例闭环：六文件钉住一条需求"></a>6. 案例闭环：六文件钉住一条需求</h2><p>以「paid 订单 30 分钟内取消」为例，六文件形成一条链：</p>
+<pre class="mermaid">flowchart TD
+    PRD["PRD 叙述"]
+    GLO["glossary.yaml"]
+    LC["lifecycle.yaml"]
+    RL["rules.yaml"]
+    CAP["capabilities.yaml"]
+    AC["acceptance.yaml"]
+    IMP["IMPLEMENTATION_STATUS.md"]
+    CODE["代码 / 测试 / UI"]
+
+    PRD --> GLO
+    GLO --> LC
+    GLO --> RL
+    GLO --> CAP
+    LC --> AC
+    RL --> AC
+    CAP --> AC
+    AC --> IMP
+    IMP --> CODE</pre>
+
+<p>追溯路径：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. glossary#order_cancel     → 确认对应 cancel.ts + RefundJob</span><br><span class="line">2. lifecycle#t_cancel_paid   → guards + effects</span><br><span class="line">3. rules#refund_full_within_window → 30 分钟、未发货 → refund_full</span><br><span class="line">4. capabilities#cap_buyer_cancel   → 买家在 paid 可见取消（UI gap）</span><br><span class="line">5. acceptance#AC-002         → Given/When/Then + verify 命令</span><br><span class="line">6. IMPLEMENTATION_STATUS     → partial：退款渠道、通知未齐；原因 #1234</span><br></pre></td></tr></table></figure>
+
+<p>AI 或开发者接到任务，只需给定入口 id，即可沿链定位 PRD、规则、代码、测试与差距。</p>
+<hr>
+<h2 id="7-与代码的三种集成深度"><a href="#7-与代码的三种集成深度" class="headerlink" title="7. 与代码的三种集成深度"></a>7. 与代码的三种集成深度</h2><table>
+<thead>
+<tr>
+<th>级别</th>
+<th>做法</th>
+<th>适合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1 文档型</strong></td>
+<td>DSL 只做人&#x2F;AI 读，人工对照代码</td>
+<td>小团队、探索期</td>
+</tr>
+<tr>
+<td><strong>L2 校验型</strong></td>
+<td>CI 跑 <code>domain:lint</code>，对比代码枚举&#x2F;路由</td>
+<td><strong>推荐起点</strong></td>
+</tr>
+<tr>
+<td><strong>L3 生成型</strong></td>
+<td>从 lifecycle 生成 types、测试骨架</td>
+<td>规则稳定、重复多的域</td>
+</tr>
+</tbody></table>
+<p>L2 的 CI 检查示例：</p>
+<ul>
+<li><code>lifecycle.yaml</code> 的 <code>states</code> 是代码里 <code>OrderStatus</code> 的子集</li>
+<li>每条 <code>transition</code> 在单元测试里有对应 case</li>
+<li><code>acceptance.yaml</code> 里 <code>status: done</code> 的条目必须有 <code>verify</code> 且 exit 0</li>
+</ul>
+<p>工具链最小集：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">domain/*.yaml</span><br><span class="line">    → domain:lint     (schema + 语义)</span><br><span class="line">    → domain:check    (DSL ↔ 代码 ↔ 测试)</span><br><span class="line">    → domain:doc      (导出给 PRD 附录)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="8-给-AI-的治理规则"><a href="#8-给-AI-的治理规则" class="headerlink" title="8. 给 AI 的治理规则"></a>8. 给 AI 的治理规则</h2><p>把冲突优先级写入 <code>AGENTS.md</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 用户明确指令</span><br><span class="line">2. acceptance.verify 通过</span><br><span class="line">3. 契约 Schema（OpenAPI / JSON Schema）</span><br><span class="line">4. 行为 DSL（lifecycle / rules）</span><br><span class="line">5. PRD 叙述</span><br><span class="line">6. 代码现状（补全任务除外）</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁止</strong>：在 PRD 或口头说「已完成」，而 DSL 仍为 <code>partial</code>——这会让 AI 误判。</p>
+<p>任务描述应带<strong>产品意图 + 实现锚点</strong>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">目标：补全 order<span class="emphasis">_cancel 在 paid 状态下的实现。</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">入口：</span></span><br><span class="line"><span class="emphasis">- 术语：glossary.yaml#order_</span>cancel</span><br><span class="line"><span class="bullet">-</span> 状态机：lifecycle.yaml#t<span class="emphasis">_cancel_</span>paid</span><br><span class="line"><span class="bullet">-</span> 规则：rules.yaml#refund<span class="emphasis">_full_</span>within<span class="emphasis">_window</span></span><br><span class="line"><span class="emphasis">- 验收：acceptance.yaml#AC-002</span></span><br><span class="line"><span class="emphasis">- 差距：IMPLEMENTATION_</span>STATUS.md §订单取消</span><br><span class="line"></span><br><span class="line">约束：</span><br><span class="line"><span class="bullet">-</span> 勿改 reject<span class="emphasis">_already_</span>shipped（AC-003 已 done）</span><br><span class="line"><span class="bullet">-</span> 完成后 AC-002 的 verify 必须 exit 0</span><br><span class="line"><span class="bullet">-</span> 若需改 30 分钟窗口，同时改 lifecycle、rules、acceptance 三处</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="9-落地最小文件结构"><a href="#9-落地最小文件结构" class="headerlink" title="9. 落地最小文件结构"></a>9. 落地最小文件结构</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">domain/</span><br><span class="line">  glossary.yaml</span><br><span class="line">  order/</span><br><span class="line">    lifecycle.yaml</span><br><span class="line">    rules.yaml</span><br><span class="line">    capabilities.yaml</span><br><span class="line">    acceptance.yaml</span><br><span class="line">  IMPLEMENTATION_STATUS.md</span><br><span class="line">packages/shared/schemas/</span><br><span class="line">AGENTS.md                    # 文档索引 + 冲突优先级</span><br><span class="line">tools/</span><br><span class="line">  domain-lint.ts</span><br><span class="line">  domain-check.ts</span><br></pre></td></tr></table></figure>
+
+<p>落地步骤：</p>
+<ol>
+<li>从模板复制到项目 <code>domain/&#123;feature&#125;/</code></li>
+<li>将示例路径替换为真实代码路径</li>
+<li>增加 <code>domain-lint</code>：校验 id 互引、status 与测试是否一致</li>
+<li>在 <code>AGENTS.md</code> 写入文档索引与冲突优先级</li>
+<li><strong>新需求优先改 DSL，再改代码</strong>——而非反过来</li>
+</ol>
+<hr>
+<h2 id="10-常见坑"><a href="#10-常见坑" class="headerlink" title="10. 常见坑"></a>10. 常见坑</h2><ol>
+<li><strong>DSL 语法过重</strong>——从小组合起步，不要一上来造语言</li>
+<li><strong>和 PRD 双写</strong>——DSL 应是提炼，不是复制粘贴</li>
+<li><strong>没有 status&#x2F;gap</strong>——AI 会把规划当实现</li>
+<li><strong>不可校验</strong>——纯 Markdown 表会漂移</li>
+<li><strong>一个 DSL 管 UI + 后端 + 运维</strong>——按职责拆分</li>
+</ol>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>问题</td>
+<td>产品语言与代码之间有翻译损耗，AI 没参加过需求会</td>
+</tr>
+<tr>
+<td>方法</td>
+<td>分层事实 + 术语映射 + 小 DSL 组合 + 差距文档</td>
+</tr>
+<tr>
+<td>形态</td>
+<td>glossary &#x2F; lifecycle &#x2F; rules &#x2F; capabilities &#x2F; acceptance</td>
+</tr>
+<tr>
+<td>集成</td>
+<td>从 L2 校验型起步，CI 跑 domain:lint</td>
+</tr>
+<tr>
+<td>治理</td>
+<td>冲突优先级写进 AGENTS.md；任务带锚点 id</td>
+</tr>
+</tbody></table>
+<p>主题本质不是再造一门语言，而是用<strong>同一组 id</strong> 把产品故事、业务规则、权限、测试和实现差距钉在同一张网上——让 AI 知道<strong>改哪、改到什么算完、哪里还不能假装做完</strong>。</p>
+<hr>
+<h2 id="行动建议"><a href="#行动建议" class="headerlink" title="行动建议"></a>行动建议</h2><ol>
+<li><strong>明天就能做</strong>：选一个你正在和 AI 协作的域（订单、权限、计费均可），建 <code>glossary.yaml</code> + 一份 <code>acceptance.yaml</code>，把现有差距写进 <code>IMPLEMENTATION_STATUS.md</code>。</li>
+<li><strong>本周可做</strong>：给核心 transition 补上 <code>mapping.code</code> 和 <code>mapping.tests</code>，在 <code>AGENTS.md</code> 写明冲突优先级。</li>
+<li><strong>值得投入</strong>：跑 L2 校验——<code>domain:lint</code> 对比 DSL 枚举与代码枚举，比把 prompt 写长一百倍更有效。</li>
+</ol>
+<p>工具会变，<strong>把隐性知识写成结构化上下文</strong>的能力不会过时。你知道该让 AI 听谁的、改哪、怎样算做完——这才是 AI 时代工程负责人该补的一课。</p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/06/26/%E5%BD%93AI%E8%AF%BB%E4%B8%8D%E6%87%82%E4%BD%A0%E7%9A%84PRD%EF%BC%9A%E7%94%A8%E9%A2%86%E5%9F%9FDSL%E6%9E%B6%E8%B5%B7%E4%BA%A7%E5%93%81%E8%AF%AD%E8%A8%80%E4%B8%8E%E4%BB%A3%E7%A0%81%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5/" data-id="cmquyr4850000dumrbtmjexju" data-title="当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AI%E5%8D%8F%E4%BD%9C/" rel="tag">AI协作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DSL/" rel="tag">DSL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PRD/" rel="tag">PRD</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" rel="tag">职场进阶</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/06/26/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AEAI%E5%BC%80%E5%8F%91%E8%80%85%E7%94%A8MacBookAirM5%E5%81%9A%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC%E6%9C%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          为什么建议 AI 开发者用 MacBook Air M5 做移动办公机？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/06/24/%E5%90%AC%E6%87%82%E5%92%8C%E8%AF%B4%E5%87%BA%E4%B9%8B%E9%97%B4%EF%BC%8C%E7%BC%BA%E7%9A%84%E4%B8%8D%E6%98%AF%E8%AF%8D%E6%B1%87%EF%BC%8C%E6%98%AF%E4%B8%80%E6%9D%A1%E9%97%AD%E7%8E%AF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">听懂和说出之间，缺的不是词汇，是一条闭环</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/">职场进阶</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%8D%8F%E4%BD%9C/" rel="tag">AI协作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%BC%80%E5%8F%91/" rel="tag">AI开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple-Intelligence/" rel="tag">Apple Intelligence</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DSL/" rel="tag">DSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M5/" rel="tag">M5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MacBook-Air/" rel="tag">MacBook Air</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PRD/" rel="tag">PRD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iPhone/" rel="tag">iPhone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" rel="tag">二语习得</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%A3%E8%AF%AD/" rel="tag">口语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%AF%E7%89%88/" rel="tag">港版</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" rel="tag">移动办公</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" rel="tag">职场进阶</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%B1%E8%AF%AD/" rel="tag">英语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/AI%E5%8D%8F%E4%BD%9C/" style="font-size: 10px;">AI协作</a> <a href="/tags/AI%E5%BC%80%E5%8F%91/" style="font-size: 10px;">AI开发</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Apple-Intelligence/" style="font-size: 10px;">Apple Intelligence</a> <a href="/tags/DSL/" style="font-size: 10px;">DSL</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/M5/" style="font-size: 10px;">M5</a> <a href="/tags/MacBook-Air/" style="font-size: 10px;">MacBook Air</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/PRD/" style="font-size: 10px;">PRD</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/iPhone/" style="font-size: 10px;">iPhone</a> <a href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" style="font-size: 10px;">二语习得</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%8F%A3%E8%AF%AD/" style="font-size: 10px;">口语</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 12px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 14px;">深度观察</a> <a href="/tags/%E6%B8%AF%E7%89%88/" style="font-size: 10px;">港版</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 12px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" style="font-size: 10px;">移动办公</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/" style="font-size: 10px;">职场进阶</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 10px;">英语</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 12px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/06/">六月 2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/05/">五月 2026</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2026/06/26/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AEAI%E5%BC%80%E5%8F%91%E8%80%85%E7%94%A8MacBookAirM5%E5%81%9A%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC%E6%9C%BA/">为什么建议 AI 开发者用 MacBook Air M5 做移动办公机？</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/26/%E5%BD%93AI%E8%AF%BB%E4%B8%8D%E6%87%82%E4%BD%A0%E7%9A%84PRD%EF%BC%9A%E7%94%A8%E9%A2%86%E5%9F%9FDSL%E6%9E%B6%E8%B5%B7%E4%BA%A7%E5%93%81%E8%AF%AD%E8%A8%80%E4%B8%8E%E4%BB%A3%E7%A0%81%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5/">当 AI 读不懂你的 PRD：用领域 DSL 架起产品语言与代码之间的桥</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%90%AC%E6%87%82%E5%92%8C%E8%AF%B4%E5%87%BA%E4%B9%8B%E9%97%B4%EF%BC%8C%E7%BC%BA%E7%9A%84%E4%B8%8D%E6%98%AF%E8%AF%8D%E6%B1%87%EF%BC%8C%E6%98%AF%E4%B8%80%E6%9D%A1%E9%97%AD%E7%8E%AF/">听懂和说出之间，缺的不是词汇，是一条闭环</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/19/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%8E%B0%E5%9C%A8%E5%B0%B1%E8%AF%A5%E9%80%89%E6%B8%AF%E7%89%88iPhone17Pro%E2%80%94%E2%80%94%E4%BB%8EAI%E5%8F%AF%E7%94%A8%E6%80%A7%E4%B8%8E%E7%A1%AC%E4%BB%B6%E5%89%8D%E7%9E%BB%E8%AF%B4%E8%B5%B7/">为什么现在就该选港版 iPhone 17 Pro？——从 AI 可用性与硬件前瞻说起</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/15/AI%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98%E7%BC%96%E6%8E%92%EF%BC%9A%E4%BB%8E%E9%9C%80%E6%B1%82%E5%88%B0%E4%B8%8A%E7%BA%BF%E7%9A%84How%E6%89%8B%E5%86%8C/">AI 研发交付编排：从需求到上线的 How 手册</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 Neo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.3/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!window.mermaid) return;
+      var opts = {"startOnLoad":false,"theme":"neutral","securityLevel":"loose"};
+      mermaid.initialize(opts);
+      mermaid.run({ querySelector: '.article-entry pre.mermaid, pre.mermaid' });
+    });
+  </script>
+
+
+
+
+
+
+  </div>
+</body>
+</html>
