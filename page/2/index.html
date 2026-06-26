@@ -78,6 +78,131 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-关于Neo-从电商与链上到Agent化Web" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/" class="article-date">
+  <time class="dt-published" datetime="2026-05-23T02:00:00.000Z" itemprop="datePublished">2026-05-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/">关于 Neo：从电商与链上到 Agent 化 Web</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%AC%A1%E5%B0%8F%E6%94%B9%E7%89%B5%E5%87%BA%E4%B8%80%E4%B8%B2%E7%B3%BB%E7%BB%9F">一次「小改」牵出一串系统</a></li>
+<li><a href="#%E4%BB%8E%E5%A0%86%E5%8A%9F%E8%83%BD%E5%88%B0%E8%83%BD%E6%BC%94%E8%BF%9B">从「堆功能」到「能演进」</a></li>
+<li><a href="#%E6%88%91%E6%98%AF%E8%B0%81%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%BB%E6%88%98%E5%9C%BA%E5%9C%A8-web-%E4%B8%8E%E5%90%8E%E7%AB%AF">我是谁：软件开发，主战场在 Web 与后端</a></li>
+<li><a href="#%E6%88%91%E5%81%9A%E4%BA%8B%E7%9A%84%E4%B8%89%E6%9D%A1%E5%8E%9F%E5%88%99">我做事的三条原则</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%86%99%E8%BF%99%E4%B8%AA%E5%8D%9A%E5%AE%A2">为什么写这个博客</a></li>
+<li><a href="#%E5%A6%82%E6%9E%9C%E4%BD%A0%E5%8F%AA%E6%83%B3%E5%85%88%E8%AF%BB%E4%B8%80%E7%AF%87%E6%8A%80%E6%9C%AF%E6%96%87">如果你只想先读一篇技术文</a></li>
+<li><a href="#%E7%94%9F%E6%B4%BB%E4%B9%8B%E5%A4%96%E6%88%91%E4%B9%9F%E5%9C%A8%E9%97%AE-app-%E8%BF%98%E4%BC%9A%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7">生活之外：我也在问 App 还会长什么样</a></li>
+<li><a href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%88%91%E6%83%B3%E5%BC%84%E6%B8%85%E7%9A%84%E5%87%A0%E4%BB%B6%E4%BA%8B">接下来我想弄清的几件事</a></li>
+<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91">联系我</a></li>
+<li><a href="#%E5%85%B3%E6%B3%A8%E4%B8%8E%E7%9B%B8%E5%85%B3">关注与相关</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>我是 Neo，做软件开发，长期在电商与加密货币场景里写 TS&#x2F;React&#x2F;Vue&#x2F;Go，现在更关心 Agent 如何改变应用形态。</p>
+</blockquote>
+<h2 id="一次「小改」牵出一串系统"><a href="#一次「小改」牵出一串系统" class="headerlink" title="一次「小改」牵出一串系统"></a>一次「小改」牵出一串系统</h2><p>有一次我以为只是改一个列表页的小交互：多一列筛选、调整一下空状态。结果从接口字段、缓存失效策略，到不同角色的按钮权限，都要跟着动一遍。电商系统里这种「小需求」并不少见——活动、库存、订单、营销规则叠在一起，表面是 UI，底下是一张张牵着的网。</p>
+<p>后来在加密货币相关产品里，我又习惯了另一套紧绷感：行情与资产数据要 timely，展示与风控边界要清楚，用户对「数错了」的容忍度极低。两段经历叠在一起，我慢慢形成同一个判断：<strong>我关心的从来不只是某个框架怎么用，而是一整套系统怎么稳稳地演进。</strong></p>
+<p>而最近一年，Agent 和 Cursor 一类工具把「从意图到改动」的距离拉短了。我既兴奋，也警惕——兴奋的是交付方式在变，警惕的是如果还按「堆功能」的老习惯往上贴 AI，只会多一个不好管的聊天框。这也是我开这个博客、并开始写 Agent 相关文章的直接原因。</p>
+<h2 id="从「堆功能」到「能演进」"><a href="#从「堆功能」到「能演进」" class="headerlink" title="从「堆功能」到「能演进」"></a>从「堆功能」到「能演进」</h2><h3 id="之前：先把需求做完"><a href="#之前：先把需求做完" class="headerlink" title="之前：先把需求做完"></a>之前：先把需求做完</h3><p>早期我的工作方式很典型：产品给 PRD，我拆页面和接口，排期、联调、上线。电商里常见的是大促前赶活动页、库存扣减与订单状态机；币圈相关产品里则是行情展示、资产汇总、充提与风控策略的呈现。目标明确：<strong>按时交付、少出线上事故</strong>。</p>
+<h3 id="卡点：改一处，牵全身"><a href="#卡点：改一处，牵全身" class="headerlink" title="卡点：改一处，牵全身"></a>卡点：改一处，牵全身</h3><p>真正磨人的不是写某个组件，而是<strong>边界不清</strong>。业务规则散落在多个服务里，改一个字段要问三个团队；联调环境不稳定，问题难以复现。需求看起来小，风险却像滚雪球。</p>
+<h3 id="现在：先想清楚怎么改、怎么验"><a href="#现在：先想清楚怎么改、怎么验" class="headerlink" title="现在：先想清楚怎么改、怎么验"></a>现在：先想清楚怎么改、怎么验</h3><p>现在我更愿意在动手前多问几句：这段逻辑属于谁？谁能改、改完怎么验？能不能分阶段上？对 AI&#x2F;Agent，我的态度也一样：<strong>它是嵌进流程的能力，不是替代思考的捷径。</strong></p>
+<blockquote>
+<p>我宁可慢一点把「谁能改什么、改完怎么验」说清楚，也不追求一次生成看起来能跑的代码。</p>
+</blockquote>
+<p>这句话差不多就是我现在的工作底线。</p>
+<h2 id="我是谁：软件开发，主战场在-Web-与后端"><a href="#我是谁：软件开发，主战场在-Web-与后端" class="headerlink" title="我是谁：软件开发，主战场在 Web 与后端"></a>我是谁：软件开发，主战场在 Web 与后端</h2><ul>
+<li><strong>角色</strong>：软件开发。熟悉<strong>电商</strong>（活动、交易、商品与订单链路）与<strong>加密货币</strong>（行情、资产、风控与展示）相关业务和系统特点。</li>
+<li><strong>技术栈</strong>：<strong>TypeScript · React · Vue · Go</strong><ul>
+<li>TS 与 React&#x2F;Vue：产品界面、复杂交互、BFF 与前端工程化。</li>
+<li>Go：接口服务、任务与需要稳定吞吐的后端模块。</li>
+</ul>
+</li>
+<li><strong>当前关注</strong>：Web 应用的 <strong>Agent 化</strong>、工程化落地，以及「未来 App 还会长什么样」。</li>
+</ul>
+<p>这里不想写成简历：年限和头衔对读者帮助不大，<strong>你在什么业务里解决过什么问题</strong>更有参考价值。若你也在电商或币圈做 Web&#x2F;全栈，欢迎对号入座聊具体场景。</p>
+<h2 id="我做事的三条原则"><a href="#我做事的三条原则" class="headerlink" title="我做事的三条原则"></a>我做事的三条原则</h2><h3 id="先划边界，再写代码"><a href="#先划边界，再写代码" class="headerlink" title="先划边界，再写代码"></a>先划边界，再写代码</h3><p>模块、权限、数据归属先说清，再讨论实现。电商里一个「加按钮」可能涉及运营权限；币圈里一处展示错误可能直接影响用户信任。边界清楚了，Agent 辅助改代码才不会越改越乱。</p>
+<h3 id="改造要可渐进"><a href="#改造要可渐进" class="headerlink" title="改造要可渐进"></a>改造要可渐进</h3><p>大系统允许分阶段演进：先只读查询、再半自动、最后才谈全自动。Agent 化也一样——不是一夜之间把整站换成聊天界面。我在 <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">《Web 应用的 Agent 化》</a> 里写的「渐进落地」，也是这条原则的外延。</p>
+<h3 id="结果要可验证"><a href="#结果要可验证" class="headerlink" title="结果要可验证"></a>结果要可验证</h3><p>能预览、能回滚、能审计。尤其是让 Agent 动仓库时，更需要状态机、范围约束和日志——这在 <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">《AI Agent 自动化工程实践》</a> 里有更完整的展开，这里不重复，只强调：<strong>能验、能查，比「生成得快」重要。</strong></p>
+<h2 id="为什么写这个博客"><a href="#为什么写这个博客" class="headerlink" title="为什么写这个博客"></a>为什么写这个博客</h2><p>一句话：<strong>分享生活与技术。</strong></p>
+<p>再具体一点：把实践里的判断记下来，避免重复踩坑；也给同路人一份可以讨论的文本，而不是只留在聊天记录里。这个站会不定期更新——技术深文花时间打磨，随笔则记录想法与转向。</p>
+<p>博客地址：<a href="https://neo-share.github.io/">https://Neo-share.github.io</a></p>
+<h2 id="如果你只想先读一篇技术文"><a href="#如果你只想先读一篇技术文" class="headerlink" title="如果你只想先读一篇技术文"></a>如果你只想先读一篇技术文</h2><p><strong>首推</strong>：<a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化：面向开发者的未来演进</a></p>
+<ul>
+<li>写给 Web &#x2F; 全栈开发者：Agent 不是「多一个聊天框」，而是应用形态的演进。</li>
+<li>适合关心：现有 App 会怎样变、该提前储备哪些能力的人。</li>
+</ul>
+<p><strong>延伸阅读</strong>：<a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a></p>
+<ul>
+<li>以 Monorepo 为例：如何让 Agent <strong>稳定、可审计</strong>地改代码。</li>
+<li>适合已经在用 Cursor &#x2F; Agent、想上工程化控制的同学。</li>
+</ul>
+<p>两篇加起来，大致就是我目前技术输出的主线：<strong>趋势判断 + 落地方法</strong>。</p>
+<h2 id="生活之外：我也在问-App-还会长什么样"><a href="#生活之外：我也在问-App-还会长什么样" class="headerlink" title="生活之外：我也在问 App 还会长什么样"></a>生活之外：我也在问 App 还会长什么样</h2><p>这一节不算「生活八卦」，而是我真正会走神去想的事。</p>
+<p>交互会不会从「点菜单」变成「说目标」？手机和桌面会不会分工——一个负责呈现，一个负责在后台把流程跑完？电商和币圈这类<strong>强业务、强合规</strong>的场景，会不会反而比消费娱乐 App 更早走出一条「Agent 嵌进流程」的路？</p>
+<p>这些观察和写技术文是同一条路。若你对「未来 App 的形态」有看法，我很乐意听不同行业的版本——也许你的场景里，答案和 Web 开发者想象的并不一样。</p>
+<h2 id="接下来我想弄清的几件事"><a href="#接下来我想弄清的几件事" class="headerlink" title="接下来我想弄清的几件事"></a>接下来我想弄清的几件事</h2><ol>
+<li>Agent 化改造里，<strong>哪些页面值得先做</strong>，哪些不该动？</li>
+<li>在电商、加密货币这类场景里，<strong>工具调用与权限</strong>怎样设计才让人放心？</li>
+<li>「未来 App」会是统一超级入口，还是 <strong>垂直场景 + 深编排</strong>？</li>
+</ol>
+<p>也想反问读者一句：</p>
+<blockquote>
+<p>你觉得三年后你日常最常用的「App」，更像今天的微信，还是更像一个能替你跑流程的助手？</p>
+</blockquote>
+<p>欢迎留言或通过邮件和我聊。</p>
+<h2 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h2><ul>
+<li>博客：<a href="https://neo-share.github.io/">https://Neo-share.github.io</a></li>
+<li>GitHub：<a target="_blank" rel="noopener" href="https://github.com/Neo-share">https://github.com/Neo-share</a></li>
+<li>邮箱：<a href="mailto:&#x6c;&#105;&#117;&#104;&#110;&#x6e;&#x6e;&#64;&#x31;&#x36;&#x33;&#x2e;&#99;&#x6f;&#109;">&#x6c;&#105;&#117;&#104;&#110;&#x6e;&#x6e;&#64;&#x31;&#x36;&#x33;&#x2e;&#99;&#x6f;&#109;</a></li>
+</ul>
+<p>欢迎交流：Web &#x2F; Agent 工程化、电商与加密货币相关系统设计，以及对「未来应用形态」的看法。</p>
+<p>感谢读完。这是本站的一篇自我介绍，后续文章会陆续更新在首页与归档里——我们慢慢来。</p>
+<hr>
+<h2 id="关注与相关"><a href="#关注与相关" class="headerlink" title="关注与相关"></a>关注与相关</h2><p><strong>Neo的数智空间</strong><br>每周二：工具实测 | 每周五：AI 周报 | 不定期：随笔与深度观察</p>
+<ul>
+<li><strong>微信公众号</strong>：搜索「Neo的数智空间」获取图文版  </li>
+<li><strong>B 站</strong>：【B站主页链接】  </li>
+<li><strong>相关阅读</strong>：<a href="/2026/05/23/Neo%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84-%E7%BB%99%E6%9C%8B%E5%8F%8B%E7%9A%84%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/">Neo 是做什么的？给朋友的自我介绍</a> | <a href="/2026/05/23/Web%E5%BA%94%E7%94%A8%E7%9A%84Agent%E5%8C%96%E6%BC%94%E8%BF%9B/">Web 应用的 Agent 化</a> | <a href="/2026/05/22/AI-Agent%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">AI Agent 自动化工程实践</a></li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://neo-share.github.io/2026/05/23/%E5%85%B3%E4%BA%8ENeo-%E4%BB%8E%E7%94%B5%E5%95%86%E4%B8%8E%E9%93%BE%E4%B8%8A%E5%88%B0Agent%E5%8C%96Web/" data-id="cmpig4v3v000pe4mrhset2uss" data-title="关于 Neo：从电商与链上到 Agent 化 Web" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Neo是做什么的-给朋友的自我介绍" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2026/05/23/Neo%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84-%E7%BB%99%E6%9C%8B%E5%8F%8B%E7%9A%84%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" class="article-date">
@@ -275,7 +400,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%81%8C%E5%9C%BA%E8%BF%9B%E9%98%B6/">职场进阶</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
     </div>
   </div>
 
@@ -285,7 +410,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple-Intelligence/" rel="tag">Apple Intelligence</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iPhone/" rel="tag">iPhone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" rel="tag">二语习得</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%A3%E8%AF%AD/" rel="tag">口语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%AF%E7%89%88/" rel="tag">港版</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%B1%E8%AF%AD/" rel="tag">英语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/" rel="tag">AI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI%E5%BC%80%E5%8F%91/" rel="tag">AI开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple-Intelligence/" rel="tag">Apple Intelligence</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Harness/" rel="tag">Harness</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M5/" rel="tag">M5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MacBook-Air/" rel="tag">MacBook Air</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Monorepo/" rel="tag">Monorepo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" rel="tag">Neo的数智空间</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%BC%80%E5%8F%91/" rel="tag">Web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iPhone/" rel="tag">iPhone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" rel="tag">二语习得</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%82%A8%E8%93%84/" rel="tag">储蓄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%A3%E8%AF%AD/" rel="tag">口语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" rel="tag">宏观经济</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" rel="tag">工具实测</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" rel="tag">技术分享</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E8%B4%B9/" rel="tag">消费</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" rel="tag">深度观察</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%AF%E7%89%88/" rel="tag">港版</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" rel="tag">生活变了吗</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%B5%E5%95%86/" rel="tag">电商</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" rel="tag">研发交付</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" rel="tag">移动办公</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%B1%E8%AF%AD/" rel="tag">英语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" rel="tag">软件工程师</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" rel="tag">软件开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -295,7 +420,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Apple-Intelligence/" style="font-size: 10px;">Apple Intelligence</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/iPhone/" style="font-size: 10px;">iPhone</a> <a href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" style="font-size: 10px;">二语习得</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%8F%A3%E8%AF%AD/" style="font-size: 10px;">口语</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 10px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 14px;">深度观察</a> <a href="/tags/%E6%B8%AF%E7%89%88/" style="font-size: 10px;">港版</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 12px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 10px;">英语</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
+      <a href="/tags/AI/" style="font-size: 18px;">AI</a> <a href="/tags/AI%E5%BC%80%E5%8F%91/" style="font-size: 10px;">AI开发</a> <a href="/tags/Agent/" style="font-size: 16px;">Agent</a> <a href="/tags/Apple-Intelligence/" style="font-size: 10px;">Apple Intelligence</a> <a href="/tags/Harness/" style="font-size: 10px;">Harness</a> <a href="/tags/M5/" style="font-size: 10px;">M5</a> <a href="/tags/MacBook-Air/" style="font-size: 10px;">MacBook Air</a> <a href="/tags/Monorepo/" style="font-size: 10px;">Monorepo</a> <a href="/tags/Neo%E7%9A%84%E6%95%B0%E6%99%BA%E7%A9%BA%E9%97%B4/" style="font-size: 20px;">Neo的数智空间</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/Web%E5%BC%80%E5%8F%91/" style="font-size: 12px;">Web开发</a> <a href="/tags/iPhone/" style="font-size: 10px;">iPhone</a> <a href="/tags/%E4%BA%8C%E8%AF%AD%E4%B9%A0%E5%BE%97/" style="font-size: 10px;">二语习得</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E5%82%A8%E8%93%84/" style="font-size: 10px;">储蓄</a> <a href="/tags/%E5%8F%A3%E8%AF%AD/" style="font-size: 10px;">口语</a> <a href="/tags/%E5%AE%8F%E8%A7%82%E7%BB%8F%E6%B5%8E/" style="font-size: 10px;">宏观经济</a> <a href="/tags/%E5%B7%A5%E5%85%B7%E5%AE%9E%E6%B5%8B/" style="font-size: 12px;">工具实测</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 10px;">工程化</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" style="font-size: 14px;">技术分享</a> <a href="/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">效率工具</a> <a href="/tags/%E6%B6%88%E8%B4%B9/" style="font-size: 10px;">消费</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E8%A7%82%E5%AF%9F/" style="font-size: 14px;">深度观察</a> <a href="/tags/%E6%B8%AF%E7%89%88/" style="font-size: 10px;">港版</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%8F%98%E4%BA%86%E5%90%97/" style="font-size: 12px;">生活变了吗</a> <a href="/tags/%E7%94%B5%E5%95%86/" style="font-size: 14px;">电商</a> <a href="/tags/%E7%A0%94%E5%8F%91%E4%BA%A4%E4%BB%98/" style="font-size: 12px;">研发交付</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC/" style="font-size: 10px;">移动办公</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a> <a href="/tags/%E8%8B%B1%E8%AF%AD/" style="font-size: 10px;">英语</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88/" style="font-size: 10px;">软件工程师</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" style="font-size: 10px;">软件开发</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 12px;">随笔</a>
     </div>
   </div>
 
@@ -317,6 +442,10 @@
       <ul>
         
           <li>
+            <a href="/2026/06/26/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BB%BA%E8%AE%AEAI%E5%BC%80%E5%8F%91%E8%80%85%E7%94%A8MacBookAirM5%E5%81%9A%E7%A7%BB%E5%8A%A8%E5%8A%9E%E5%85%AC%E6%9C%BA/">为什么建议 AI 开发者用 MacBook Air M5 做移动办公机？</a>
+          </li>
+        
+          <li>
             <a href="/2026/06/24/%E5%90%AC%E6%87%82%E5%92%8C%E8%AF%B4%E5%87%BA%E4%B9%8B%E9%97%B4%EF%BC%8C%E7%BC%BA%E7%9A%84%E4%B8%8D%E6%98%AF%E8%AF%8D%E6%B1%87%EF%BC%8C%E6%98%AF%E4%B8%80%E6%9D%A1%E9%97%AD%E7%8E%AF/">听懂和说出之间，缺的不是词汇，是一条闭环</a>
           </li>
         
@@ -330,10 +459,6 @@
         
           <li>
             <a href="/2026/06/08/AI%E6%97%B6%E4%BB%A3%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9AAI%E5%81%9A%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%BA%BA%E5%81%9A%E5%86%B3%E7%AD%96/">AI 时代的软件开发最佳实践：AI 做执行，人做决策</a>
-          </li>
-        
-          <li>
-            <a href="/2026/05/30/%E4%B8%AD%E5%9B%BD%E4%BA%BA%E7%88%B1%E5%AD%98%E9%92%B1%E3%80%81%E7%BE%8E%E5%9B%BD%E4%BA%BA%E7%88%B1%E8%8A%B1%E9%92%B1%E2%80%94%E2%80%94AI%E6%97%B6%E4%BB%A3%E8%AF%A5%E5%A4%9A%E5%88%9B%E9%80%A0%E8%BF%98%E6%98%AF%E5%A4%9A%E6%B6%88%E8%B4%B9/">中国人爱存钱、美国人爱花钱？——AI 时代该多创造还是多消费</a>
           </li>
         
       </ul>
